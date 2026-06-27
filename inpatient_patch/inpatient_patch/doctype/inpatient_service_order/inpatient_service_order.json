@@ -16,14 +16,19 @@
   "sex",
   "bed",
   "sb_so",
-  "service_type",
   "ordered_by",
   "order_datetime",
   "cb_so",
   "status",
   "sales_invoice",
+  "sb_lab",
+  "lab_help",
+  "lab_tests",
+  "sb_proc",
+  "procedures",
   "sb_items",
-  "services",
+  "item_help",
+  "items",
   "sb_send",
   "send_help"
  ],
@@ -113,19 +118,9 @@
   },
   {
    "fieldname": "sb_so",
-   "label": "Service Order",
+   "label": "Order",
    "fieldtype": "Section Break",
    "idx": 10
-  },
-  {
-   "fieldname": "service_type",
-   "label": "Service Type",
-   "fieldtype": "Select",
-   "options": "Pharmacy\nLaboratory\nRadiology\nProcedure\nConsumable\nOther",
-   "reqd": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "idx": 11
   },
   {
    "fieldname": "ordered_by",
@@ -133,20 +128,20 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "in_list_view": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "order_datetime",
    "label": "Order Date/Time",
    "fieldtype": "Datetime",
    "reqd": 1,
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "cb_so",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "status",
@@ -157,7 +152,7 @@
    "read_only": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "sales_invoice",
@@ -165,33 +160,73 @@
    "fieldtype": "Link",
    "options": "Sales Invoice",
    "read_only": 1,
+   "idx": 15
+  },
+  {
+   "fieldname": "sb_lab",
+   "label": "Lab Tests",
+   "fieldtype": "Section Break",
    "idx": 16
   },
   {
-   "fieldname": "sb_items",
-   "label": "Services / Items",
-   "fieldtype": "Section Break",
+   "fieldname": "lab_help",
+   "label": "Lab",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Add lab tests \u2014 each pulls its billing Item from the Lab Test Template.</p>",
    "idx": 17
   },
   {
-   "fieldname": "services",
-   "label": "Services",
+   "fieldname": "lab_tests",
+   "label": "Lab Tests",
    "fieldtype": "Table",
-   "options": "Service Charge Line",
+   "options": "Inpatient Lab Order",
    "idx": 18
+  },
+  {
+   "fieldname": "sb_proc",
+   "label": "Procedures",
+   "fieldtype": "Section Break",
+   "idx": 19
+  },
+  {
+   "fieldname": "procedures",
+   "label": "Procedures",
+   "fieldtype": "Table",
+   "options": "Inpatient Procedure Order",
+   "idx": 20
+  },
+  {
+   "fieldname": "sb_items",
+   "label": "Medicines / Radiology / Consumables",
+   "fieldtype": "Section Break",
+   "idx": 21
+  },
+  {
+   "fieldname": "item_help",
+   "label": "Items",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Add any billable Item (pharmacy, radiology, consumables).</p>",
+   "idx": 22
+  },
+  {
+   "fieldname": "items",
+   "label": "Items",
+   "fieldtype": "Table",
+   "options": "Inpatient Item Order",
+   "idx": 23
   },
   {
    "fieldname": "sb_send",
    "label": "Send",
    "fieldtype": "Section Break",
-   "idx": 19
+   "idx": 24
   },
   {
    "fieldname": "send_help",
    "label": "Send",
    "fieldtype": "HTML",
-   "options": "<p class='text-muted'>Use the <b>Send to Billing</b> button on the form to create the draft-but-billable Sales Invoice (pharmacy/lab/radiology/OT), exactly like consultation drug-prescription invoicing.</p>",
-   "idx": 20
+   "options": "<p class='text-muted'>Click <b>Send to Billing</b> to create the draft-but-billable Sales Invoice from all the lines above \u2014 exactly like consultation drug-prescription invoicing.</p>",
+   "idx": 25
   }
  ],
  "index_web_pages_for_search": 1,

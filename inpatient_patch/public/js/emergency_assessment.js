@@ -3,6 +3,27 @@
 // flow). The new record is pre-filled with the patient + department.
 frappe.ui.form.on('Emergency Assessment Sheet', {
     refresh(frm) {
+        if (frm.is_new() === false && frm.doc.patient) {
+            frm.add_custom_button(__('Fetch Findings'), () => {
+                frappe.call({
+                    method: 'inpatient_patch.inpatient_patch.billing.fetch_lab_findings',
+                    args: { patient: frm.doc.patient, inpatient_record: frm.doc.inpatient_record },
+                    freeze: true, freeze_message: __('Fetching lab results...'),
+                    callback(r) {
+                        const rows = r.message || [];
+                        if (!rows.length) { frappe.msgprint(__('No lab results found for this patient.')); return; }
+                        frm.clear_table('lab_findings');
+                        rows.forEach((row) => {
+                            const d = frm.add_child('lab_findings');
+                            d.lab_test = row.lab_test; d.test_name = row.test_name;
+                            d.status = row.status; d.result_date = row.result_date; d.finding = row.finding;
+                        });
+                        frm.refresh_field('lab_findings');
+                        frappe.show_alert({ message: __('{0} findings fetched', [rows.length]), indicator: 'green' });
+                    },
+                });
+            });
+        }
         if (frm.is_new()) return;
         if (frm.doc.final_decision === 'Admitted' && !frm.doc.inpatient_record) {
             frm.add_custom_button(__('Admit Patient'), () => {

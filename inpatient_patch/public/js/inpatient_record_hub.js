@@ -1,104 +1,126 @@
-// Inpatient Record hub: a simple, guided control panel.
-// - One "Next step" banner tells staff what to do now.
-// - Three tidy menus: "Care Steps", "Billing", "View".
-// - A step's button disappears once that step is done; the next one appears.
-// - The "Clinical Sheets" badges are live links to the filtered lists.
+// Inpatient Record hub: ONE "Create" button opens a grouped menu of the
+// actions that are valid right now (gated, and hidden once a step is done).
+// A "Next step" banner guides staff; the Clinical Sheets badges are live links.
 
 frappe.ui.form.on('Inpatient Record', {
     refresh(frm) {
         if (frm.is_new()) return;
-        frm_clear_dynamic(frm);
         frappe.call({
             method: 'inpatient_patch.inpatient_patch.workflow.get_stage',
             args: { inpatient_record: frm.doc.name },
             callback(r) {
                 const s = r.message || {};
-                build_care_menu(frm, s);
-                add_billing_menu(frm);
-                add_view_menu(frm, s);
+                add_create_button(frm, s);
                 show_next_step(frm, s);
-                render_snapshot(frm, s);
+                render_snapshot(frm);
             },
         });
     },
 });
-
-function frm_clear_dynamic(frm) {
-    // custom buttons are rebuilt on every refresh by Frappe, nothing to clear.
-}
 
 function go(frm, sheet) {
     frappe.route_options = { inpatient_record: frm.doc.name, patient: frm.doc.patient };
     frappe.new_doc(sheet);
 }
 
-const CARE = 'Care Steps';
+// Build the list of actions valid for the current stage.
+function build_actions(frm, s) {
+    const A = [];
+    const add = (group, label, fn) => A.push({ group, label, fn });
 
-function build_care_menu(frm, s) {
-    // ----- Admission phase -----
-    if (!s.has_admission_data) frm.add_custom_button(__('Admission Social Data'), () => go(frm, 'Admission Social Data'), __(CARE));
-    if (!s.has_nursing)        frm.add_custom_button(__('Nursing Admission Assessment'), () => go(frm, 'Nursing Admission Assessment'), __(CARE));
-    if (s.has_nursing && !s.has_history) frm.add_custom_button(__('History & Clinical Examination'), () => go(frm, 'History Clinical Examination'), __(CARE));
+    // ----- Admission -----
+    if (!s.has_admission_data) add('Admission', 'Admission Social Data', () => go(frm, 'Admission Social Data'));
+    if (!s.has_nursing)        add('Admission', 'Nursing Admission Assessment', () => go(frm, 'Nursing Admission Assessment'));
+    if (s.has_nursing && !s.has_history) add('Admission', 'History & Clinical Examination', () => go(frm, 'History Clinical Examination'));
 
-    // ----- Ward phase (after nursing assessment) : repeatable tools -----
+    // ----- Ward / Nursing (repeatable) -----
     if (s.has_nursing) {
-        frm.add_custom_button(__('Progress Note'), () => go(frm, 'Progress Note'), __(CARE));
-        frm.add_custom_button(__('Doctor Order'), () => go(frm, 'Doctor Order'), __(CARE));
-        frm.add_custom_button(__('Medication Administration (MAR)'), () => go(frm, 'Medication Administration Record'), __(CARE));
-        frm.add_custom_button(__('Diabetic Insulin Chart'), () => go(frm, 'Diabetic Insulin Chart'), __(CARE));
-        frm.add_custom_button(__('Daily Round Plan'), () => go(frm, 'Daily Round Plan'), __(CARE));
-        frm.add_custom_button(__('Nurse Handover'), () => go(frm, 'Nurse Handover'), __(CARE));
+        add('Ward / Nursing', 'Progress Note', () => go(frm, 'Progress Note'));
+        add('Ward / Nursing', 'Doctor Order', () => go(frm, 'Doctor Order'));
+        add('Ward / Nursing', 'Medication Administration (MAR)', () => go(frm, 'Medication Administration Record'));
+        add('Ward / Nursing', 'Diabetic Insulin Chart', () => go(frm, 'Diabetic Insulin Chart'));
+        add('Ward / Nursing', 'Daily Round Plan', () => go(frm, 'Daily Round Plan'));
+        add('Ward / Nursing', 'Nurse Handover', () => go(frm, 'Nurse Handover'));
     }
 
-    // ----- Operation phase (surgical only) -----
+    // ----- Operation (surgical only) -----
     if (s.is_surgical) {
         if (s.has_history && !s.preop_ready) {
-            frm.add_custom_button(__('Cardiac Review'), () => go(frm, 'Pre Operation Cardiac Review'), __(CARE));
-            frm.add_custom_button(__('Pre-Anesthetic Assessment'), () => go(frm, 'Pre Anesthetic Assessment'), __(CARE));
-            if (!s.has_consent) frm.add_custom_button(__('Surgical Consent Form'), () => go(frm, 'Surgical Consent Form'), __(CARE));
-            frm.add_custom_button(__('Pre-Operative Checklist'), () => go(frm, 'Pre Operative Checklist'), __(CARE));
+            add('Operation (OT)', 'Cardiac Review', () => go(frm, 'Pre Operation Cardiac Review'));
+            add('Operation (OT)', 'Pre-Anesthetic Assessment', () => go(frm, 'Pre Anesthetic Assessment'));
+            if (!s.has_consent) add('Operation (OT)', 'Surgical Consent Form', () => go(frm, 'Surgical Consent Form'));
+            add('Operation (OT)', 'Pre-Operative Checklist', () => go(frm, 'Pre Operative Checklist'));
         }
         if (s.preop_ready && !s.operated) {
-            frm.add_custom_button(__('Operation Theatre Case'), () => go(frm, 'Operation Theatre Case'), __(CARE));
-            frm.add_custom_button(__('Surgical Safety Checklist'), () => go(frm, 'Surgical Safety Checklist'), __(CARE));
-            frm.add_custom_button(__('OR Tracking Board'), () => go(frm, 'OR Tracking Board'), __(CARE));
-            frm.add_custom_button(__('Operation / Procedure Note'), () => go(frm, 'Operation Procedure Note'), __(CARE));
+            add('Operation (OT)', 'Operation Theatre Case', () => go(frm, 'Operation Theatre Case'));
+            add('Operation (OT)', 'Surgical Safety Checklist', () => go(frm, 'Surgical Safety Checklist'));
+            add('Operation (OT)', 'OR Tracking Board', () => go(frm, 'OR Tracking Board'));
+            add('Operation (OT)', 'Operation / Procedure Note', () => go(frm, 'Operation Procedure Note'));
         }
         if (s.operated) {
-            if (!s.has_recovery) frm.add_custom_button(__('Recovery Nurse Record'), () => go(frm, 'Recovery Nurse Record'), __(CARE));
-            if (!s.has_postop)   frm.add_custom_button(__('Post-Operative Checklist'), () => go(frm, 'Post Operative Checklist'), __(CARE));
+            if (!s.has_recovery) add('Operation (OT)', 'Recovery Nurse Record', () => go(frm, 'Recovery Nurse Record'));
+            if (!s.has_postop)   add('Operation (OT)', 'Post-Operative Checklist', () => go(frm, 'Post Operative Checklist'));
         }
     }
 
     // ----- Discharge -----
     const can_discharge = s.is_surgical ? s.has_recovery : s.has_history;
-    if (can_discharge && !s.discharged) {
-        frm.add_custom_button(__('Discharge Summary'), () => go(frm, 'Discharge Summary'), __(CARE));
-    }
+    if (can_discharge && !s.discharged) add('Discharge', 'Discharge Summary', () => go(frm, 'Discharge Summary'));
+
+    // ----- Billing -----
+    add('Billing', 'Send Service to Billing (lab / drugs / radiology)', () => go(frm, 'Inpatient Service Order'));
+    add('Billing', 'Add Deposit', () => open_deposit_dialog(frm));
+    add('Billing', 'Bill Bed Now', () => bill_bed(frm));
+
+    // ----- View -----
+    add('View', 'Care Timeline (notifications)', () => frappe.set_route('List', 'Patient Notification', { inpatient_record: frm.doc.name }));
+    add('View', 'Nurse Handovers', () => frappe.set_route('List', 'Nurse Handover', { inpatient_record: frm.doc.name }));
+    add('View', 'Invoices', () => frappe.set_route('List', 'Sales Invoice', { custom_inpatient_record: frm.doc.name }));
+    return A;
 }
 
-function add_billing_menu(frm) {
-    frm.add_custom_button(__('Deposit'), () => open_deposit_dialog(frm), __('Billing'));
-    frm.add_custom_button(__('Send Service to Billing'), () => go(frm, 'Inpatient Service Order'), __('Billing'));
-    frm.add_custom_button(__('Bill Bed Now'), () => {
-        frappe.call({
-            method: 'inpatient_patch.inpatient_patch.billing.bill_bed_for_record',
-            args: { inpatient_record: frm.doc.name }, freeze: true,
-            callback(r) { if (r.message) { frappe.show_alert({ message: __('Draft bed invoice {0} created', [r.message]), indicator: 'green' }); frm.reload_doc(); } },
+function add_create_button(frm, s) {
+    const btn = frm.add_custom_button(__('Create / Actions'), () => open_create_menu(frm, s));
+    btn.addClass('btn-primary');
+}
+
+function open_create_menu(frm, s) {
+    const actions = build_actions(frm, s);
+    const groups = {};
+    actions.forEach((a, i) => { (groups[a.group] = groups[a.group] || []).push({ i, label: a.label }); });
+
+    let html = '<div class="ip-create-menu">';
+    Object.keys(groups).forEach((g) => {
+        html += '<div style="margin:6px 0 2px;font-weight:600;color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:.04em;">' + frappe.utils.escape_html(g) + '</div>';
+        groups[g].forEach((item) => {
+            html += '<button type="button" class="btn btn-default btn-sm ip-act" data-i="' + item.i +
+                '" style="display:block;width:100%;text-align:left;margin:3px 0;">' +
+                frappe.utils.escape_html(item.label) + '</button>';
         });
-    }, __('Billing'));
+    });
+    html += '</div>';
+
+    const d = new frappe.ui.Dialog({ title: __('What would you like to do?'), size: 'small' });
+    d.$body.html(html);
+    d.$body.find('.ip-act').on('click', function () {
+        const idx = parseInt($(this).attr('data-i'), 10);
+        d.hide();
+        actions[idx].fn();
+    });
+    d.show();
 }
 
-function add_view_menu(frm, s) {
-    const L = (dt) => frappe.set_route('List', dt, { inpatient_record: frm.doc.name });
-    frm.add_custom_button(__('Care Timeline (notifications)'), () => L('Patient Notification'), __('View'));
-    frm.add_custom_button(__('Nurse Handovers'), () => L('Nurse Handover'), __('View'));
-    frm.add_custom_button(__('Invoices'), () => frappe.set_route('List', 'Sales Invoice', { custom_inpatient_record: frm.doc.name }), __('View'));
+function bill_bed(frm) {
+    frappe.call({
+        method: 'inpatient_patch.inpatient_patch.billing.bill_bed_for_record',
+        args: { inpatient_record: frm.doc.name }, freeze: true,
+        callback(r) { if (r.message) { frappe.show_alert({ message: __('Draft bed invoice {0} created', [r.message]), indicator: 'green' }); frm.reload_doc(); } },
+    });
 }
 
 function show_next_step(frm, s) {
     let next;
-    if (!s.has_nursing) next = 'Complete the Nursing Admission Assessment (Care Steps menu).';
+    if (!s.has_nursing) next = 'Complete the Nursing Admission Assessment (Create → Admission).';
     else if (!s.has_history) next = 'Complete the History & Clinical Examination.';
     else if (s.is_surgical && !s.preop_ready) next = 'Prepare for theatre: finish the Pre-Operative Checklist and tick READY FOR OR.';
     else if (s.is_surgical && !s.operated) next = 'Run the Operation Theatre Case, then the Procedure Note.';
@@ -133,7 +155,7 @@ function open_deposit_dialog(frm) {
     d.show();
 }
 
-function render_snapshot(frm, stage) {
+function render_snapshot(frm) {
     frappe.call({
         method: 'inpatient_patch.inpatient_patch.hub.get_snapshot',
         args: { inpatient_record: frm.doc.name },
@@ -144,8 +166,7 @@ function render_snapshot(frm, stage) {
             Object.keys(counts).forEach((sheet) => {
                 const n = counts[sheet];
                 const color = n ? '#1f9d55' : '#9aa0a6';
-                const slug = frappe.router.slug(sheet);
-                const url = '/app/' + slug + '?inpatient_record=' + encodeURIComponent(frm.doc.name);
+                const url = '/app/' + frappe.router.slug(sheet) + '?inpatient_record=' + encodeURIComponent(frm.doc.name);
                 html += '<a href="' + url + '" style="text-decoration:none;border:1px solid ' + color +
                     ';color:' + color + ';border-radius:12px;padding:2px 10px;font-size:12px;">' +
                     frappe.utils.escape_html(sheet) + ' : <b>' + n + '</b></a>';

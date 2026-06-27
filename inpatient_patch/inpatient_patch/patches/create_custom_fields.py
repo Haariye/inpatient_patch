@@ -127,6 +127,15 @@ FIELD_CONFIGS = [
 ]
 
 
+# Compatibility columns referenced by other apps / native dialogs but sometimes
+# missing on a bench. Created if absent; never removed by our uninstall.
+COMPAT_FIELDS = [
+    {"dt": "Healthcare Service Unit", "fieldname": "custom_disabled",
+     "fieldtype": "Check", "label": "Disabled", "default": "0",
+     "insert_after": "service_unit_type"},
+]
+
+
 def _upsert(cfg):
     cf_name = f"{cfg['dt']}-{cfg['fieldname']}"
     if frappe.db.exists("Custom Field", cf_name):
@@ -148,4 +157,15 @@ def execute():
         except Exception:
             frappe.log_error(frappe.get_traceback(),
                              f"Inpatient Patch custom field: {cfg.get('fieldname')}")
+    # Compatibility shims: some benches reference columns that other apps were
+    # supposed to create (e.g. the native Admit dialog filters Healthcare Service
+    # Unit by custom_disabled). Create them if missing so those queries don't 500.
+    # These are NOT removed on uninstall (we don't own them).
+    for cfg in COMPAT_FIELDS:
+        try:
+            if not frappe.db.exists("Custom Field", f"{cfg['dt']}-{cfg['fieldname']}"):
+                frappe.get_doc({"doctype": "Custom Field", **cfg}).insert(ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(),
+                             f"Inpatient Patch compat field: {cfg.get('fieldname')}")
     frappe.db.commit()

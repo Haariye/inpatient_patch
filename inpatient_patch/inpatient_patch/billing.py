@@ -147,12 +147,58 @@ def bill_bed_for_record(inpatient_record, posting_date=None):
 # 2. SERVICE ORDER -> DRAFT BILLABLE INVOICE  (pharmacy/lab/radiology/...)
 # ===========================================================================
 @frappe.whitelist()
+def _resolve_template_item(doctype, name):
+    """Return the billing Item linked to a Lab Test / Clinical Procedure Template."""
+    if not name:
+        return None
+    for field in ("item", "item_code"):
+        if frappe.get_meta(doctype).has_field(field):
+            val = frappe.db.get_value(doctype, name, field)
+            if val:
+                return val
+    return None
+
+
+def _collect_order_rows(so):
+    """Flatten the encounter-style tables into billable rows:
+       {row_dt, row_name, item_code, qty, rate, desc}."""
+    rows = []
+    for r in (so.get("lab_tests") or []):
+        if cint(r.get("billed")):
+            continue
+        item = _resolve_template_item("Lab Test Template", r.lab_test_template)
+        if not item:
+            frappe.throw(_("Lab Test Template <b>{0}</b> has no billing Item set. "
+                           "Set its Item, or remove the row.").format(r.lab_test_template))
+        rows.append({"row_dt": "Inpatient Lab Order", "row_name": r.name,
+                     "item_code": item, "qty": flt(r.qty) or 1, "rate": flt(r.rate),
+                     "desc": r.lab_test_name or r.lab_test_template})
+    for r in (so.get("procedures") or []):
+        if cint(r.get("billed")):
+            continue
+        item = _resolve_template_item("Clinical Procedure Template", r.procedure_template)
+        if not item:
+            frappe.throw(_("Clinical Procedure Template <b>{0}</b> has no billing Item set. "
+                           "Set its Item, or remove the row.").format(r.procedure_template))
+        rows.append({"row_dt": "Inpatient Procedure Order", "row_name": r.name,
+                     "item_code": item, "qty": flt(r.qty) or 1, "rate": flt(r.rate),
+                     "desc": r.procedure_name or r.procedure_template})
+    for r in (so.get("items") or []):
+        if cint(r.get("billed")):
+            continue
+        rows.append({"row_dt": "Inpatient Item Order", "row_name": r.name,
+                     "item_code": r.item_code, "qty": flt(r.qty) or 1,
+                     "rate": flt(r.rate), "desc": r.item_name or r.item_code})
+    return rows
+
+
 def send_service_order_to_billing(service_order):
     so = frappe.get_doc("Inpatient Service Order", service_order)
 
-    lines = [r for r in so.services if not cint(r.billed)]
-    if not lines:
-        frappe.throw(_("Nothing to bill: all service lines already billed."))
+    rows = _collect_order_rows(so)
+    if not rows:
+        frappe.throw(_("Nothing to bill: add lab tests, procedures or items first "
+                       "(or all rows are already billed)."))
 
     ip = frappe.get_doc("Inpatient Record", so.inpatient_record)
     customer = get_customer(so.patient)
@@ -170,17 +216,16 @@ def send_service_order_to_billing(service_order):
     inv.custom_inpatient_record = so.inpatient_record
     inv.custom_is_inpatient_service_invoice = 1
     inv.custom_inpatient_service_order = so.name
-    inv.remarks = _("{0} services from {1}").format(so.service_type, so.name)
+    inv.remarks = _("Inpatient services from {0}").format(so.name)
 
-    for r in lines:
+    for r in rows:
         child = inv.append("items", {})
-        child.item_code = r.item_code
-        child.qty = flt(r.qty) or 1
-        if flt(r.rate):
-            child.rate = flt(r.rate)
-        child.description = "\n".join(filter(None, [r.item_name, r.notes,
-                                      _("Service: {0}").format(r.service_type)]))
-        child.custom_service_charge_row_id = r.name
+        child.item_code = r["item_code"]
+        child.qty = r["qty"]
+        if r["rate"]:
+            child.rate = r["rate"]
+        child.description = r["desc"]
+        child.custom_service_charge_row_id = "{0}:{1}".format(r["row_dt"], r["row_name"])
         child.custom_inpatient_record = so.inpatient_record
 
     inv.set_missing_values()
@@ -193,25 +238,63 @@ def send_service_order_to_billing(service_order):
     try:
         from inpatient_patch.inpatient_patch.notifications import notify_patient
         notify_patient(so.inpatient_record, "New Bill",
-                       _("A new {0} bill has been generated for you.").format(so.service_type),
+                       _("A new bill has been generated for you."),
                        ref_dt="Sales Invoice", ref_dn=inv.name)
     except Exception:
         pass
     return inv.name
 
 
+@frappe.whitelist()
+def fetch_lab_findings(patient, inpatient_record=None):
+    """Return this patient's lab tests (most recent first) as finding rows for the
+    Emergency Assessment / examination lab-findings table."""
+    out = []
+    try:
+        names = frappe.get_all("Lab Test",
+            filters={"patient": patient}, order_by="modified desc",
+            pluck="name", limit=50)
+    except Exception:
+        names = []
+    for nm in names:
+        try:
+            lt = frappe.get_doc("Lab Test", nm)
+        except Exception:
+            continue
+        finding = ""
+        try:
+            parts = []
+            for it in (lt.get("normal_test_items") or []):
+                val = it.get("result_value")
+                lab = it.get("lab_test_name") or it.get("lab_test_particulars")
+                if val:
+                    parts.append("{0}: {1}".format(lab, val))
+            finding = "; ".join(parts)
+        except Exception:
+            finding = ""
+        out.append({
+            "lab_test": lt.name,
+            "test_name": lt.get("lab_test_name") or lt.name,
+            "status": lt.get("status") or "",
+            "result_date": str(lt.get("result_date") or "")[:10],
+            "finding": finding,
+        })
+    return out
+
+
 def on_submit_sales_invoice(doc, method=None):
     """When any inpatient invoice is submitted, mark its source rows billed and
     refresh the record summary."""
-    # service order rows
+    # service order rows (row id stored as "RowDocType:RowName")
     if cint(getattr(doc, "custom_is_inpatient_service_invoice", 0)):
         for item in doc.items:
-            row_id = item.get("custom_service_charge_row_id")
-            if row_id and frappe.db.exists("Service Charge Line", row_id):
-                frappe.db.set_value("Service Charge Line", row_id,
-                                    {"billed": 1, "billed_invoice": doc.name,
-                                     "billed_invoice_item": item.name},
-                                    update_modified=False)
+            row_id = item.get("custom_service_charge_row_id") or ""
+            if ":" in row_id:
+                row_dt, _sep, row_name = row_id.partition(":")
+                if row_name and frappe.db.exists(row_dt, row_name):
+                    frappe.db.set_value(row_dt, row_name,
+                                        {"billed": 1, "billed_invoice": doc.name},
+                                        update_modified=False)
         if doc.get("custom_inpatient_service_order"):
             _refresh_service_order_status(doc.custom_inpatient_service_order)
 
@@ -245,8 +328,12 @@ def on_cancel_service_order(doc, method=None):
 
 def _refresh_service_order_status(name):
     so = frappe.get_doc("Inpatient Service Order", name)
-    total = len(so.services)
-    billed = len([r for r in so.services if cint(r.billed)])
+    allrows = (list(so.get("lab_tests") or []) + list(so.get("procedures") or [])
+               + list(so.get("items") or []))
+    total = len(allrows)
+    billed = len([r for r in allrows if cint(r.get("billed"))])
+    if not total:
+        return
     status = "Billed" if billed == total else ("Partially Billed" if billed else "Sent (Billable)")
     so.db_set("status", status)
 

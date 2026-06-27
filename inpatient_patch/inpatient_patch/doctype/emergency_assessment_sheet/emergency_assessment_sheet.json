@@ -36,6 +36,7 @@
   "h_heart",
   "past_medications",
   "sb_dx",
+  "lab_findings_help",
   "lab_findings",
   "diagnosis",
   "emergency_plan",
@@ -258,35 +259,43 @@
    "idx": 30
   },
   {
+   "fieldname": "lab_findings_help",
+   "label": "Lab Findings",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Use the <b>Fetch Findings</b> button (top right) to pull this patient's lab results into the table.</p>",
+   "idx": 31
+  },
+  {
    "fieldname": "lab_findings",
    "label": "Laboratory Findings",
-   "fieldtype": "Text",
-   "idx": 31
+   "fieldtype": "Table",
+   "options": "Inpatient Lab Finding",
+   "idx": 32
   },
   {
    "fieldname": "diagnosis",
    "label": "Diagnosis / Assessment",
    "fieldtype": "Text",
-   "idx": 32
+   "idx": 33
   },
   {
    "fieldname": "emergency_plan",
    "label": "Emergency Plan & Medications",
    "fieldtype": "Text",
-   "idx": 33
+   "idx": 34
   },
   {
    "fieldname": "consultant",
    "label": "Consultant Consulted",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
-   "idx": 34
+   "idx": 35
   },
   {
    "fieldname": "sb_decision",
    "label": "Final Decision",
    "fieldtype": "Section Break",
-   "idx": 35
+   "idx": 36
   },
   {
    "fieldname": "final_decision",
@@ -295,21 +304,21 @@
    "options": "\nAdmitted\nDischarged\nSelf-Discharge\nReferred",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 36
+   "idx": 37
   },
   {
    "fieldname": "admitted_to",
    "label": "Admitted To (ward)",
    "fieldtype": "Data",
    "depends_on": "eval:doc.final_decision=='Admitted'",
-   "idx": 37
+   "idx": 38
   },
   {
    "fieldname": "decision_reason",
    "label": "Reason / Referral Detail",
    "fieldtype": "Small Text",
    "depends_on": "eval:['Self-Discharge','Referred'].includes(doc.final_decision)",
-   "idx": 38
+   "idx": 39
   }
  ],
  "index_web_pages_for_search": 1,
