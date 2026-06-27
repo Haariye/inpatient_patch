@@ -9,9 +9,9 @@
   "shift",
   "rbs_mgdl",
   "cb_ins",
-  "mixtard_units",
-  "actrapid_premeal_units",
-  "actrapid_sliding_units",
+  "insulin_item",
+  "insulin_kind",
+  "units",
   "nurse",
   "remarks"
  ],
@@ -47,21 +47,27 @@
    "idx": 4
   },
   {
-   "fieldname": "mixtard_units",
-   "label": "Mixtard (units)",
-   "fieldtype": "Float",
+   "fieldname": "insulin_item",
+   "label": "Insulin (Item)",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "description": "Insulin product is selected from the Item master, not a fixed list.",
    "idx": 5
   },
   {
-   "fieldname": "actrapid_premeal_units",
-   "label": "Actrapid Pre-meal (units)",
-   "fieldtype": "Float",
+   "fieldname": "insulin_kind",
+   "label": "Kind",
+   "fieldtype": "Select",
+   "options": "\nBasal\nBolus / Pre-meal\nSliding Scale",
+   "in_list_view": 1,
    "idx": 6
   },
   {
-   "fieldname": "actrapid_sliding_units",
-   "label": "Actrapid Sliding Scale (units)",
+   "fieldname": "units",
+   "label": "Units",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "idx": 7
   },
   {

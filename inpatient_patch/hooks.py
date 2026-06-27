@@ -15,15 +15,23 @@ doctype_js = {
     "Inpatient Record": "public/js/inpatient_record_hub.js",
     "Inpatient Service Order": "public/js/service_order.js",
     "Operation Theatre Case": "public/js/ot_case.js",
+    "Emergency Assessment Sheet": "public/js/emergency_assessment.js",
+    "Nurse Handover": "public/js/nurse_handover.js",
 }
 
 # ---- document events ------------------------------------------------------
+def _stage(dt):
+    return {dt: {"after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage",
+                 "on_submit": "inpatient_patch.inpatient_patch.workflow.update_stage"}}
+
+
 doc_events = {
     "Inpatient Record": {
         "after_insert": "inpatient_patch.inpatient_patch.department.apply_admission_protocol",
         "on_update": "inpatient_patch.inpatient_patch.billing.refresh_inpatient_billing_summary",
     },
     "Operation Theatre Case": {
+        "before_submit": "inpatient_patch.inpatient_patch.workflow.before_submit_ot_case",
         "on_submit": "inpatient_patch.inpatient_patch.ot.on_submit_ot_case",
         "on_cancel": "inpatient_patch.inpatient_patch.ot.on_cancel_ot_case",
     },
@@ -40,13 +48,31 @@ doc_events = {
     },
     "Operation Procedure Note": {
         "validate": "inpatient_patch.inpatient_patch.ot.validate_procedure_note",
+        "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage",
+        "on_submit": "inpatient_patch.inpatient_patch.workflow.update_stage",
     },
     "Pre Operative Checklist": {
         "validate": "inpatient_patch.inpatient_patch.ot.validate_preop_checklist",
+        "on_update": "inpatient_patch.inpatient_patch.workflow.update_stage",
     },
     "Surgical Safety Checklist": {
         "validate": "inpatient_patch.inpatient_patch.ot.validate_safety_checklist",
     },
+    "Discharge Summary": {
+        "before_submit": "inpatient_patch.inpatient_patch.workflow.before_submit_discharge",
+        "on_submit": "inpatient_patch.inpatient_patch.workflow.update_stage",
+    },
+    # stage tracking + patient notification for the remaining sheets
+    "Emergency Assessment Sheet": {
+        "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
+    "Nursing Admission Assessment": {
+        "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
+    "History Clinical Examination": {
+        "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
+    "Recovery Nurse Record": {
+        "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
+    "Nurse Handover": {
+        "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
 }
 
 # ---- scheduled jobs -------------------------------------------------------

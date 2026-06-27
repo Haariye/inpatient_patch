@@ -16,6 +16,10 @@
   "sb_deposit",
   "deposit_mode_of_payment",
   "deposit_account",
+  "sb_notify",
+  "send_patient_inapp",
+  "send_patient_sms",
+  "notify_help",
   "sb_warn",
   "note"
  ],
@@ -97,18 +101,45 @@
    "idx": 11
   },
   {
+   "fieldname": "sb_notify",
+   "label": "Patient Notifications",
+   "fieldtype": "Section Break",
+   "idx": 12
+  },
+  {
+   "fieldname": "send_patient_inapp",
+   "label": "Send in-app notifications to patient",
+   "fieldtype": "Check",
+   "default": "1",
+   "idx": 13
+  },
+  {
+   "fieldname": "send_patient_sms",
+   "label": "Send SMS to patient (uses SMS Settings)",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 14
+  },
+  {
+   "fieldname": "notify_help",
+   "label": "Notify",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Every workflow step logs a Patient Notification and (optionally) sends an in-app alert / SMS.</p>",
+   "idx": 15
+  },
+  {
    "fieldname": "sb_warn",
    "label": "Behaviour",
    "fieldtype": "Section Break",
    "collapsible": 1,
-   "idx": 12
+   "idx": 16
   },
   {
    "fieldname": "note",
    "label": "Note",
    "fieldtype": "Small Text",
    "default": "Service invoices (pharmacy/lab/radiology/OT) are created as DRAFT but billable the moment a nurse/doctor sends them. Only bed charges run on the daily schedule.",
-   "idx": 13
+   "idx": 17
   }
  ],
  "index_web_pages_for_search": 1,

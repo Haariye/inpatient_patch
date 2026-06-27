@@ -14,22 +14,15 @@
   "hospital_id",
   "age",
   "sex",
-  "sb_pa",
-  "assessment_date",
-  "diagnosis",
-  "planned_procedure",
-  "sb_systems",
-  "s_heent",
-  "s_chest",
-  "s_cvs",
-  "s_endocrine",
-  "s_gi",
-  "cb_sys",
-  "s_hematological",
-  "s_neuro",
-  "s_gut",
-  "s_msk",
-  "s_other",
+  "bed",
+  "sb_ho",
+  "handover_datetime",
+  "shift",
+  "from_nurse",
+  "to_nurse",
+  "sb_clin",
+  "clinical_summary",
+  "alerts",
   "sb_vitals",
   "bp",
   "pulse",
@@ -38,25 +31,20 @@
   "temperature",
   "spo2",
   "weight",
-  "sb_assess",
-  "general_appearance",
-  "physical_examination",
-  "asa",
-  "airway_assessment",
-  "pre_medication",
-  "lab_review",
-  "anesthesia_type",
-  "sb_fit",
-  "fitness",
-  "anesthetist"
+  "sb_tasks",
+  "pending_tasks",
+  "sb_ack",
+  "acknowledged",
+  "acknowledged_by",
+  "acknowledged_at"
  ],
  "fields": [
   {
    "fieldname": "naming_series",
    "label": "Series",
    "fieldtype": "Select",
-   "options": "PAA-.YYYY.-.#####",
-   "default": "PAA-.YYYY.-.#####",
+   "options": "HANDOVER-.YYYY.-.#####",
+   "default": "HANDOVER-.YYYY.-.#####",
    "reqd": 1,
    "idx": 0
   },
@@ -126,236 +114,163 @@
    "idx": 8
   },
   {
-   "fieldname": "sb_pa",
-   "label": "Pre-Anesthetic Assessment",
-   "fieldtype": "Section Break",
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
    "idx": 9
   },
   {
-   "fieldname": "assessment_date",
-   "label": "Date",
-   "fieldtype": "Date",
-   "reqd": 1,
+   "fieldname": "sb_ho",
+   "label": "Shift Handover",
+   "fieldtype": "Section Break",
    "idx": 10
   },
   {
-   "fieldname": "diagnosis",
-   "label": "Diagnosis",
-   "fieldtype": "Small Text",
+   "fieldname": "handover_datetime",
+   "label": "Date / Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1,
    "idx": 11
   },
   {
-   "fieldname": "planned_procedure",
-   "label": "Planned Procedure",
-   "fieldtype": "Small Text",
+   "fieldname": "shift",
+   "label": "Shift",
+   "fieldtype": "Select",
+   "options": "\nA (Morning)\nB (Evening)\nC (Night)",
+   "in_list_view": 1,
    "idx": 12
   },
   {
-   "fieldname": "sb_systems",
-   "label": "Systems Review",
-   "fieldtype": "Section Break",
-   "collapsible": 1,
+   "fieldname": "from_nurse",
+   "label": "From Nurse",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "in_list_view": 1,
    "idx": 13
   },
   {
-   "fieldname": "s_heent",
-   "label": "HEENT issue",
-   "fieldtype": "Check",
-   "default": "0",
+   "fieldname": "to_nurse",
+   "label": "To Nurse",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "in_list_view": 1,
    "idx": 14
   },
   {
-   "fieldname": "s_chest",
-   "label": "Chest issue",
-   "fieldtype": "Check",
-   "default": "0",
+   "fieldname": "sb_clin",
+   "label": "Clinical Summary",
+   "fieldtype": "Section Break",
    "idx": 15
   },
   {
-   "fieldname": "s_cvs",
-   "label": "CVS issue",
-   "fieldtype": "Check",
-   "default": "0",
+   "fieldname": "clinical_summary",
+   "label": "Clinical Summary / Status",
+   "fieldtype": "Text",
+   "reqd": 1,
    "idx": 16
   },
   {
-   "fieldname": "s_endocrine",
-   "label": "Endocrine disease",
-   "fieldtype": "Check",
-   "default": "0",
+   "fieldname": "alerts",
+   "label": "Allergies / Alerts",
+   "fieldtype": "Small Text",
    "idx": 17
   },
   {
-   "fieldname": "s_gi",
-   "label": "GI disease",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 18
-  },
-  {
-   "fieldname": "cb_sys",
-   "label": "",
-   "fieldtype": "Column Break",
-   "idx": 19
-  },
-  {
-   "fieldname": "s_hematological",
-   "label": "Hematological",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 20
-  },
-  {
-   "fieldname": "s_neuro",
-   "label": "Neurological",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 21
-  },
-  {
-   "fieldname": "s_gut",
-   "label": "GUT",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 22
-  },
-  {
-   "fieldname": "s_msk",
-   "label": "Musculoskeletal",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 23
-  },
-  {
-   "fieldname": "s_other",
-   "label": "Other Diseases",
-   "fieldtype": "Small Text",
-   "idx": 24
-  },
-  {
    "fieldname": "sb_vitals",
-   "label": "Vital Signs",
+   "label": "Latest Vitals",
    "fieldtype": "Section Break",
    "collapsible": 1,
-   "idx": 25
+   "idx": 18
   },
   {
    "fieldname": "bp",
    "label": "BP",
    "fieldtype": "Data",
-   "idx": 26
+   "idx": 19
   },
   {
    "fieldname": "pulse",
    "label": "Pulse (PR)",
    "fieldtype": "Int",
-   "idx": 27
+   "idx": 20
   },
   {
    "fieldname": "rr",
    "label": "Respiration (RR)",
    "fieldtype": "Int",
-   "idx": 28
+   "idx": 21
   },
   {
    "fieldname": "cb_vitals",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 29
+   "idx": 22
   },
   {
    "fieldname": "temperature",
    "label": "Temperature (\u00b0C)",
    "fieldtype": "Float",
-   "idx": 30
+   "idx": 23
   },
   {
    "fieldname": "spo2",
    "label": "SpO2 (%)",
    "fieldtype": "Int",
-   "idx": 31
+   "idx": 24
   },
   {
    "fieldname": "weight",
    "label": "Weight (kg)",
    "fieldtype": "Float",
-   "idx": 32
+   "idx": 25
   },
   {
-   "fieldname": "sb_assess",
-   "label": "Assessment",
+   "fieldname": "sb_tasks",
+   "label": "Pending Tasks Handed Over",
    "fieldtype": "Section Break",
-   "idx": 33
+   "idx": 26
   },
   {
-   "fieldname": "general_appearance",
-   "label": "General Appearance",
-   "fieldtype": "Select",
-   "options": "\nAcute Sick Looking\nChronic Sick Looking\nWell",
-   "idx": 34
+   "fieldname": "pending_tasks",
+   "label": "Pending Tasks",
+   "fieldtype": "Table",
+   "options": "Handover Task",
+   "idx": 27
   },
   {
-   "fieldname": "physical_examination",
-   "label": "Physical Examination",
-   "fieldtype": "Text",
-   "idx": 35
-  },
-  {
-   "fieldname": "asa",
-   "label": "ASA Classification",
-   "fieldtype": "Select",
-   "options": "\nASA I\nASA II\nASA III\nASA IV\nASA V\nASA VI",
-   "in_list_view": 1,
-   "idx": 36
-  },
-  {
-   "fieldname": "airway_assessment",
-   "label": "Airway Assessment",
-   "fieldtype": "Small Text",
-   "idx": 37
-  },
-  {
-   "fieldname": "pre_medication",
-   "label": "Pre-medication",
-   "fieldtype": "Small Text",
-   "idx": 38
-  },
-  {
-   "fieldname": "lab_review",
-   "label": "Laboratory Review",
-   "fieldtype": "Text",
-   "idx": 39
-  },
-  {
-   "fieldname": "anesthesia_type",
-   "label": "Anesthesia Type",
-   "fieldtype": "Link",
-   "options": "OT Anesthesia Type",
-   "in_list_view": 1,
-   "idx": 40
-  },
-  {
-   "fieldname": "sb_fit",
-   "label": "Clearance (mandatory)",
+   "fieldname": "sb_ack",
+   "label": "Acknowledgement",
    "fieldtype": "Section Break",
-   "idx": 41
+   "idx": 28
   },
   {
-   "fieldname": "fitness",
-   "label": "Fit / Unfit",
-   "fieldtype": "Select",
-   "options": "\nFit\nUnfit",
-   "reqd": 1,
-   "in_list_view": 1,
-   "idx": 42
+   "fieldname": "acknowledged",
+   "label": "Acknowledged by receiving nurse",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 29
   },
   {
-   "fieldname": "anesthetist",
-   "label": "Anesthetist",
+   "fieldname": "acknowledged_by",
+   "label": "Acknowledged By",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
-   "reqd": 1,
-   "idx": 43
+   "depends_on": "eval:doc.acknowledged",
+   "mandatory_depends_on": "eval:doc.acknowledged",
+   "idx": 30
+  },
+  {
+   "fieldname": "acknowledged_at",
+   "label": "Acknowledged At",
+   "fieldtype": "Datetime",
+   "depends_on": "eval:doc.acknowledged",
+   "idx": 31
   }
  ],
  "index_web_pages_for_search": 1,
@@ -363,7 +278,7 @@
  "modified": "2026-01-01 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Inpatient Patch",
- "name": "Pre Anesthetic Assessment",
+ "name": "Nurse Handover",
  "owner": "Administrator",
  "naming_rule": "By \"Naming Series\" field",
  "sort_field": "modified",
@@ -379,9 +294,9 @@
    "write": 1,
    "create": 1,
    "delete": 1,
-   "submit": 0,
-   "cancel": 0,
-   "amend": 0,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
    "report": 1,
    "export": 1,
    "print": 1,
@@ -395,9 +310,9 @@
    "write": 1,
    "create": 1,
    "delete": 1,
-   "submit": 0,
-   "cancel": 0,
-   "amend": 0,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
    "report": 1,
    "export": 1,
    "print": 1,
@@ -411,9 +326,9 @@
    "write": 1,
    "create": 1,
    "delete": 1,
-   "submit": 0,
-   "cancel": 0,
-   "amend": 0,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
    "report": 1,
    "export": 1,
    "print": 1,
@@ -427,9 +342,9 @@
    "write": 1,
    "create": 1,
    "delete": 1,
-   "submit": 0,
-   "cancel": 0,
-   "amend": 0,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
    "report": 1,
    "export": 1,
    "print": 1,
@@ -438,6 +353,7 @@
   }
  ],
  "quick_entry": 1,
+ "is_submittable": 1,
  "autoname": "naming_series:",
  "title_field": "patient_name",
  "show_title_field_in_link": 1

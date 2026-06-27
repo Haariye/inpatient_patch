@@ -47,6 +47,16 @@ def on_submit_ot_case(doc, method=None):
     if doc.inpatient_record:
         frappe.db.set_value("Inpatient Record", doc.inpatient_record,
                             "custom_operated", 1, update_modified=False)
+    if doc.get("status") != "Completed":
+        doc.db_set("status", "Completed")
+    try:
+        from inpatient_patch.inpatient_patch.notifications import notify_patient
+        notify_patient(doc.inpatient_record, "Operation",
+                       _("Your operation ({0}) has been completed and recorded.")
+                       .format(doc.planned_procedure or ""),
+                       ref_dt="Operation Theatre Case", ref_dn=doc.name)
+    except Exception:
+        pass
 
 
 def on_cancel_ot_case(doc, method=None):

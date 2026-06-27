@@ -14,9 +14,21 @@ from frappe import _
 
 
 def apply_admission_protocol(doc, method=None):
-    dept = doc.get("custom_medical_department")
+    """Stamp the department protocol onto a new Inpatient Record and post a
+    guidance comment. Wrapped so it can NEVER block the native admission flow
+    (e.g. the 'Schedule Admission' button on Patient Encounter)."""
+    try:
+        _apply_admission_protocol(doc)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "apply_admission_protocol")
+
+
+def _apply_admission_protocol(doc):
+    dept = doc.get("custom_medical_department") or doc.get("medical_department")
+    if dept and not doc.get("custom_medical_department"):
+        # mirror the native medical_department into our field for convenience
+        doc.db_set("custom_medical_department", dept, update_modified=False)
     if not dept:
-        # try to infer from the primary practitioner's department
         prac = doc.get("primary_practitioner")
         if prac:
             dept = frappe.db.get_value("Healthcare Practitioner", prac, "department")
@@ -41,6 +53,15 @@ def apply_admission_protocol(doc, method=None):
         doc.add_comment("Comment",
             _("<b>{0} admission protocol applied.</b> Required workflow:<ul>{1}</ul>")
             .format(dept, lines))
+
+    # notify the patient that admission has started
+    try:
+        from inpatient_patch.inpatient_patch.notifications import notify_patient
+        notify_patient(doc.name, "Admission",
+                       _("You have been admitted under {0}. Your care plan has started.")
+                       .format(dept), ref_dt="Inpatient Record", ref_dn=doc.name)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "admission notify")
 
 
 @frappe.whitelist()

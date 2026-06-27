@@ -26,6 +26,7 @@ SHEETS = {
     "Doctor Order": ("Doctor Order", "inpatient_record"),
     "Diabetic Insulin Chart": ("Diabetic Insulin Chart", "inpatient_record"),
     "Daily Round Plan": ("Daily Round Plan", "inpatient_record"),
+    "Nurse Handover": ("Nurse Handover", "inpatient_record"),
     "Discharge Summary": ("Discharge Summary", "inpatient_record"),
     "Operation Theatre Case": ("Operation Theatre Case", "inpatient_record"),
     "Inpatient Service Order": ("Inpatient Service Order", "inpatient_record"),

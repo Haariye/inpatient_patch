@@ -162,8 +162,8 @@
   {
    "fieldname": "anesthesia_type",
    "label": "Anesthesia",
-   "fieldtype": "Select",
-   "options": "\nGA (General)\nSA (Spinal)\nRegional Block\nLocal\nOther",
+   "fieldtype": "Link",
+   "options": "OT Anesthesia Type",
    "idx": 14
   },
   {

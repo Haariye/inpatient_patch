@@ -6,8 +6,29 @@ def after_install():
     """Seed the billing settings + a few example department protocols so the
     app is usable immediately. Safe & idempotent."""
     _seed_settings()
+    _seed_masters()
     _seed_protocols()
     frappe.db.commit()
+
+
+def _seed_masters():
+    anes = ["GA (General)", "SA (Spinal)", "Regional Block", "Local", "Sedation", "Other"]
+    for a in anes:
+        if not frappe.db.exists("OT Anesthesia Type", a):
+            try:
+                frappe.get_doc({"doctype": "OT Anesthesia Type",
+                                "anesthesia_type": a}).insert(ignore_permissions=True)
+            except Exception:
+                pass
+    routes = ["Oral", "IV", "IM", "SC", "Topical", "Inhalation", "PR", "Sublingual",
+              "Intradermal", "Other"]
+    for r in routes:
+        if not frappe.db.exists("Drug Route", r):
+            try:
+                frappe.get_doc({"doctype": "Drug Route",
+                                "route": r}).insert(ignore_permissions=True)
+            except Exception:
+                pass
 
 
 def _seed_settings():

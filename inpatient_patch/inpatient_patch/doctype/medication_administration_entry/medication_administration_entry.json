@@ -45,8 +45,8 @@
   {
    "fieldname": "route",
    "label": "Route",
-   "fieldtype": "Select",
-   "options": "\nOral\nIV\nIM\nSC\nTopical\nInhalation\nPR\nOther",
+   "fieldtype": "Link",
+   "options": "Drug Route",
    "idx": 4
   },
   {

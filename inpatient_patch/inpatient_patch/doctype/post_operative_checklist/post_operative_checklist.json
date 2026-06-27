@@ -29,27 +29,9 @@
   "sb_fluids",
   "maintenance_fluid_rate",
   "fluid_stop_time",
-  "sb_abx",
-  "abx_ceftriaxone",
-  "abx_metronidazole",
-  "abx_other",
-  "abx_other_detail",
-  "sb_analgesia",
-  "an_tramadol",
-  "an_diclofenac",
-  "an_paracetamol",
-  "an_pethidine",
-  "cb_an",
-  "an_other",
-  "an_other_detail",
-  "sb_anticoag",
-  "ac_enoxaparin",
-  "ac_heparin",
-  "ac_rivaroxaban",
-  "cb_ac",
-  "ac_other",
-  "med_omeprazole",
-  "med_pasil",
+  "sb_meds",
+  "meds_help",
+  "medications",
   "sb_care",
   "elevate_extremity",
   "pillow_hip_precautions",
@@ -243,238 +225,116 @@
    "idx": 23
   },
   {
-   "fieldname": "sb_abx",
-   "label": "Antibiotics",
+   "fieldname": "sb_meds",
+   "label": "Post-Op Medications",
    "fieldtype": "Section Break",
    "idx": 24
   },
   {
-   "fieldname": "abx_ceftriaxone",
-   "label": "Ceftriaxone",
-   "fieldtype": "Check",
-   "default": "0",
+   "fieldname": "meds_help",
+   "label": "Meds",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Add antibiotics, analgesics, anticoagulants etc. Each medicine is chosen from the Item master (nothing hardcoded).</p>",
    "idx": 25
   },
   {
-   "fieldname": "abx_metronidazole",
-   "label": "Metronidazole",
-   "fieldtype": "Check",
-   "default": "0",
+   "fieldname": "medications",
+   "label": "Medications",
+   "fieldtype": "Table",
+   "options": "Post Operative Medication",
    "idx": 26
-  },
-  {
-   "fieldname": "abx_other",
-   "label": "Other antibiotic",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 27
-  },
-  {
-   "fieldname": "abx_other_detail",
-   "label": "Other antibiotic detail",
-   "fieldtype": "Data",
-   "depends_on": "eval:doc.abx_other",
-   "idx": 28
-  },
-  {
-   "fieldname": "sb_analgesia",
-   "label": "Analgesics",
-   "fieldtype": "Section Break",
-   "idx": 29
-  },
-  {
-   "fieldname": "an_tramadol",
-   "label": "Tramadol",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 30
-  },
-  {
-   "fieldname": "an_diclofenac",
-   "label": "Diclofenac",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 31
-  },
-  {
-   "fieldname": "an_paracetamol",
-   "label": "Paracetamol",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 32
-  },
-  {
-   "fieldname": "an_pethidine",
-   "label": "Pethidine",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 33
-  },
-  {
-   "fieldname": "cb_an",
-   "label": "",
-   "fieldtype": "Column Break",
-   "idx": 34
-  },
-  {
-   "fieldname": "an_other",
-   "label": "Other analgesic",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 35
-  },
-  {
-   "fieldname": "an_other_detail",
-   "label": "Other analgesic detail",
-   "fieldtype": "Data",
-   "depends_on": "eval:doc.an_other",
-   "idx": 36
-  },
-  {
-   "fieldname": "sb_anticoag",
-   "label": "Anticoagulants",
-   "fieldtype": "Section Break",
-   "idx": 37
-  },
-  {
-   "fieldname": "ac_enoxaparin",
-   "label": "Enoxaparin",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 38
-  },
-  {
-   "fieldname": "ac_heparin",
-   "label": "Heparin",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 39
-  },
-  {
-   "fieldname": "ac_rivaroxaban",
-   "label": "Rivaroxaban",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 40
-  },
-  {
-   "fieldname": "cb_ac",
-   "label": "",
-   "fieldtype": "Column Break",
-   "idx": 41
-  },
-  {
-   "fieldname": "ac_other",
-   "label": "Other anticoagulant",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 42
-  },
-  {
-   "fieldname": "med_omeprazole",
-   "label": "Omeprazole",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 43
-  },
-  {
-   "fieldname": "med_pasil",
-   "label": "Pasil",
-   "fieldtype": "Check",
-   "default": "0",
-   "idx": 44
   },
   {
    "fieldname": "sb_care",
    "label": "Wound & Care",
    "fieldtype": "Section Break",
-   "idx": 45
+   "idx": 27
   },
   {
    "fieldname": "elevate_extremity",
    "label": "Elevate extremity",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 46
+   "idx": 28
   },
   {
    "fieldname": "pillow_hip_precautions",
    "label": "Pillow & hip precautions",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 47
+   "idx": 29
   },
   {
    "fieldname": "dressing_frequency",
    "label": "Dressing frequency",
    "fieldtype": "Data",
-   "idx": 48
+   "idx": 30
   },
   {
    "fieldname": "drainage_inserted",
    "label": "Drainage inserted",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 49
+   "idx": 31
   },
   {
    "fieldname": "drainage_removal_plan",
    "label": "Drain removal plan",
    "fieldtype": "Data",
    "depends_on": "eval:doc.drainage_inserted",
-   "idx": 50
+   "idx": 32
   },
   {
    "fieldname": "slab_removal_plan",
    "label": "Slab removal plan",
    "fieldtype": "Data",
-   "idx": 51
+   "idx": 33
   },
   {
    "fieldname": "cb_care",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 52
+   "idx": 34
   },
   {
    "fieldname": "postop_transfusion",
    "label": "Post-op transfusion",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 53
+   "idx": 35
   },
   {
    "fieldname": "transfusion_units",
    "label": "Units",
    "fieldtype": "Int",
    "depends_on": "eval:doc.postop_transfusion",
-   "idx": 54
+   "idx": 36
   },
   {
    "fieldname": "physiotherapy",
    "label": "Physiotherapy instructions",
    "fieldtype": "Small Text",
-   "idx": 55
+   "idx": 37
   },
   {
    "fieldname": "sb_inv",
    "label": "Investigations & Handover",
    "fieldtype": "Section Break",
-   "idx": 56
+   "idx": 38
   },
   {
    "fieldname": "inv_hct",
    "label": "Post-op HCT",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 57
+   "idx": 39
   },
   {
    "fieldname": "inv_control_xray",
    "label": "Control X-ray",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 58
+   "idx": 40
   },
   {
    "fieldname": "med_sheet_filled",
@@ -482,27 +342,27 @@
    "fieldtype": "Check",
    "reqd": 1,
    "default": "0",
-   "idx": 59
+   "idx": 41
   },
   {
    "fieldname": "recovery_sheet_filled",
    "label": "Recovery sheet filled by accepting nurse",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 60
+   "idx": 42
   },
   {
    "fieldname": "cb_inv",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 61
+   "idx": 43
   },
   {
    "fieldname": "items_collected",
    "label": "Images/photos/card/biopsy/removed part collected",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 62
+   "idx": 44
   }
  ],
  "index_web_pages_for_search": 1,

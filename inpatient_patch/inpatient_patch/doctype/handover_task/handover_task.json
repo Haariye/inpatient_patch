@@ -1,0 +1,63 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "task",
+  "priority",
+  "status",
+  "owner_nurse"
+ ],
+ "fields": [
+  {
+   "fieldname": "task",
+   "label": "Pending Task",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Routine\nImportant\nUrgent",
+   "default": "Routine",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Pending\nDone",
+   "default": "Pending",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "owner_nurse",
+   "label": "Owner",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "idx": 4
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Handover Task",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

@@ -141,8 +141,8 @@
   {
    "fieldname": "anesthesia_type",
    "label": "Anesthesia",
-   "fieldtype": "Select",
-   "options": "\nGeneral\nSpinal\nBlock\nLocal\nOther",
+   "fieldtype": "Link",
+   "options": "OT Anesthesia Type",
    "idx": 12
   },
   {

@@ -132,6 +132,14 @@ def bill_bed_for_record(inpatient_record, posting_date=None):
                         "custom_last_bed_billed_date", posting_date,
                         update_modified=False)
     refresh_inpatient_billing_summary(ip)
+    try:
+        from inpatient_patch.inpatient_patch.notifications import notify_patient
+        notify_patient(ip.name, "Bed Charge",
+                       _("A daily bed charge of {0} {1} was posted to your account.")
+                       .format(settings.currency or "USD", rate),
+                       ref_dt="Sales Invoice", ref_dn=inv.name)
+    except Exception:
+        pass
     return inv.name
 
 
@@ -182,6 +190,13 @@ def send_service_order_to_billing(service_order):
     so.db_set("sales_invoice", inv.name)
     so.db_set("status", "Sent (Billable)")
     refresh_inpatient_billing_summary(ip)
+    try:
+        from inpatient_patch.inpatient_patch.notifications import notify_patient
+        notify_patient(so.inpatient_record, "New Bill",
+                       _("A new {0} bill has been generated for you.").format(so.service_type),
+                       ref_dt="Sales Invoice", ref_dn=inv.name)
+    except Exception:
+        pass
     return inv.name
 
 
@@ -274,6 +289,14 @@ def on_submit_deposit(doc, method=None):
 
     doc.db_set("payment_entry", pe.name)
     refresh_inpatient_billing_summary(doc.inpatient_record)
+    try:
+        from inpatient_patch.inpatient_patch.notifications import notify_patient
+        notify_patient(doc.inpatient_record, "Deposit Received",
+                       _("Your deposit of {0} has been received. Thank you.")
+                       .format(flt(doc.amount)),
+                       ref_dt="Patient Deposit", ref_dn=doc.name)
+    except Exception:
+        pass
 
 
 def on_cancel_deposit(doc, method=None):
@@ -288,28 +311,37 @@ def on_cancel_deposit(doc, method=None):
 # ===========================================================================
 # 4. SUMMARY ROLLUP on Inpatient Record
 # ===========================================================================
-def refresh_inpatient_billing_summary(record):
-    name = record if isinstance(record, str) else record.name
-    if not frappe.db.exists("Inpatient Record", name):
-        return
+def refresh_inpatient_billing_summary(record, method=None):
+    """Roll up billed/paid/deposit/outstanding onto the Inpatient Record.
 
-    billed = frappe.db.sql("""
-        select coalesce(sum(grand_total),0), coalesce(sum(outstanding_amount),0),
-               coalesce(sum(grand_total-outstanding_amount),0)
-        from `tabSales Invoice`
-        where custom_inpatient_record=%s and docstatus=1
-    """, name)[0]
-    total_billed, outstanding, paid = flt(billed[0]), flt(billed[1]), flt(billed[2])
+    Registered as an `on_update` doc-event (called as (doc, method)) AND called
+    internally with a name string. Must never raise - it augments a native
+    healthcare save and must not block it.
+    """
+    try:
+        name = record if isinstance(record, str) else record.name
+        if not name or not frappe.db.exists("Inpatient Record", name):
+            return
 
-    deposit = frappe.db.sql("""
-        select coalesce(sum(amount),0) from `tabPatient Deposit`
-        where inpatient_record=%s and docstatus=1
-    """, name)[0][0]
-    deposit = flt(deposit)
+        billed = frappe.db.sql("""
+            select coalesce(sum(grand_total),0), coalesce(sum(outstanding_amount),0),
+                   coalesce(sum(grand_total-outstanding_amount),0)
+            from `tabSales Invoice`
+            where custom_inpatient_record=%s and docstatus=1
+        """, name)[0]
+        total_billed, outstanding, paid = flt(billed[0]), flt(billed[1]), flt(billed[2])
 
-    frappe.db.set_value("Inpatient Record", name, {
-        "custom_total_billed": total_billed,
-        "custom_total_paid": paid,
-        "custom_total_deposit": deposit,
-        "custom_outstanding": max(outstanding - deposit, 0),
-    }, update_modified=False)
+        deposit = frappe.db.sql("""
+            select coalesce(sum(amount),0) from `tabPatient Deposit`
+            where inpatient_record=%s and docstatus=1
+        """, name)[0][0]
+        deposit = flt(deposit)
+
+        frappe.db.set_value("Inpatient Record", name, {
+            "custom_total_billed": total_billed,
+            "custom_total_paid": paid,
+            "custom_total_deposit": deposit,
+            "custom_outstanding": max(outstanding - deposit, 0),
+        }, update_modified=False)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "Inpatient billing summary refresh")
