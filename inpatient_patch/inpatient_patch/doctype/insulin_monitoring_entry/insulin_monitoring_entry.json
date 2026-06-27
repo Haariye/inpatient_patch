@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "entry_datetime",
+  "shift",
+  "rbs_mgdl",
+  "cb_ins",
+  "mixtard_units",
+  "actrapid_premeal_units",
+  "actrapid_sliding_units",
+  "nurse",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "entry_datetime",
+   "label": "Date / Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "shift",
+   "label": "Shift",
+   "fieldtype": "Select",
+   "options": "\nA\nB\nC",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "rbs_mgdl",
+   "label": "RBS (mg/dL)",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "cb_ins",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 4
+  },
+  {
+   "fieldname": "mixtard_units",
+   "label": "Mixtard (units)",
+   "fieldtype": "Float",
+   "idx": 5
+  },
+  {
+   "fieldname": "actrapid_premeal_units",
+   "label": "Actrapid Pre-meal (units)",
+   "fieldtype": "Float",
+   "idx": 6
+  },
+  {
+   "fieldname": "actrapid_sliding_units",
+   "label": "Actrapid Sliding Scale (units)",
+   "fieldtype": "Float",
+   "idx": 7
+  },
+  {
+   "fieldname": "nurse",
+   "label": "Nurse / Doctor",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "in_list_view": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "remarks",
+   "label": "Remarks",
+   "fieldtype": "Data",
+   "idx": 9
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Insulin Monitoring Entry",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

@@ -1,0 +1,591 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "bed",
+  "sb_meta",
+  "checklist_datetime",
+  "accepting_nurse",
+  "surgeon",
+  "sb_vitals",
+  "bp",
+  "pulse",
+  "temp",
+  "cb_v",
+  "rr",
+  "sao2",
+  "sb_fluids",
+  "maintenance_fluid_rate",
+  "fluid_stop_time",
+  "sb_abx",
+  "abx_ceftriaxone",
+  "abx_metronidazole",
+  "abx_other",
+  "abx_other_detail",
+  "sb_analgesia",
+  "an_tramadol",
+  "an_diclofenac",
+  "an_paracetamol",
+  "an_pethidine",
+  "cb_an",
+  "an_other",
+  "an_other_detail",
+  "sb_anticoag",
+  "ac_enoxaparin",
+  "ac_heparin",
+  "ac_rivaroxaban",
+  "cb_ac",
+  "ac_other",
+  "med_omeprazole",
+  "med_pasil",
+  "sb_care",
+  "elevate_extremity",
+  "pillow_hip_precautions",
+  "dressing_frequency",
+  "drainage_inserted",
+  "drainage_removal_plan",
+  "slab_removal_plan",
+  "cb_care",
+  "postop_transfusion",
+  "transfusion_units",
+  "physiotherapy",
+  "sb_inv",
+  "inv_hct",
+  "inv_control_xray",
+  "med_sheet_filled",
+  "recovery_sheet_filled",
+  "cb_inv",
+  "items_collected"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "POSTOP-.YYYY.-.#####",
+   "default": "POSTOP-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "sb_meta",
+   "label": "Post-Op",
+   "fieldtype": "Section Break",
+   "idx": 10
+  },
+  {
+   "fieldname": "checklist_datetime",
+   "label": "Date / Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "accepting_nurse",
+   "label": "Accepting Nurse",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "surgeon",
+   "label": "Surgeon",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 13
+  },
+  {
+   "fieldname": "sb_vitals",
+   "label": "Immediate Post-op Vitals",
+   "fieldtype": "Section Break",
+   "idx": 14
+  },
+  {
+   "fieldname": "bp",
+   "label": "BP",
+   "fieldtype": "Data",
+   "idx": 15
+  },
+  {
+   "fieldname": "pulse",
+   "label": "PR",
+   "fieldtype": "Int",
+   "idx": 16
+  },
+  {
+   "fieldname": "temp",
+   "label": "T",
+   "fieldtype": "Float",
+   "idx": 17
+  },
+  {
+   "fieldname": "cb_v",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 18
+  },
+  {
+   "fieldname": "rr",
+   "label": "RR",
+   "fieldtype": "Int",
+   "idx": 19
+  },
+  {
+   "fieldname": "sao2",
+   "label": "SaO2 (%)",
+   "fieldtype": "Int",
+   "idx": 20
+  },
+  {
+   "fieldname": "sb_fluids",
+   "label": "Fluids",
+   "fieldtype": "Section Break",
+   "idx": 21
+  },
+  {
+   "fieldname": "maintenance_fluid_rate",
+   "label": "Maintenance Fluid Rate",
+   "fieldtype": "Data",
+   "idx": 22
+  },
+  {
+   "fieldname": "fluid_stop_time",
+   "label": "Stop When Oral Tolerated (time)",
+   "fieldtype": "Data",
+   "idx": 23
+  },
+  {
+   "fieldname": "sb_abx",
+   "label": "Antibiotics",
+   "fieldtype": "Section Break",
+   "idx": 24
+  },
+  {
+   "fieldname": "abx_ceftriaxone",
+   "label": "Ceftriaxone",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 25
+  },
+  {
+   "fieldname": "abx_metronidazole",
+   "label": "Metronidazole",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 26
+  },
+  {
+   "fieldname": "abx_other",
+   "label": "Other antibiotic",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 27
+  },
+  {
+   "fieldname": "abx_other_detail",
+   "label": "Other antibiotic detail",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.abx_other",
+   "idx": 28
+  },
+  {
+   "fieldname": "sb_analgesia",
+   "label": "Analgesics",
+   "fieldtype": "Section Break",
+   "idx": 29
+  },
+  {
+   "fieldname": "an_tramadol",
+   "label": "Tramadol",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 30
+  },
+  {
+   "fieldname": "an_diclofenac",
+   "label": "Diclofenac",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 31
+  },
+  {
+   "fieldname": "an_paracetamol",
+   "label": "Paracetamol",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 32
+  },
+  {
+   "fieldname": "an_pethidine",
+   "label": "Pethidine",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 33
+  },
+  {
+   "fieldname": "cb_an",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 34
+  },
+  {
+   "fieldname": "an_other",
+   "label": "Other analgesic",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 35
+  },
+  {
+   "fieldname": "an_other_detail",
+   "label": "Other analgesic detail",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.an_other",
+   "idx": 36
+  },
+  {
+   "fieldname": "sb_anticoag",
+   "label": "Anticoagulants",
+   "fieldtype": "Section Break",
+   "idx": 37
+  },
+  {
+   "fieldname": "ac_enoxaparin",
+   "label": "Enoxaparin",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 38
+  },
+  {
+   "fieldname": "ac_heparin",
+   "label": "Heparin",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 39
+  },
+  {
+   "fieldname": "ac_rivaroxaban",
+   "label": "Rivaroxaban",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 40
+  },
+  {
+   "fieldname": "cb_ac",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 41
+  },
+  {
+   "fieldname": "ac_other",
+   "label": "Other anticoagulant",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 42
+  },
+  {
+   "fieldname": "med_omeprazole",
+   "label": "Omeprazole",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 43
+  },
+  {
+   "fieldname": "med_pasil",
+   "label": "Pasil",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 44
+  },
+  {
+   "fieldname": "sb_care",
+   "label": "Wound & Care",
+   "fieldtype": "Section Break",
+   "idx": 45
+  },
+  {
+   "fieldname": "elevate_extremity",
+   "label": "Elevate extremity",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 46
+  },
+  {
+   "fieldname": "pillow_hip_precautions",
+   "label": "Pillow & hip precautions",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 47
+  },
+  {
+   "fieldname": "dressing_frequency",
+   "label": "Dressing frequency",
+   "fieldtype": "Data",
+   "idx": 48
+  },
+  {
+   "fieldname": "drainage_inserted",
+   "label": "Drainage inserted",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 49
+  },
+  {
+   "fieldname": "drainage_removal_plan",
+   "label": "Drain removal plan",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.drainage_inserted",
+   "idx": 50
+  },
+  {
+   "fieldname": "slab_removal_plan",
+   "label": "Slab removal plan",
+   "fieldtype": "Data",
+   "idx": 51
+  },
+  {
+   "fieldname": "cb_care",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 52
+  },
+  {
+   "fieldname": "postop_transfusion",
+   "label": "Post-op transfusion",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 53
+  },
+  {
+   "fieldname": "transfusion_units",
+   "label": "Units",
+   "fieldtype": "Int",
+   "depends_on": "eval:doc.postop_transfusion",
+   "idx": 54
+  },
+  {
+   "fieldname": "physiotherapy",
+   "label": "Physiotherapy instructions",
+   "fieldtype": "Small Text",
+   "idx": 55
+  },
+  {
+   "fieldname": "sb_inv",
+   "label": "Investigations & Handover",
+   "fieldtype": "Section Break",
+   "idx": 56
+  },
+  {
+   "fieldname": "inv_hct",
+   "label": "Post-op HCT",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 57
+  },
+  {
+   "fieldname": "inv_control_xray",
+   "label": "Control X-ray",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 58
+  },
+  {
+   "fieldname": "med_sheet_filled",
+   "label": "Medication sheet filled by accepting nurse",
+   "fieldtype": "Check",
+   "reqd": 1,
+   "default": "0",
+   "idx": 59
+  },
+  {
+   "fieldname": "recovery_sheet_filled",
+   "label": "Recovery sheet filled by accepting nurse",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 60
+  },
+  {
+   "fieldname": "cb_inv",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 61
+  },
+  {
+   "fieldname": "items_collected",
+   "label": "Images/photos/card/biopsy/removed part collected",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 62
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Post Operative Checklist",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

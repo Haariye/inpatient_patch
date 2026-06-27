@@ -1,0 +1,43 @@
+{
+ "charts": [{"chart_name": "Inpatient Admissions", "label": "Inpatient Admissions"}],
+ "content": "[{\"id\":\"hdr\",\"type\":\"header\",\"data\":{\"text\":\"Inpatient Suite\",\"col\":12}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Record\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Operation Theatre Case\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Census\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Outstanding Bills\",\"col\":3}}]",
+ "creation": "2026-01-01 00:00:00",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "hospital",
+ "is_hidden": 0,
+ "label": "Inpatient Suite",
+ "links": [
+  {"hidden": 0, "is_query_report": 0, "label": "Clinical", "link_count": 0, "onboard": 0, "type": "Card Break"},
+  {"hidden": 0, "is_query_report": 0, "label": "Inpatient Record", "link_to": "Inpatient Record", "link_type": "DocType", "onboard": 1, "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Operation Theatre Case", "link_to": "Operation Theatre Case", "link_type": "DocType", "onboard": 1, "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Medication Administration Record", "link_to": "Medication Administration Record", "link_type": "DocType", "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Daily Round Plan", "link_to": "Daily Round Plan", "link_type": "DocType", "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Billing", "link_count": 0, "onboard": 0, "type": "Card Break"},
+  {"hidden": 0, "is_query_report": 0, "label": "Inpatient Service Order", "link_to": "Inpatient Service Order", "link_type": "DocType", "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Patient Deposit", "link_to": "Patient Deposit", "link_type": "DocType", "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Inpatient Billing Settings", "link_to": "Inpatient Billing Settings", "link_type": "DocType", "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Configuration", "link_count": 0, "onboard": 0, "type": "Card Break"},
+  {"hidden": 0, "is_query_report": 0, "label": "Department Admission Protocol", "link_to": "Department Admission Protocol", "link_type": "DocType", "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Reports", "link_count": 0, "onboard": 0, "type": "Card Break"},
+  {"hidden": 0, "is_query_report": 1, "label": "Inpatient Census", "link_to": "Inpatient Census", "link_type": "Report", "type": "Link"},
+  {"hidden": 0, "is_query_report": 1, "label": "Inpatient Outstanding Bills", "link_to": "Inpatient Outstanding Bills", "link_type": "Report", "type": "Link"},
+  {"hidden": 0, "is_query_report": 1, "label": "Medication Due List", "link_to": "Medication Due List", "link_type": "Report", "type": "Link"}
+ ],
+ "modified": "2026-01-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Inpatient Suite",
+ "owner": "Administrator",
+ "public": 1,
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {"color": "Blue", "label": "Inpatient Record", "link_to": "Inpatient Record", "type": "DocType"},
+  {"color": "Green", "label": "Operation Theatre Case", "link_to": "Operation Theatre Case", "type": "DocType"},
+  {"color": "Grey", "label": "Inpatient Census", "link_to": "Inpatient Census", "type": "Report"},
+  {"color": "Red", "label": "Inpatient Outstanding Bills", "link_to": "Inpatient Outstanding Bills", "type": "Report"}
+ ],
+ "title": "Inpatient Suite"
+}

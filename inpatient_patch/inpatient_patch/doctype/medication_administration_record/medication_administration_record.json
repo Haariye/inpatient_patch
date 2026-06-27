@@ -1,0 +1,233 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "bed",
+  "sb_mar",
+  "mar_date",
+  "ordered_by",
+  "instructions",
+  "sb_entries",
+  "entries"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "MAR-.YYYY.-.#####",
+   "default": "MAR-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "sb_mar",
+   "label": "Medication Administration",
+   "fieldtype": "Section Break",
+   "idx": 10
+  },
+  {
+   "fieldname": "mar_date",
+   "label": "Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "ordered_by",
+   "label": "Ordered By (Doctor)",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "idx": 12
+  },
+  {
+   "fieldname": "instructions",
+   "label": "Exact-timing Instructions",
+   "fieldtype": "Small Text",
+   "idx": 13
+  },
+  {
+   "fieldname": "sb_entries",
+   "label": "Administrations  (time given + nurse)",
+   "fieldtype": "Section Break",
+   "idx": 14
+  },
+  {
+   "fieldname": "entries",
+   "label": "Medication Entries",
+   "fieldtype": "Table",
+   "options": "Medication Administration Entry",
+   "idx": 15
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Medication Administration Record",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

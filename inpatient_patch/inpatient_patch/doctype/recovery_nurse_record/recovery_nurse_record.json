@@ -1,0 +1,388 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "bed",
+  "sb_rec",
+  "procedure_performed",
+  "anesthesia_type",
+  "patient_source",
+  "conscious_level",
+  "cb_rec",
+  "ventilation",
+  "breath_sounds",
+  "skin",
+  "dressing",
+  "sb_vitals_tbl",
+  "vital_entries",
+  "sb_iv",
+  "iv_fluid_status",
+  "iv_fluid_type_rate",
+  "pain_score",
+  "pain_medication",
+  "cb_iv",
+  "nausea_vomiting",
+  "antiemetic",
+  "other_medication",
+  "sb_disc",
+  "aldrete_score",
+  "discharge_time",
+  "transfer_location",
+  "nurse"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "RECOV-.YYYY.-.#####",
+   "default": "RECOV-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "sb_rec",
+   "label": "Recovery",
+   "fieldtype": "Section Break",
+   "idx": 10
+  },
+  {
+   "fieldname": "procedure_performed",
+   "label": "Procedure Performed",
+   "fieldtype": "Data",
+   "idx": 11
+  },
+  {
+   "fieldname": "anesthesia_type",
+   "label": "Anesthesia",
+   "fieldtype": "Select",
+   "options": "\nGeneral\nSpinal\nBlock\nLocal\nOther",
+   "idx": 12
+  },
+  {
+   "fieldname": "patient_source",
+   "label": "Patient Source",
+   "fieldtype": "Select",
+   "options": "\nInpatient\nOutpatient",
+   "idx": 13
+  },
+  {
+   "fieldname": "conscious_level",
+   "label": "Conscious Level",
+   "fieldtype": "Select",
+   "options": "\nAwake\nArousable/Drowsy\nRestless\nConfused\nUnresponsive",
+   "in_list_view": 1,
+   "idx": 14
+  },
+  {
+   "fieldname": "cb_rec",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 15
+  },
+  {
+   "fieldname": "ventilation",
+   "label": "Ventilation",
+   "fieldtype": "Select",
+   "options": "\nAdequate Airway\nOral Airway\nNormal Airway\nIntubated",
+   "idx": 16
+  },
+  {
+   "fieldname": "breath_sounds",
+   "label": "Bilateral Breath Sounds",
+   "fieldtype": "Select",
+   "options": "\nPresent\nAbsent",
+   "idx": 17
+  },
+  {
+   "fieldname": "skin",
+   "label": "Skin",
+   "fieldtype": "Select",
+   "options": "\nPink\nPale\nDry\nMoist\nWarm\nCool",
+   "idx": 18
+  },
+  {
+   "fieldname": "dressing",
+   "label": "Dressing",
+   "fieldtype": "Select",
+   "options": "\nDry\nSoaked",
+   "idx": 19
+  },
+  {
+   "fieldname": "sb_vitals_tbl",
+   "label": "Repeated Vitals",
+   "fieldtype": "Section Break",
+   "idx": 20
+  },
+  {
+   "fieldname": "vital_entries",
+   "label": "Vital Entries",
+   "fieldtype": "Table",
+   "options": "Recovery Vital Entry",
+   "idx": 21
+  },
+  {
+   "fieldname": "sb_iv",
+   "label": "IV / Pain / Nausea",
+   "fieldtype": "Section Break",
+   "idx": 22
+  },
+  {
+   "fieldname": "iv_fluid_status",
+   "label": "IV Fluid",
+   "fieldtype": "Select",
+   "options": "\nPatent\nNon-Patent",
+   "idx": 23
+  },
+  {
+   "fieldname": "iv_fluid_type_rate",
+   "label": "Fluid Type & Rate",
+   "fieldtype": "Data",
+   "idx": 24
+  },
+  {
+   "fieldname": "pain_score",
+   "label": "Pain Score (0-10)",
+   "fieldtype": "Int",
+   "idx": 25
+  },
+  {
+   "fieldname": "pain_medication",
+   "label": "Pain Med (time/med/dose/route)",
+   "fieldtype": "Small Text",
+   "idx": 26
+  },
+  {
+   "fieldname": "cb_iv",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 27
+  },
+  {
+   "fieldname": "nausea_vomiting",
+   "label": "Nausea / Vomiting",
+   "fieldtype": "Select",
+   "options": "\nPresent\nAbsent",
+   "idx": 28
+  },
+  {
+   "fieldname": "antiemetic",
+   "label": "Antiemetic given",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.nausea_vomiting=='Present'",
+   "idx": 29
+  },
+  {
+   "fieldname": "other_medication",
+   "label": "Other Medication",
+   "fieldtype": "Small Text",
+   "idx": 30
+  },
+  {
+   "fieldname": "sb_disc",
+   "label": "Discharge from Recovery (mandatory)",
+   "fieldtype": "Section Break",
+   "idx": 31
+  },
+  {
+   "fieldname": "aldrete_score",
+   "label": "Aldrete Score",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 32
+  },
+  {
+   "fieldname": "discharge_time",
+   "label": "Discharge Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "idx": 33
+  },
+  {
+   "fieldname": "transfer_location",
+   "label": "Transfer Location",
+   "fieldtype": "Select",
+   "options": "\nVIP\nGround Floor\nFirst Floor",
+   "reqd": 1,
+   "idx": 34
+  },
+  {
+   "fieldname": "nurse",
+   "label": "Recovery Nurse",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 35
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Recovery Nurse Record",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

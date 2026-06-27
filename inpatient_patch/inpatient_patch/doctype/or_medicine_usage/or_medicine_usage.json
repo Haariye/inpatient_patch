@@ -1,0 +1,63 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "drug_code",
+  "drug_name",
+  "qty",
+  "uom"
+ ],
+ "fields": [
+  {
+   "fieldname": "drug_code",
+   "label": "Medicine",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "drug_name",
+   "label": "Medicine Name",
+   "fieldtype": "Data",
+   "fetch_from": "drug_code.item_name",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "qty",
+   "label": "Qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "default": "1",
+   "idx": 3
+  },
+  {
+   "fieldname": "uom",
+   "label": "UOM",
+   "fieldtype": "Link",
+   "options": "UOM",
+   "fetch_from": "drug_code.stock_uom",
+   "idx": 4
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "OR Medicine Usage",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

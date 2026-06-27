@@ -1,0 +1,210 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "sb_pn",
+  "note_datetime",
+  "doctor",
+  "progress_note"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "PN-.YYYY.-.#####",
+   "default": "PN-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_pn",
+   "label": "Progress",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "note_datetime",
+   "label": "Date / Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "doctor",
+   "label": "Doctor",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "in_list_view": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "progress_note",
+   "label": "Progress Note",
+   "fieldtype": "Text",
+   "reqd": 1,
+   "idx": 12
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Progress Note",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

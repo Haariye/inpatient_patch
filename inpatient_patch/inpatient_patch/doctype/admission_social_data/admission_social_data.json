@@ -1,0 +1,278 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "sb_adm",
+  "admission_date",
+  "mode_of_admission",
+  "admitting_doctor",
+  "physician_in_charge",
+  "ward",
+  "cb_adm",
+  "diagnosis_on_admission",
+  "sb_social",
+  "region",
+  "city",
+  "marital_status",
+  "children"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "ASD-.YYYY.-.#####",
+   "default": "ASD-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_adm",
+   "label": "Admission",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "admission_date",
+   "label": "Date of Admission",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "mode_of_admission",
+   "label": "Mode of Admission",
+   "fieldtype": "Select",
+   "options": "\nEmergency\nElective\nOther",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "admitting_doctor",
+   "label": "Admitting Doctor",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "physician_in_charge",
+   "label": "Physician In Charge",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "idx": 13
+  },
+  {
+   "fieldname": "ward",
+   "label": "Ward",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "reqd": 1,
+   "idx": 14
+  },
+  {
+   "fieldname": "cb_adm",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 15
+  },
+  {
+   "fieldname": "diagnosis_on_admission",
+   "label": "Diagnosis on Admission",
+   "fieldtype": "Small Text",
+   "idx": 16
+  },
+  {
+   "fieldname": "sb_social",
+   "label": "Social / Demographic",
+   "fieldtype": "Section Break",
+   "idx": 17
+  },
+  {
+   "fieldname": "region",
+   "label": "Region",
+   "fieldtype": "Data",
+   "idx": 18
+  },
+  {
+   "fieldname": "city",
+   "label": "City",
+   "fieldtype": "Data",
+   "idx": 19
+  },
+  {
+   "fieldname": "marital_status",
+   "label": "Marital Status",
+   "fieldtype": "Select",
+   "options": "\nMarried\nSingle\nOther",
+   "idx": 20
+  },
+  {
+   "fieldname": "children",
+   "label": "Children",
+   "fieldtype": "Int",
+   "idx": 21
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Admission Social Data",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

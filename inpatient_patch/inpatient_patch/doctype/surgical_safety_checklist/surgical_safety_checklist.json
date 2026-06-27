@@ -1,0 +1,430 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "bed",
+  "sb_signin",
+  "si_identity_confirmed",
+  "si_procedure_consent",
+  "si_site_marked",
+  "si_anesthesia_check",
+  "si_pulse_oximeter",
+  "cb_si",
+  "si_allergy",
+  "si_airway_risk",
+  "si_blood_loss_risk",
+  "signin_complete",
+  "sb_timeout",
+  "to_team_introduced",
+  "to_surgeon_confirms",
+  "to_anesthesia_confirms",
+  "cb_to",
+  "to_nursing_confirms",
+  "timeout_complete",
+  "sb_signout",
+  "procedure_name",
+  "instrument_count",
+  "sponge_count",
+  "needle_count",
+  "cb_so",
+  "specimen_labeling",
+  "equipment_problems",
+  "recovery_concerns",
+  "signout_complete",
+  "sb_exc",
+  "cancellation_reason",
+  "death_cause",
+  "card_number"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "SSC-.YYYY.-.#####",
+   "default": "SSC-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "sb_signin",
+   "label": "Sign-In  \u2014 Before Anesthesia",
+   "fieldtype": "Section Break",
+   "idx": 10
+  },
+  {
+   "fieldname": "si_identity_confirmed",
+   "label": "Patient identity confirmed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 11
+  },
+  {
+   "fieldname": "si_procedure_consent",
+   "label": "Procedure & consent confirmed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 12
+  },
+  {
+   "fieldname": "si_site_marked",
+   "label": "Site marked",
+   "fieldtype": "Select",
+   "options": "\nYes\nNot Applicable",
+   "idx": 13
+  },
+  {
+   "fieldname": "si_anesthesia_check",
+   "label": "Anesthesia machine & medicines checked",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 14
+  },
+  {
+   "fieldname": "si_pulse_oximeter",
+   "label": "Pulse oximeter functioning",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 15
+  },
+  {
+   "fieldname": "cb_si",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 16
+  },
+  {
+   "fieldname": "si_allergy",
+   "label": "Allergy reviewed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 17
+  },
+  {
+   "fieldname": "si_airway_risk",
+   "label": "Difficult airway / aspiration risk reviewed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 18
+  },
+  {
+   "fieldname": "si_blood_loss_risk",
+   "label": "Blood loss risk & assistance available",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 19
+  },
+  {
+   "fieldname": "signin_complete",
+   "label": "Sign-In complete",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "default": "0",
+   "idx": 20
+  },
+  {
+   "fieldname": "sb_timeout",
+   "label": "Time-Out  \u2014 Before Skin Incision",
+   "fieldtype": "Section Break",
+   "idx": 21
+  },
+  {
+   "fieldname": "to_team_introduced",
+   "label": "Team introduced by name & role",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 22
+  },
+  {
+   "fieldname": "to_surgeon_confirms",
+   "label": "Surgeon confirms patient/site/procedure/steps",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 23
+  },
+  {
+   "fieldname": "to_anesthesia_confirms",
+   "label": "Anesthesia confirms patient-specific concerns",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 24
+  },
+  {
+   "fieldname": "cb_to",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 25
+  },
+  {
+   "fieldname": "to_nursing_confirms",
+   "label": "Nursing confirms sterility/equipment/results",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 26
+  },
+  {
+   "fieldname": "timeout_complete",
+   "label": "Time-Out complete",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "default": "0",
+   "idx": 27
+  },
+  {
+   "fieldname": "sb_signout",
+   "label": "Sign-Out  \u2014 Before Leaving Room",
+   "fieldtype": "Section Break",
+   "idx": 28
+  },
+  {
+   "fieldname": "procedure_name",
+   "label": "Procedure name recorded",
+   "fieldtype": "Data",
+   "idx": 29
+  },
+  {
+   "fieldname": "instrument_count",
+   "label": "Instrument count",
+   "fieldtype": "Data",
+   "idx": 30
+  },
+  {
+   "fieldname": "sponge_count",
+   "label": "Sponge count",
+   "fieldtype": "Data",
+   "idx": 31
+  },
+  {
+   "fieldname": "needle_count",
+   "label": "Needle count",
+   "fieldtype": "Data",
+   "idx": 32
+  },
+  {
+   "fieldname": "cb_so",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 33
+  },
+  {
+   "fieldname": "specimen_labeling",
+   "label": "Specimen labeling (if any)",
+   "fieldtype": "Data",
+   "idx": 34
+  },
+  {
+   "fieldname": "equipment_problems",
+   "label": "Equipment problems",
+   "fieldtype": "Small Text",
+   "idx": 35
+  },
+  {
+   "fieldname": "recovery_concerns",
+   "label": "Recovery / management concerns",
+   "fieldtype": "Small Text",
+   "idx": 36
+  },
+  {
+   "fieldname": "signout_complete",
+   "label": "Sign-Out complete",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "default": "0",
+   "idx": 37
+  },
+  {
+   "fieldname": "sb_exc",
+   "label": "Exceptions",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 38
+  },
+  {
+   "fieldname": "cancellation_reason",
+   "label": "Cancellation reason",
+   "fieldtype": "Small Text",
+   "idx": 39
+  },
+  {
+   "fieldname": "death_cause",
+   "label": "Death cause (if applicable)",
+   "fieldtype": "Small Text",
+   "idx": 40
+  },
+  {
+   "fieldname": "card_number",
+   "label": "Card number",
+   "fieldtype": "Data",
+   "idx": 41
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Surgical Safety Checklist",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

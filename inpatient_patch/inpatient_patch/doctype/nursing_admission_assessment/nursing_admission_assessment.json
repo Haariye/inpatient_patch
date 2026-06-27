@@ -1,0 +1,499 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "bed",
+  "sb_basic",
+  "data_collected_from",
+  "assessment_datetime",
+  "height",
+  "sb_vitals",
+  "bp",
+  "pulse",
+  "rr",
+  "cb_vitals",
+  "temperature",
+  "spo2",
+  "weight",
+  "sb_allergy",
+  "no_known_allergies",
+  "has_allergies",
+  "allergy_detail",
+  "sb_hist",
+  "reason_for_admission",
+  "current_past_history",
+  "current_medications",
+  "sb_psy",
+  "depression",
+  "confusion",
+  "smoking",
+  "alcohol",
+  "cb_psy",
+  "usual_diet",
+  "has_helper",
+  "hospital_care_involvement",
+  "sb_func",
+  "function_level",
+  "flag_nursing_support",
+  "c_ambulation",
+  "c_dressing",
+  "c_eating",
+  "cb_func",
+  "c_toileting",
+  "c_bathing",
+  "sb_sign",
+  "nurse",
+  "completion_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "NAA-.YYYY.-.#####",
+   "default": "NAA-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "sb_basic",
+   "label": "Assessment",
+   "fieldtype": "Section Break",
+   "idx": 10
+  },
+  {
+   "fieldname": "data_collected_from",
+   "label": "Data Collected From",
+   "fieldtype": "Data",
+   "idx": 11
+  },
+  {
+   "fieldname": "assessment_datetime",
+   "label": "Date / Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "height",
+   "label": "Height (cm)",
+   "fieldtype": "Float",
+   "idx": 13
+  },
+  {
+   "fieldname": "sb_vitals",
+   "label": "Vital Signs",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 14
+  },
+  {
+   "fieldname": "bp",
+   "label": "BP",
+   "fieldtype": "Data",
+   "idx": 15
+  },
+  {
+   "fieldname": "pulse",
+   "label": "Pulse (PR)",
+   "fieldtype": "Int",
+   "idx": 16
+  },
+  {
+   "fieldname": "rr",
+   "label": "Respiration (RR)",
+   "fieldtype": "Int",
+   "idx": 17
+  },
+  {
+   "fieldname": "cb_vitals",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 18
+  },
+  {
+   "fieldname": "temperature",
+   "label": "Temperature (\u00b0C)",
+   "fieldtype": "Float",
+   "idx": 19
+  },
+  {
+   "fieldname": "spo2",
+   "label": "SpO2 (%)",
+   "fieldtype": "Int",
+   "idx": 20
+  },
+  {
+   "fieldname": "weight",
+   "label": "Weight (kg)",
+   "fieldtype": "Float",
+   "idx": 21
+  },
+  {
+   "fieldname": "sb_allergy",
+   "label": "Allergy (mandatory)",
+   "fieldtype": "Section Break",
+   "idx": 22
+  },
+  {
+   "fieldname": "no_known_allergies",
+   "label": "No Known Allergies",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 23
+  },
+  {
+   "fieldname": "has_allergies",
+   "label": "Allergies Present",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 24
+  },
+  {
+   "fieldname": "allergy_detail",
+   "label": "Allergy Detail",
+   "fieldtype": "Small Text",
+   "depends_on": "eval:doc.has_allergies",
+   "mandatory_depends_on": "eval:doc.has_allergies",
+   "idx": 25
+  },
+  {
+   "fieldname": "sb_hist",
+   "label": "History",
+   "fieldtype": "Section Break",
+   "idx": 26
+  },
+  {
+   "fieldname": "reason_for_admission",
+   "label": "Reason for Admission",
+   "fieldtype": "Small Text",
+   "idx": 27
+  },
+  {
+   "fieldname": "current_past_history",
+   "label": "Current & Past Medical History",
+   "fieldtype": "Text",
+   "idx": 28
+  },
+  {
+   "fieldname": "current_medications",
+   "label": "Current Medications (drug/dose/freq)",
+   "fieldtype": "Text",
+   "idx": 29
+  },
+  {
+   "fieldname": "sb_psy",
+   "label": "Psychosocial",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 30
+  },
+  {
+   "fieldname": "depression",
+   "label": "Depression",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 31
+  },
+  {
+   "fieldname": "confusion",
+   "label": "Confusion",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 32
+  },
+  {
+   "fieldname": "smoking",
+   "label": "Smoking",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 33
+  },
+  {
+   "fieldname": "alcohol",
+   "label": "Alcohol",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 34
+  },
+  {
+   "fieldname": "cb_psy",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 35
+  },
+  {
+   "fieldname": "usual_diet",
+   "label": "Usual Diet",
+   "fieldtype": "Data",
+   "idx": 36
+  },
+  {
+   "fieldname": "has_helper",
+   "label": "Post-discharge Helper Available",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 37
+  },
+  {
+   "fieldname": "hospital_care_involvement",
+   "label": "Hospital Care Involvement",
+   "fieldtype": "Data",
+   "idx": 38
+  },
+  {
+   "fieldname": "sb_func",
+   "label": "Functional Status",
+   "fieldtype": "Section Break",
+   "idx": 39
+  },
+  {
+   "fieldname": "function_level",
+   "label": "Function Level",
+   "fieldtype": "Select",
+   "options": "\nIndependent\nAssisted\nDependent",
+   "in_list_view": 1,
+   "idx": 40
+  },
+  {
+   "fieldname": "flag_nursing_support",
+   "label": "Flag for Nursing Care Support",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "depends_on": "eval:doc.function_level=='Dependent'",
+   "default": "0",
+   "idx": 41
+  },
+  {
+   "fieldname": "c_ambulation",
+   "label": "Ambulation needs help",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 42
+  },
+  {
+   "fieldname": "c_dressing",
+   "label": "Dressing needs help",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 43
+  },
+  {
+   "fieldname": "c_eating",
+   "label": "Eating needs help",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 44
+  },
+  {
+   "fieldname": "cb_func",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 45
+  },
+  {
+   "fieldname": "c_toileting",
+   "label": "Toileting needs help",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 46
+  },
+  {
+   "fieldname": "c_bathing",
+   "label": "Bathing / Hygiene needs help",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 47
+  },
+  {
+   "fieldname": "sb_sign",
+   "label": "Completion",
+   "fieldtype": "Section Break",
+   "idx": 48
+  },
+  {
+   "fieldname": "nurse",
+   "label": "Assessment Nurse",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 49
+  },
+  {
+   "fieldname": "completion_date",
+   "label": "Completion Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "idx": 50
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Nursing Admission Assessment",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

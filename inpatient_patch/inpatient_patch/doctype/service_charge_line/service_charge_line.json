@@ -1,0 +1,113 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "service_type",
+  "item_code",
+  "item_name",
+  "qty",
+  "rate",
+  "cb_scl",
+  "notes",
+  "billed",
+  "billed_invoice",
+  "billed_invoice_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "service_type",
+   "label": "Service Type",
+   "fieldtype": "Select",
+   "options": "Pharmacy\nLaboratory\nRadiology\nProcedure\nConsumable\nBed\nOther",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "item_code",
+   "label": "Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "item_name",
+   "label": "Item Name",
+   "fieldtype": "Data",
+   "fetch_from": "item_code.item_name",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "qty",
+   "label": "Qty",
+   "fieldtype": "Float",
+   "default": "1",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "rate",
+   "label": "Rate (USD)",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "idx": 5
+  },
+  {
+   "fieldname": "cb_scl",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 6
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text",
+   "idx": 7
+  },
+  {
+   "fieldname": "billed",
+   "label": "Billed",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "in_list_view": 1,
+   "default": "0",
+   "idx": 8
+  },
+  {
+   "fieldname": "billed_invoice",
+   "label": "Billed Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "billed_invoice_item",
+   "label": "Billed Invoice Item",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "idx": 10
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Service Charge Line",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

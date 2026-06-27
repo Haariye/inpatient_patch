@@ -1,0 +1,458 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "bed",
+  "sb_meta",
+  "checklist_datetime",
+  "diagnosis",
+  "procedure",
+  "sb_forms",
+  "all_forms_filled",
+  "incomplete_form_name",
+  "routine_labs_ready",
+  "ecg_done",
+  "echo_done",
+  "cb_forms",
+  "xray_ready",
+  "ct_ready",
+  "anesthesia_eval_done",
+  "surgery_date_confirmed",
+  "receipts_attached",
+  "sb_or",
+  "or_materials_prepared",
+  "or_med_pack_prepared",
+  "dvt_prophylaxis",
+  "dvt_detail",
+  "crossmatch_done",
+  "crossmatch_units",
+  "sb_final",
+  "side_marked",
+  "consent_signed",
+  "video_consent",
+  "npo_confirmed",
+  "last_meal_datetime",
+  "cb_final",
+  "iv_line_inserted",
+  "clothing_removed",
+  "completed_by",
+  "ready_for_or"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "POC-.YYYY.-.#####",
+   "default": "POC-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "sb_meta",
+   "label": "Operation",
+   "fieldtype": "Section Break",
+   "idx": 10
+  },
+  {
+   "fieldname": "checklist_datetime",
+   "label": "Date / Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "diagnosis",
+   "label": "Diagnosis",
+   "fieldtype": "Data",
+   "idx": 12
+  },
+  {
+   "fieldname": "procedure",
+   "label": "Procedure",
+   "fieldtype": "Data",
+   "idx": 13
+  },
+  {
+   "fieldname": "sb_forms",
+   "label": "Forms & Investigations",
+   "fieldtype": "Section Break",
+   "idx": 14
+  },
+  {
+   "fieldname": "all_forms_filled",
+   "label": "All patient forms filled",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 15
+  },
+  {
+   "fieldname": "incomplete_form_name",
+   "label": "Incomplete Form (if any)",
+   "fieldtype": "Data",
+   "depends_on": "eval:!doc.all_forms_filled",
+   "idx": 16
+  },
+  {
+   "fieldname": "routine_labs_ready",
+   "label": "Routine labs ready & alerts marked",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 17
+  },
+  {
+   "fieldname": "ecg_done",
+   "label": "ECG done (when required)",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 18
+  },
+  {
+   "fieldname": "echo_done",
+   "label": "ECHO done (when required)",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 19
+  },
+  {
+   "fieldname": "cb_forms",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 20
+  },
+  {
+   "fieldname": "xray_ready",
+   "label": "X-ray ready & marked correctly",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 21
+  },
+  {
+   "fieldname": "ct_ready",
+   "label": "CT ready (if needed)",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 22
+  },
+  {
+   "fieldname": "anesthesia_eval_done",
+   "label": "Anesthesia evaluation completed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 23
+  },
+  {
+   "fieldname": "surgery_date_confirmed",
+   "label": "Surgery date confirmed with surgeon",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 24
+  },
+  {
+   "fieldname": "receipts_attached",
+   "label": "Receipts attached",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 25
+  },
+  {
+   "fieldname": "sb_or",
+   "label": "OR Preparation",
+   "fieldtype": "Section Break",
+   "idx": 26
+  },
+  {
+   "fieldname": "or_materials_prepared",
+   "label": "OR materials & implants prepared",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 27
+  },
+  {
+   "fieldname": "or_med_pack_prepared",
+   "label": "OR medication pack prepared & shifted",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 28
+  },
+  {
+   "fieldname": "dvt_prophylaxis",
+   "label": "DVT prophylaxis given",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 29
+  },
+  {
+   "fieldname": "dvt_detail",
+   "label": "DVT last dose / type / date-time",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.dvt_prophylaxis",
+   "idx": 30
+  },
+  {
+   "fieldname": "crossmatch_done",
+   "label": "Cross-match blood prepared",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 31
+  },
+  {
+   "fieldname": "crossmatch_units",
+   "label": "Units",
+   "fieldtype": "Int",
+   "depends_on": "eval:doc.crossmatch_done",
+   "idx": 32
+  },
+  {
+   "fieldname": "sb_final",
+   "label": "Final Safety (mandatory)",
+   "fieldtype": "Section Break",
+   "idx": 33
+  },
+  {
+   "fieldname": "side_marked",
+   "label": "Surgical side marked & initialized by nurse",
+   "fieldtype": "Check",
+   "reqd": 1,
+   "default": "0",
+   "idx": 34
+  },
+  {
+   "fieldname": "consent_signed",
+   "label": "Consent signed & witnessed",
+   "fieldtype": "Check",
+   "reqd": 1,
+   "default": "0",
+   "idx": 35
+  },
+  {
+   "fieldname": "video_consent",
+   "label": "Videography consent signed (if needed)",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 36
+  },
+  {
+   "fieldname": "npo_confirmed",
+   "label": "NPO status confirmed",
+   "fieldtype": "Check",
+   "reqd": 1,
+   "default": "0",
+   "idx": 37
+  },
+  {
+   "fieldname": "last_meal_datetime",
+   "label": "Last Meal Date/Time",
+   "fieldtype": "Datetime",
+   "depends_on": "eval:doc.npo_confirmed",
+   "idx": 38
+  },
+  {
+   "fieldname": "cb_final",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 39
+  },
+  {
+   "fieldname": "iv_line_inserted",
+   "label": "IV line inserted & maintenance fluid started",
+   "fieldtype": "Check",
+   "reqd": 1,
+   "default": "0",
+   "idx": 40
+  },
+  {
+   "fieldname": "clothing_removed",
+   "label": "Patient clothing/items removed before theater",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 41
+  },
+  {
+   "fieldname": "completed_by",
+   "label": "Completed By (nurse)",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 42
+  },
+  {
+   "fieldname": "ready_for_or",
+   "label": "READY FOR OPERATING ROOM",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "description": "Auto-set when all mandatory items pass.",
+   "default": "0",
+   "idx": 43
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Pre Operative Checklist",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

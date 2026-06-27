@@ -1,0 +1,53 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "order_datetime",
+  "order_text",
+  "ordered_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "order_datetime",
+   "label": "Date / Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "order_text",
+   "label": "Round Order",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "ordered_by",
+   "label": "Surgeon / Doctor",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "in_list_view": 1,
+   "idx": 3
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Round Order Entry",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

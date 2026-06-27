@@ -1,0 +1,194 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_general",
+  "default_company",
+  "currency",
+  "auto_bed_billing_enabled",
+  "daily_run_hour",
+  "cb_general",
+  "consolidate_bed_invoice",
+  "bed_income_account",
+  "sb_deposit",
+  "deposit_mode_of_payment",
+  "deposit_account",
+  "sb_warn",
+  "note"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_general",
+   "label": "General",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "default_company",
+   "label": "Default Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "idx": 2
+  },
+  {
+   "fieldname": "currency",
+   "label": "Currency",
+   "fieldtype": "Link",
+   "options": "Currency",
+   "default": "USD",
+   "idx": 3
+  },
+  {
+   "fieldname": "auto_bed_billing_enabled",
+   "label": "Enable Daily Bed Billing",
+   "fieldtype": "Check",
+   "default": "1",
+   "idx": 4
+  },
+  {
+   "fieldname": "daily_run_hour",
+   "label": "Daily Run Hour (24h, local)",
+   "fieldtype": "Int",
+   "default": "12",
+   "description": "Bed invoice generated daily at this hour (default 12 = noon).",
+   "idx": 5
+  },
+  {
+   "fieldname": "cb_general",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 6
+  },
+  {
+   "fieldname": "consolidate_bed_invoice",
+   "label": "One bed invoice per patient/day",
+   "fieldtype": "Check",
+   "default": "1",
+   "idx": 7
+  },
+  {
+   "fieldname": "bed_income_account",
+   "label": "Bed Income Account",
+   "fieldtype": "Link",
+   "options": "Account",
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_deposit",
+   "label": "Deposit",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "deposit_mode_of_payment",
+   "label": "Default Deposit Mode of Payment",
+   "fieldtype": "Link",
+   "options": "Mode of Payment",
+   "idx": 10
+  },
+  {
+   "fieldname": "deposit_account",
+   "label": "Deposit / Advance Account",
+   "fieldtype": "Link",
+   "options": "Account",
+   "idx": 11
+  },
+  {
+   "fieldname": "sb_warn",
+   "label": "Behaviour",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "note",
+   "label": "Note",
+   "fieldtype": "Small Text",
+   "default": "Service invoices (pharmacy/lab/radiology/OT) are created as DRAFT but billable the moment a nurse/doctor sends them. Only bed charges run on the daily schedule.",
+   "idx": 13
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Inpatient Billing Settings",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "issingle": 1,
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ]
+}

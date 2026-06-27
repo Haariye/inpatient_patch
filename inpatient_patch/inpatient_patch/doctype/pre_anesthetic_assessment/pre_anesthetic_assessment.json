@@ -1,0 +1,444 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "age",
+  "sex",
+  "sb_pa",
+  "assessment_date",
+  "diagnosis",
+  "planned_procedure",
+  "sb_systems",
+  "s_heent",
+  "s_chest",
+  "s_cvs",
+  "s_endocrine",
+  "s_gi",
+  "cb_sys",
+  "s_hematological",
+  "s_neuro",
+  "s_gut",
+  "s_msk",
+  "s_other",
+  "sb_vitals",
+  "bp",
+  "pulse",
+  "rr",
+  "cb_vitals",
+  "temperature",
+  "spo2",
+  "weight",
+  "sb_assess",
+  "general_appearance",
+  "physical_examination",
+  "asa",
+  "airway_assessment",
+  "pre_medication",
+  "lab_review",
+  "anesthesia_type",
+  "sb_fit",
+  "fitness",
+  "anesthetist"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "PAA-.YYYY.-.#####",
+   "default": "PAA-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Hospital ID",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_id",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "fetch_from": "patient.custom_patient_age",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_pa",
+   "label": "Pre-Anesthetic Assessment",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "assessment_date",
+   "label": "Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "diagnosis",
+   "label": "Diagnosis",
+   "fieldtype": "Small Text",
+   "idx": 11
+  },
+  {
+   "fieldname": "planned_procedure",
+   "label": "Planned Procedure",
+   "fieldtype": "Small Text",
+   "idx": 12
+  },
+  {
+   "fieldname": "sb_systems",
+   "label": "Systems Review",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 13
+  },
+  {
+   "fieldname": "s_heent",
+   "label": "HEENT issue",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 14
+  },
+  {
+   "fieldname": "s_chest",
+   "label": "Chest issue",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 15
+  },
+  {
+   "fieldname": "s_cvs",
+   "label": "CVS issue",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 16
+  },
+  {
+   "fieldname": "s_endocrine",
+   "label": "Endocrine disease",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 17
+  },
+  {
+   "fieldname": "s_gi",
+   "label": "GI disease",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 18
+  },
+  {
+   "fieldname": "cb_sys",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 19
+  },
+  {
+   "fieldname": "s_hematological",
+   "label": "Hematological",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 20
+  },
+  {
+   "fieldname": "s_neuro",
+   "label": "Neurological",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 21
+  },
+  {
+   "fieldname": "s_gut",
+   "label": "GUT",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 22
+  },
+  {
+   "fieldname": "s_msk",
+   "label": "Musculoskeletal",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 23
+  },
+  {
+   "fieldname": "s_other",
+   "label": "Other Diseases",
+   "fieldtype": "Small Text",
+   "idx": 24
+  },
+  {
+   "fieldname": "sb_vitals",
+   "label": "Vital Signs",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 25
+  },
+  {
+   "fieldname": "bp",
+   "label": "BP",
+   "fieldtype": "Data",
+   "idx": 26
+  },
+  {
+   "fieldname": "pulse",
+   "label": "Pulse (PR)",
+   "fieldtype": "Int",
+   "idx": 27
+  },
+  {
+   "fieldname": "rr",
+   "label": "Respiration (RR)",
+   "fieldtype": "Int",
+   "idx": 28
+  },
+  {
+   "fieldname": "cb_vitals",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 29
+  },
+  {
+   "fieldname": "temperature",
+   "label": "Temperature (\u00b0C)",
+   "fieldtype": "Float",
+   "idx": 30
+  },
+  {
+   "fieldname": "spo2",
+   "label": "SpO2 (%)",
+   "fieldtype": "Int",
+   "idx": 31
+  },
+  {
+   "fieldname": "weight",
+   "label": "Weight (kg)",
+   "fieldtype": "Float",
+   "idx": 32
+  },
+  {
+   "fieldname": "sb_assess",
+   "label": "Assessment",
+   "fieldtype": "Section Break",
+   "idx": 33
+  },
+  {
+   "fieldname": "general_appearance",
+   "label": "General Appearance",
+   "fieldtype": "Select",
+   "options": "\nAcute Sick Looking\nChronic Sick Looking\nWell",
+   "idx": 34
+  },
+  {
+   "fieldname": "physical_examination",
+   "label": "Physical Examination",
+   "fieldtype": "Text",
+   "idx": 35
+  },
+  {
+   "fieldname": "asa",
+   "label": "ASA Classification",
+   "fieldtype": "Select",
+   "options": "\nASA I\nASA II\nASA III\nASA IV\nASA V\nASA VI",
+   "in_list_view": 1,
+   "idx": 36
+  },
+  {
+   "fieldname": "airway_assessment",
+   "label": "Airway Assessment",
+   "fieldtype": "Small Text",
+   "idx": 37
+  },
+  {
+   "fieldname": "pre_medication",
+   "label": "Pre-medication",
+   "fieldtype": "Small Text",
+   "idx": 38
+  },
+  {
+   "fieldname": "lab_review",
+   "label": "Laboratory Review",
+   "fieldtype": "Text",
+   "idx": 39
+  },
+  {
+   "fieldname": "anesthesia_type",
+   "label": "Anesthesia Type",
+   "fieldtype": "Select",
+   "options": "\nGA (General)\nSA (Spinal)\nRegional Block\nLocal\nOther",
+   "in_list_view": 1,
+   "idx": 40
+  },
+  {
+   "fieldname": "sb_fit",
+   "label": "Clearance (mandatory)",
+   "fieldtype": "Section Break",
+   "idx": 41
+  },
+  {
+   "fieldname": "fitness",
+   "label": "Fit / Unfit",
+   "fieldtype": "Select",
+   "options": "\nFit\nUnfit",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 42
+  },
+  {
+   "fieldname": "anesthetist",
+   "label": "Anesthetist",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 43
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Pre Anesthetic Assessment",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

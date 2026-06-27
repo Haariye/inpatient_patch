@@ -1,0 +1,145 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "serial_no",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "age",
+  "sex",
+  "cb_osp",
+  "bed",
+  "diagnosis",
+  "procedure",
+  "blood_group",
+  "anesthesia_type",
+  "npo_group",
+  "injury_days",
+  "admission_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "serial_no",
+   "label": "S/N",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Data",
+   "idx": 5
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "idx": 6
+  },
+  {
+   "fieldname": "cb_osp",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 7
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "idx": 8
+  },
+  {
+   "fieldname": "diagnosis",
+   "label": "Diagnosis",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "procedure",
+   "label": "Procedure",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "blood_group",
+   "label": "Blood Group",
+   "fieldtype": "Data",
+   "idx": 11
+  },
+  {
+   "fieldname": "anesthesia_type",
+   "label": "Anesthesia",
+   "fieldtype": "Select",
+   "options": "\nGA (General)\nSA (Spinal)\nRegional Block\nLocal\nOther",
+   "idx": 12
+  },
+  {
+   "fieldname": "npo_group",
+   "label": "NPO Group",
+   "fieldtype": "Select",
+   "options": "\n12 AM\n5 AM",
+   "idx": 13
+  },
+  {
+   "fieldname": "injury_days",
+   "label": "Injury Days",
+   "fieldtype": "Int",
+   "idx": 14
+  },
+  {
+   "fieldname": "admission_date",
+   "label": "Admission Date",
+   "fieldtype": "Date",
+   "idx": 15
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Operation Schedule Patient",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

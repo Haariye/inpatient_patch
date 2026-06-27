@@ -1,0 +1,128 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "item_code",
+  "item_name",
+  "category",
+  "qty",
+  "uom",
+  "cb_otc",
+  "is_implant",
+  "serial_no",
+  "batch_no",
+  "rate",
+  "billed",
+  "billed_invoice"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "label": "Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "item_name",
+   "label": "Item Name",
+   "fieldtype": "Data",
+   "fetch_from": "item_code.item_name",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "category",
+   "label": "Category",
+   "fieldtype": "Select",
+   "options": "Consumable\nImplant / Screw\nMedicine\nSuture\nFluid\nOther",
+   "default": "Consumable",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "qty",
+   "label": "Qty",
+   "fieldtype": "Float",
+   "default": "1",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "uom",
+   "label": "UOM",
+   "fieldtype": "Link",
+   "options": "UOM",
+   "fetch_from": "item_code.stock_uom",
+   "idx": 5
+  },
+  {
+   "fieldname": "cb_otc",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 6
+  },
+  {
+   "fieldname": "is_implant",
+   "label": "Is Implant",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 7
+  },
+  {
+   "fieldname": "serial_no",
+   "label": "Serial No (implant)",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.is_implant",
+   "idx": 8
+  },
+  {
+   "fieldname": "batch_no",
+   "label": "Batch",
+   "fieldtype": "Data",
+   "idx": 9
+  },
+  {
+   "fieldname": "rate",
+   "label": "Rate (USD)",
+   "fieldtype": "Currency",
+   "idx": 10
+  },
+  {
+   "fieldname": "billed",
+   "label": "Billed",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "default": "0",
+   "idx": 11
+  },
+  {
+   "fieldname": "billed_invoice",
+   "label": "Billed Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "idx": 12
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "OT Consumable Line",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}
