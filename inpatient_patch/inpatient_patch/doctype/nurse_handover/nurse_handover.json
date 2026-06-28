@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_ho",
@@ -20,17 +19,16 @@
   "shift",
   "from_nurse",
   "to_nurse",
-  "sb_clin",
+  "sb_cond",
+  "condition",
   "clinical_summary",
   "alerts",
-  "sb_vitals",
-  "bp",
-  "pulse",
-  "rr",
-  "cb_vitals",
-  "temperature",
-  "spo2",
-  "weight",
+  "sb_vit",
+  "vit_help",
+  "vitals_log",
+  "sb_meds",
+  "meds_help",
+  "meds_given",
   "sb_tasks",
   "pending_tasks",
   "sb_ack",
@@ -90,19 +88,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -111,7 +101,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -120,13 +110,13 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_ho",
    "label": "Shift Handover",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "handover_datetime",
@@ -134,7 +124,7 @@
    "fieldtype": "Datetime",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "shift",
@@ -142,35 +132,43 @@
    "fieldtype": "Select",
    "options": "\nA (Morning)\nB (Evening)\nC (Night)",
    "in_list_view": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "from_nurse",
-   "label": "From Nurse",
+   "label": "From Nurse (going off)",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "to_nurse",
+   "label": "To Nurse (coming on)",
+   "fieldtype": "Link",
+   "options": "Nurse",
    "reqd": 1,
    "in_list_view": 1,
    "idx": 13
   },
   {
-   "fieldname": "to_nurse",
-   "label": "To Nurse",
-   "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
-   "reqd": 1,
-   "in_list_view": 1,
+   "fieldname": "sb_cond",
+   "label": "Patient Condition This Shift",
+   "fieldtype": "Section Break",
    "idx": 14
   },
   {
-   "fieldname": "sb_clin",
-   "label": "Clinical Summary",
-   "fieldtype": "Section Break",
+   "fieldname": "condition",
+   "label": "Overall Condition",
+   "fieldtype": "Select",
+   "options": "\nStable\nImproving\nGuarded\nCritical",
+   "in_list_view": 1,
    "idx": 15
   },
   {
    "fieldname": "clinical_summary",
-   "label": "Clinical Summary / Status",
+   "label": "Summary / Events This Shift",
    "fieldtype": "Text",
    "reqd": 1,
    "idx": 16
@@ -182,95 +180,87 @@
    "idx": 17
   },
   {
-   "fieldname": "sb_vitals",
-   "label": "Latest Vitals",
+   "fieldname": "sb_vit",
+   "label": "Vitals Recorded This Shift",
    "fieldtype": "Section Break",
-   "collapsible": 1,
    "idx": 18
   },
   {
-   "fieldname": "bp",
-   "label": "BP",
-   "fieldtype": "Data",
+   "fieldname": "vit_help",
+   "label": "Vitals",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Latest set below; add more rows for the shift if needed.</p>",
    "idx": 19
   },
   {
-   "fieldname": "pulse",
-   "label": "Pulse (PR)",
-   "fieldtype": "Int",
+   "fieldname": "vitals_log",
+   "label": "Vitals Log",
+   "fieldtype": "Table",
+   "options": "Handover Vital",
    "idx": 20
   },
   {
-   "fieldname": "rr",
-   "label": "Respiration (RR)",
-   "fieldtype": "Int",
+   "fieldname": "sb_meds",
+   "label": "Medications Given This Shift",
+   "fieldtype": "Section Break",
    "idx": 21
   },
   {
-   "fieldname": "cb_vitals",
-   "label": "",
-   "fieldtype": "Column Break",
+   "fieldname": "meds_help",
+   "label": "Meds",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Click <b>Pull Today's MAR</b> (top) to auto-fill what was administered, or add rows.</p>",
    "idx": 22
   },
   {
-   "fieldname": "temperature",
-   "label": "Temperature (\u00b0C)",
-   "fieldtype": "Float",
+   "fieldname": "meds_given",
+   "label": "Medications Given",
+   "fieldtype": "Table",
+   "options": "Handover Medication",
    "idx": 23
   },
   {
-   "fieldname": "spo2",
-   "label": "SpO2 (%)",
-   "fieldtype": "Int",
-   "idx": 24
-  },
-  {
-   "fieldname": "weight",
-   "label": "Weight (kg)",
-   "fieldtype": "Float",
-   "idx": 25
-  },
-  {
    "fieldname": "sb_tasks",
-   "label": "Pending Tasks Handed Over",
+   "label": "Still Pending / To-Do for Next Shift",
    "fieldtype": "Section Break",
-   "idx": 26
+   "idx": 24
   },
   {
    "fieldname": "pending_tasks",
    "label": "Pending Tasks",
    "fieldtype": "Table",
    "options": "Handover Task",
-   "idx": 27
+   "idx": 25
   },
   {
    "fieldname": "sb_ack",
    "label": "Acknowledgement",
    "fieldtype": "Section Break",
-   "idx": 28
+   "idx": 26
   },
   {
    "fieldname": "acknowledged",
    "label": "Acknowledged by receiving nurse",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 29
+   "idx": 27
   },
   {
    "fieldname": "acknowledged_by",
    "label": "Acknowledged By",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "depends_on": "eval:doc.acknowledged",
    "mandatory_depends_on": "eval:doc.acknowledged",
-   "idx": 30
+   "idx": 28
   },
   {
    "fieldname": "acknowledged_at",
    "label": "Acknowledged At",
    "fieldtype": "Datetime",
    "depends_on": "eval:doc.acknowledged",
-   "idx": 31
+   "read_only": 1,
+   "idx": 29
   }
  ],
  "index_web_pages_for_search": 1,

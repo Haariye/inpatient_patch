@@ -1,0 +1,17 @@
+{
+ "creation": "2026-01-01 00:00:00",
+ "doctype": "Number Card",
+ "document_type": "Operation Theatre Case",
+ "function": "Count",
+ "filters_json": "[[\"Operation Theatre Case\",\"status\",\"=\",\"In Theatre\"]]",
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "In Theatre",
+ "modified": "2026-01-01 00:00:00",
+ "module": "Inpatient Patch",
+ "name": "IP In Theatre",
+ "owner": "Administrator",
+ "color": "#ef4444",
+ "show_percentage_stats": 0,
+ "type": "Document Type"
+}

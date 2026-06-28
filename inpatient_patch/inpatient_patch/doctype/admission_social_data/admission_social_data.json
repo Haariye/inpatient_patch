@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "sb_adm",
   "admission_date",
@@ -80,19 +79,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -101,20 +92,20 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "sb_adm",
    "label": "Admission",
    "fieldtype": "Section Break",
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "admission_date",
    "label": "Date of Admission",
    "fieldtype": "Date",
    "reqd": 1,
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "mode_of_admission",
@@ -123,7 +114,7 @@
    "options": "\nEmergency\nElective\nOther",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "admitting_doctor",
@@ -131,14 +122,14 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "reqd": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "physician_in_charge",
    "label": "Physician In Charge",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "ward",
@@ -146,50 +137,50 @@
    "fieldtype": "Link",
    "options": "Healthcare Service Unit",
    "reqd": 1,
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "cb_adm",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "diagnosis_on_admission",
    "label": "Diagnosis on Admission",
    "fieldtype": "Small Text",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "sb_social",
    "label": "Social / Demographic",
    "fieldtype": "Section Break",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "region",
    "label": "Region",
    "fieldtype": "Data",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "city",
    "label": "City",
    "fieldtype": "Data",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "marital_status",
    "label": "Marital Status",
    "fieldtype": "Select",
    "options": "\nMarried\nSingle\nOther",
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "children",
    "label": "Children",
    "fieldtype": "Int",
-   "idx": 21
+   "idx": 20
   }
  ],
  "index_web_pages_for_search": 1,

@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_so",
@@ -24,6 +23,9 @@
   "sb_lab",
   "lab_help",
   "lab_tests",
+  "sb_imaging",
+  "imaging_help",
+  "imaging",
   "sb_proc",
   "procedures",
   "sb_items",
@@ -84,19 +86,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -105,7 +99,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -114,13 +108,13 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_so",
    "label": "Order",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "ordered_by",
@@ -128,20 +122,20 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "in_list_view": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "order_datetime",
    "label": "Order Date/Time",
    "fieldtype": "Datetime",
    "reqd": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "cb_so",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "status",
@@ -152,7 +146,7 @@
    "read_only": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "sales_invoice",
@@ -160,73 +154,93 @@
    "fieldtype": "Link",
    "options": "Sales Invoice",
    "read_only": 1,
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "sb_lab",
    "label": "Lab Tests",
    "fieldtype": "Section Break",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "lab_help",
    "label": "Lab",
    "fieldtype": "HTML",
    "options": "<p class='text-muted'>Add lab tests \u2014 each pulls its billing Item from the Lab Test Template.</p>",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "lab_tests",
    "label": "Lab Tests",
    "fieldtype": "Table",
    "options": "Inpatient Lab Order",
+   "idx": 17
+  },
+  {
+   "fieldname": "sb_imaging",
+   "label": "Radiology / Imaging",
+   "fieldtype": "Section Break",
    "idx": 18
+  },
+  {
+   "fieldname": "imaging_help",
+   "label": "Imaging",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Imaging is chosen from Lab Test Templates in the IMAGING group.</p>",
+   "idx": 19
+  },
+  {
+   "fieldname": "imaging",
+   "label": "Imaging",
+   "fieldtype": "Table",
+   "options": "Inpatient Imaging Order",
+   "idx": 20
   },
   {
    "fieldname": "sb_proc",
    "label": "Procedures",
    "fieldtype": "Section Break",
-   "idx": 19
+   "idx": 21
   },
   {
    "fieldname": "procedures",
    "label": "Procedures",
    "fieldtype": "Table",
    "options": "Inpatient Procedure Order",
-   "idx": 20
+   "idx": 22
   },
   {
    "fieldname": "sb_items",
-   "label": "Medicines / Radiology / Consumables",
+   "label": "Pharmacy / Consumables",
    "fieldtype": "Section Break",
-   "idx": 21
+   "idx": 23
   },
   {
    "fieldname": "item_help",
    "label": "Items",
    "fieldtype": "HTML",
-   "options": "<p class='text-muted'>Add any billable Item (pharmacy, radiology, consumables).</p>",
-   "idx": 22
+   "options": "<p class='text-muted'>Pharmacy medicines and consumable items.</p>",
+   "idx": 24
   },
   {
    "fieldname": "items",
-   "label": "Items",
+   "label": "Pharmacy / Consumables",
    "fieldtype": "Table",
    "options": "Inpatient Item Order",
-   "idx": 23
+   "idx": 25
   },
   {
    "fieldname": "sb_send",
    "label": "Send",
    "fieldtype": "Section Break",
-   "idx": 24
+   "idx": 26
   },
   {
    "fieldname": "send_help",
    "label": "Send",
    "fieldtype": "HTML",
    "options": "<p class='text-muted'>Click <b>Send to Billing</b> to create the draft-but-billable Sales Invoice from all the lines above \u2014 exactly like consultation drug-prescription invoicing.</p>",
-   "idx": 25
+   "idx": 27
   }
  ],
  "index_web_pages_for_search": 1,

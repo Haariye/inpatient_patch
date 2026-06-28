@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_dates",
@@ -87,19 +86,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -108,7 +99,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -117,27 +108,27 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_dates",
    "label": "Dates",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "admission_date",
    "label": "Admission Date",
    "fieldtype": "Date",
    "fetch_from": "inpatient_record.admitted_datetime",
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "discharge_date",
    "label": "Discharge Date",
    "fieldtype": "Date",
    "reqd": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "condition_at_discharge",
@@ -145,88 +136,88 @@
    "fieldtype": "Select",
    "options": "\nImproved\nStable\nReferred\nDeceased\nLAMA",
    "in_list_view": 1,
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "sb_clin",
    "label": "Clinical",
    "fieldtype": "Section Break",
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "final_diagnosis",
    "label": "Final Diagnosis",
    "fieldtype": "Small Text",
    "reqd": 1,
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "procedure_performed",
    "label": "Procedure Performed (if any)",
    "fieldtype": "Small Text",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "investigations",
    "label": "Important Investigations & Results",
    "fieldtype": "Text",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "treatment_given",
    "label": "Treatment Given",
    "fieldtype": "Text",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "sb_meds",
    "label": "Discharge Plan",
    "fieldtype": "Section Break",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "discharge_medicines",
    "label": "Discharge Medicines (dose & duration)",
    "fieldtype": "Text",
    "reqd": 1,
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "wound_care",
    "label": "Wound Care Instructions",
    "fieldtype": "Small Text",
-   "idx": 21
+   "idx": 20
   },
   {
    "fieldname": "physiotherapy",
    "label": "Physiotherapy Instructions",
    "fieldtype": "Small Text",
-   "idx": 22
+   "idx": 21
   },
   {
    "fieldname": "cb_meds",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 23
+   "idx": 22
   },
   {
    "fieldname": "follow_up",
    "label": "Follow-up Appointment",
    "fieldtype": "Data",
    "reqd": 1,
-   "idx": 24
+   "idx": 23
   },
   {
    "fieldname": "warning_signs",
    "label": "Warning Signs / When to Return",
    "fieldtype": "Small Text",
-   "idx": 25
+   "idx": 24
   },
   {
    "fieldname": "sb_sign",
    "label": "Sign-off",
    "fieldtype": "Section Break",
-   "idx": 26
+   "idx": 25
   },
   {
    "fieldname": "doctor",
@@ -234,14 +225,14 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "reqd": 1,
-   "idx": 27
+   "idx": 26
   },
   {
    "fieldname": "bill_cleared",
    "label": "Bill / Clearance completed",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 28
+   "idx": 27
   }
  ],
  "index_web_pages_for_search": 1,

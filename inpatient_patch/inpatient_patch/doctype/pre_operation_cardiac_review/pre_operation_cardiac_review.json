@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "sb_card",
   "review_date",
@@ -82,19 +81,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -103,32 +94,32 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "sb_card",
    "label": "Cardiac Review",
    "fieldtype": "Section Break",
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "review_date",
    "label": "Date",
    "fieldtype": "Date",
    "reqd": 1,
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "bp",
    "label": "BP",
    "fieldtype": "Data",
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "pulse",
    "label": "Pulse",
    "fieldtype": "Int",
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "mets",
@@ -136,56 +127,56 @@
    "fieldtype": "Select",
    "options": "\n< 4\n> 4\n> 10",
    "in_list_view": 1,
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "rcri",
    "label": "RCRI",
    "fieldtype": "Select",
    "options": "\n< 1\n> 1",
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "cb_card",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "cardio_pulmonary_exam",
    "label": "Cardio-Pulmonary Examination",
    "fieldtype": "Text",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "ecg_findings",
    "label": "ECG Findings",
    "fieldtype": "Small Text",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "echo_findings",
    "label": "ECHO Findings (if done)",
    "fieldtype": "Small Text",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "ejection_fraction",
    "label": "Ejection Fraction (%)",
    "fieldtype": "Float",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "chamber_wall_motion",
    "label": "Chamber Size / Wall Motion",
    "fieldtype": "Small Text",
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "sb_plan",
    "label": "Plan (mandatory)",
    "fieldtype": "Section Break",
-   "idx": 21
+   "idx": 20
   },
   {
    "fieldname": "plan",
@@ -194,7 +185,7 @@
    "options": "\nFit for Surgery\nNeeds Optimization\nNot Fit",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 22
+   "idx": 21
   },
   {
    "fieldname": "doctor",
@@ -202,7 +193,7 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "reqd": 1,
-   "idx": 23
+   "idx": 22
   }
  ],
  "index_web_pages_for_search": 1,

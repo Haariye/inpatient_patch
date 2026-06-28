@@ -85,7 +85,7 @@
    "fieldname": "administered_by",
    "label": "Nurse (Given By)",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "depends_on": "eval:doc.given",
    "mandatory_depends_on": "eval:doc.given",
    "in_list_view": 1,

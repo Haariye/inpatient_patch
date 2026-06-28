@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "given_at",
+  "drug_code",
+  "dose",
+  "status",
+  "given_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "given_at",
+   "label": "Time Given",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "drug_code",
+   "label": "Drug",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "dose",
+   "label": "Dose",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "given_by",
+   "label": "Given By",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "idx": 5
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Handover Medication",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

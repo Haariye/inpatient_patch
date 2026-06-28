@@ -31,6 +31,7 @@ doc_events = {
         "on_update": "inpatient_patch.inpatient_patch.billing.refresh_inpatient_billing_summary",
     },
     "Operation Theatre Case": {
+        "validate": "inpatient_patch.inpatient_patch.ot.validate_ot_case",
         "before_submit": "inpatient_patch.inpatient_patch.workflow.before_submit_ot_case",
         "on_submit": "inpatient_patch.inpatient_patch.ot.on_submit_ot_case",
         "on_cancel": "inpatient_patch.inpatient_patch.ot.on_cancel_ot_case",
@@ -66,7 +67,10 @@ doc_events = {
     "Emergency Assessment Sheet": {
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
     "Nursing Admission Assessment": {
+        "validate": "inpatient_patch.inpatient_patch.workflow.stamp_nursing_complete",
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
+    "Medication Administration Record": {
+        "validate": "inpatient_patch.inpatient_patch.workflow.stamp_nursing_complete"},
     "History Clinical Examination": {
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
     "Recovery Nurse Record": {

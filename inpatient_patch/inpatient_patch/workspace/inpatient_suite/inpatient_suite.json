@@ -1,6 +1,7 @@
 {
  "charts": [{"chart_name": "Inpatient Admissions", "label": "Inpatient Admissions"}],
- "content": "[{\"id\":\"hdr\",\"type\":\"header\",\"data\":{\"text\":\"Inpatient Suite\",\"col\":12}},{\"id\":\"sc0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Emergency Assessment\",\"col\":3}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Record\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Operation Theatre Case\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Census\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Outstanding Bills\",\"col\":3}}]",
+ "number_cards": [{"number_card_name": "IP Admitted Patients", "label": "IP Admitted Patients"}, {"number_card_name": "IP In Theatre", "label": "IP In Theatre"}, {"number_card_name": "IP Open Bills", "label": "IP Open Bills"}],
+ "content": "[{\"id\":\"hdr\",\"type\":\"header\",\"data\":{\"text\":\"Inpatient Suite\",\"col\":12}},{\"id\":\"nc1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"IP Admitted Patients\",\"col\":4}},{\"id\":\"nc2\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"IP In Theatre\",\"col\":4}},{\"id\":\"nc3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"IP Open Bills\",\"col\":4}},{\"id\":\"sc0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Emergency Assessment\",\"col\":3}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Record\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Operation Theatre Case\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inpatient Census\",\"col\":3}},{\"id\":\"ch1\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Inpatient Admissions\",\"col\":12}}]",
  "creation": "2026-01-01 00:00:00",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -23,11 +24,13 @@
   {"hidden": 0, "is_query_report": 0, "label": "Patient Deposit", "link_to": "Patient Deposit", "link_type": "DocType", "type": "Link"},
   {"hidden": 0, "is_query_report": 0, "label": "Inpatient Billing Settings", "link_to": "Inpatient Billing Settings", "link_type": "DocType", "type": "Link"},
   {"hidden": 0, "is_query_report": 0, "label": "Configuration", "link_count": 0, "onboard": 0, "type": "Card Break"},
+  {"hidden": 0, "is_query_report": 0, "label": "Nurse", "link_to": "Nurse", "link_type": "DocType", "type": "Link"},
   {"hidden": 0, "is_query_report": 0, "label": "Department Admission Protocol", "link_to": "Department Admission Protocol", "link_type": "DocType", "type": "Link"},
   {"hidden": 0, "is_query_report": 0, "label": "Reports", "link_count": 0, "onboard": 0, "type": "Card Break"},
   {"hidden": 0, "is_query_report": 1, "label": "Inpatient Census", "link_to": "Inpatient Census", "link_type": "Report", "type": "Link"},
   {"hidden": 0, "is_query_report": 1, "label": "Inpatient Outstanding Bills", "link_to": "Inpatient Outstanding Bills", "link_type": "Report", "type": "Link"},
-  {"hidden": 0, "is_query_report": 1, "label": "Medication Due List", "link_to": "Medication Due List", "link_type": "Report", "type": "Link"}
+  {"hidden": 0, "is_query_report": 1, "label": "Medication Due List", "link_to": "Medication Due List", "link_type": "Report", "type": "Link"},
+  {"hidden": 0, "is_query_report": 1, "label": "Operative Workflow Status", "link_to": "Operative Workflow Status", "link_type": "Report", "type": "Link"}
  ],
  "modified": "2026-01-01 00:00:00",
  "modified_by": "Administrator",

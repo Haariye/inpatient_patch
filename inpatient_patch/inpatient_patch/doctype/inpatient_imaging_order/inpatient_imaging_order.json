@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "lab_test_template",
+  "lab_test_name",
+  "observation",
+  "comments",
+  "cb_imo",
+  "qty",
+  "rate",
+  "billed",
+  "billed_invoice"
+ ],
+ "fields": [
+  {
+   "fieldname": "lab_test_template",
+   "label": "Imaging / Radiology",
+   "fieldtype": "Link",
+   "options": "Lab Test Template",
+   "in_list_view": 1,
+   "reqd": 1,
+   "description": "Filtered to the IMAGING item group.",
+   "idx": 1
+  },
+  {
+   "fieldname": "lab_test_name",
+   "label": "Name",
+   "fieldtype": "Data",
+   "fetch_from": "lab_test_template.lab_test_name",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "observation",
+   "label": "Observation",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "comments",
+   "label": "Comments",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_imo",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "qty",
+   "label": "Qty",
+   "fieldtype": "Float",
+   "default": "1",
+   "idx": 6
+  },
+  {
+   "fieldname": "rate",
+   "label": "Rate (USD)",
+   "fieldtype": "Currency",
+   "idx": 7
+  },
+  {
+   "fieldname": "billed",
+   "label": "Billed",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "default": "0",
+   "idx": 8
+  },
+  {
+   "fieldname": "billed_invoice",
+   "label": "Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "idx": 9
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Inpatient Imaging Order",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

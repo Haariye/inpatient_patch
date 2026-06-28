@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_h",
@@ -94,19 +93,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -115,7 +106,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -124,169 +115,169 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_h",
    "label": "History",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "admission_date",
    "label": "Admission Date",
    "fieldtype": "Date",
    "fetch_from": "inpatient_record.admitted_datetime",
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "complaint",
    "label": "Complaint (C/O)",
    "fieldtype": "Small Text",
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "hpi",
    "label": "History of Presenting Illness",
    "fieldtype": "Text",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "past_medical_illness",
    "label": "Past Medical Illness",
    "fieldtype": "Text",
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "drug_history",
    "label": "Drug History",
    "fieldtype": "Small Text",
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "cb_h",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "family_history",
    "label": "Family History",
    "fieldtype": "Small Text",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "social_history",
    "label": "Social History",
    "fieldtype": "Small Text",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "review_of_systems",
    "label": "Review of Systems",
    "fieldtype": "Text",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "summary",
    "label": "Summary",
    "fieldtype": "Text",
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "sb_vitals",
    "label": "Examination & Vitals",
    "fieldtype": "Section Break",
    "collapsible": 1,
-   "idx": 21
+   "idx": 20
   },
   {
    "fieldname": "bp",
    "label": "BP",
    "fieldtype": "Data",
-   "idx": 22
+   "idx": 21
   },
   {
    "fieldname": "pulse",
    "label": "Pulse (PR)",
    "fieldtype": "Int",
-   "idx": 23
+   "idx": 22
   },
   {
    "fieldname": "rr",
    "label": "Respiration (RR)",
    "fieldtype": "Int",
-   "idx": 24
+   "idx": 23
   },
   {
    "fieldname": "cb_vitals",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 25
+   "idx": 24
   },
   {
    "fieldname": "temperature",
    "label": "Temperature (\u00b0C)",
    "fieldtype": "Float",
-   "idx": 26
+   "idx": 25
   },
   {
    "fieldname": "spo2",
    "label": "SpO2 (%)",
    "fieldtype": "Int",
-   "idx": 27
+   "idx": 26
   },
   {
    "fieldname": "weight",
    "label": "Weight (kg)",
    "fieldtype": "Float",
-   "idx": 28
+   "idx": 27
   },
   {
    "fieldname": "physical_examination",
    "label": "Physical Examination",
    "fieldtype": "Text",
-   "idx": 29
+   "idx": 28
   },
   {
    "fieldname": "lab_on_admission",
    "label": "Lab Exam on Admission",
    "fieldtype": "Text",
-   "idx": 30
+   "idx": 29
   },
   {
    "fieldname": "sb_dx",
    "label": "Diagnosis & Treatment",
    "fieldtype": "Section Break",
-   "idx": 31
+   "idx": 30
   },
   {
    "fieldname": "provisional_diagnosis",
    "label": "Provisional Diagnosis",
    "fieldtype": "Small Text",
    "reqd": 1,
-   "idx": 32
+   "idx": 31
   },
   {
    "fieldname": "treatment_on_admission",
    "label": "Treatment on Admission",
    "fieldtype": "Text",
    "reqd": 1,
-   "idx": 33
+   "idx": 32
   },
   {
    "fieldname": "requires_surgery",
    "label": "Requires Surgery (request surgeon review)",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 34
+   "idx": 33
   },
   {
    "fieldname": "gp_in_charge",
    "label": "GP On Charge",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
-   "idx": 35
+   "idx": 34
   }
  ],
  "index_web_pages_for_search": 1,

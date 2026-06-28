@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_mar",
@@ -20,7 +19,11 @@
   "ordered_by",
   "instructions",
   "sb_entries",
-  "entries"
+  "entries",
+  "sb_signoff",
+  "nursing_completed",
+  "completed_by",
+  "completed_at"
  ],
  "fields": [
   {
@@ -74,19 +77,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -95,7 +90,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -104,13 +99,13 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_mar",
    "label": "Medication Administration",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "mar_date",
@@ -118,33 +113,63 @@
    "fieldtype": "Date",
    "reqd": 1,
    "in_standard_filter": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "ordered_by",
    "label": "Ordered By (Doctor)",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "instructions",
    "label": "Exact-timing Instructions",
    "fieldtype": "Small Text",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "sb_entries",
    "label": "Administrations  (time given + nurse)",
    "fieldtype": "Section Break",
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "entries",
    "label": "Medication Entries",
    "fieldtype": "Table",
    "options": "Medication Administration Entry",
+   "idx": 14
+  },
+  {
+   "fieldname": "sb_signoff",
+   "label": "Nursing Sign-off",
+   "fieldtype": "Section Break",
    "idx": 15
+  },
+  {
+   "fieldname": "nursing_completed",
+   "label": "Nursing Completed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 16
+  },
+  {
+   "fieldname": "completed_by",
+   "label": "Completed By (Nurse)",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "depends_on": "eval:doc.nursing_completed",
+   "mandatory_depends_on": "eval:doc.nursing_completed",
+   "idx": 17
+  },
+  {
+   "fieldname": "completed_at",
+   "label": "Completed At",
+   "fieldtype": "Datetime",
+   "depends_on": "eval:doc.nursing_completed",
+   "read_only": 1,
+   "idx": 18
   }
  ],
  "index_web_pages_for_search": 1,

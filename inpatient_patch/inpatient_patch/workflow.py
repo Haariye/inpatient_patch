@@ -116,3 +116,37 @@ def before_submit_discharge(doc, method=None):
                            {"inpatient_record": doc.inpatient_record}):
         frappe.throw(_("Cannot discharge: a <b>History & Clinical Examination</b> "
                        "must be completed for this admission."))
+
+
+def stamp_nursing_complete(doc, method=None):
+    """When 'Nursing Completed' is ticked, stamp the completion time."""
+    try:
+        if doc.get("nursing_completed") and not doc.get("completed_at"):
+            doc.completed_at = frappe.utils.now_datetime()
+    except Exception:
+        pass
+
+
+@frappe.whitelist()
+def get_shift_medications(inpatient_record):
+    """Pull today's administered medicines from MAR sheets for the handover chart."""
+    out = []
+    try:
+        today = frappe.utils.nowdate()
+        mars = frappe.get_all("Medication Administration Record",
+            filters={"inpatient_record": inpatient_record, "mar_date": today},
+            pluck="name")
+        for m in mars:
+            doc = frappe.get_doc("Medication Administration Record", m)
+            for e in (doc.get("entries") or []):
+                if cint(e.get("given")):
+                    out.append({
+                        "given_at": str(e.get("administration_time") or ""),
+                        "drug_code": e.get("drug_code"),
+                        "dose": e.get("dose"),
+                        "status": e.get("status") or "Given",
+                        "given_by": e.get("administered_by"),
+                    })
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "get_shift_medications")
+    return out

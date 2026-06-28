@@ -69,10 +69,10 @@ def run_daily_bed_billing():
 
 
 def _bed_rate_and_item(ip_doc):
-    """Resolve the daily bed rate + item from the current bed's service-unit type."""
+    """Resolve the daily bed rate + item from the current bed's service-unit type
+    using the NATIVE item_code + rate fields on Healthcare Service Unit Type."""
     bed = ip_doc.get("custom_current_bed")
     if not bed:
-        # fall back to the latest occupancy row on the inpatient record
         occ = ip_doc.get("inpatient_occupancies") or []
         if occ:
             bed = occ[-1].service_unit
@@ -84,8 +84,31 @@ def _bed_rate_and_item(ip_doc):
     if unit_type:
         item, rate = frappe.db.get_value(
             "Healthcare Service Unit Type", unit_type,
-            ["custom_bed_item", "custom_daily_bed_rate"]) or (None, 0)
+            ["item_code", "rate"]) or (None, 0)
     return bed, flt(rate), item
+
+
+def _admission_date(ip):
+    val = ip.get("admitted_datetime") or ip.get("scheduled_date")
+    if not val:
+        return None
+    return getdate(val)
+
+
+def _bed_days_allowed_and_billed(ip):
+    """Allowed bed-days = days from admission up to today (or discharge) inclusive.
+    Billed = number of submitted bed invoices already raised for this record."""
+    adm = _admission_date(ip)
+    if not adm:
+        return 0, 0
+    end = getdate(ip.get("discharge_datetime")) if ip.get("discharge_datetime") else getdate(nowdate())
+    allowed = (end - adm).days + 1
+    if allowed < 1:
+        allowed = 1
+    billed = frappe.db.count("Sales Invoice",
+        {"custom_inpatient_record": ip.name, "custom_is_inpatient_bed_invoice": 1,
+         "docstatus": ["<", 2]})
+    return allowed, billed
 
 
 @frappe.whitelist()
@@ -98,8 +121,20 @@ def bill_bed_for_record(inpatient_record, posting_date=None):
     if not bed:
         frappe.throw(_("No current bed set on {0}; cannot bill bed.").format(inpatient_record))
     if rate <= 0 or not item:
-        frappe.throw(_("Set 'Daily Bed Rate' and 'Bed Charge Item' on the "
-                       "Service Unit Type of bed {0}.").format(bed))
+        frappe.throw(_("Set the <b>Item Code</b> and <b>Rate</b> on the Service Unit "
+                       "Type of bed {0}.").format(bed))
+
+    # ---- over-billing guard: never bill more bed-days than the stay ----
+    allowed, billed = _bed_days_allowed_and_billed(ip)
+    if billed >= allowed:
+        frappe.throw(_("Bed already billed for all {0} day(s) of this stay. "
+                       "You cannot bill more bed-days than the patient has stayed.")
+                     .format(allowed))
+    # don't double-bill the same day
+    if frappe.db.exists("Sales Invoice",
+            {"custom_inpatient_record": ip.name, "custom_is_inpatient_bed_invoice": 1,
+             "custom_bed_billed_date": posting_date, "docstatus": ["<", 2]}):
+        frappe.throw(_("The bed is already billed for {0}.").format(posting_date))
 
     customer = get_customer(ip.patient)
     if not customer:
@@ -126,7 +161,11 @@ def bill_bed_for_record(inpatient_record, posting_date=None):
 
     inv.set_missing_values()
     inv.calculate_taxes_and_totals()
-    inv.insert(ignore_permissions=True)   # stays DRAFT (unpaid, billable)
+    inv.insert(ignore_permissions=True)
+    try:
+        inv.submit()   # bed invoices are SUBMITTED immediately
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "bed invoice submit")
 
     frappe.db.set_value("Inpatient Record", ip.name,
                         "custom_last_bed_billed_date", posting_date,
@@ -171,6 +210,16 @@ def _collect_order_rows(so):
             frappe.throw(_("Lab Test Template <b>{0}</b> has no billing Item set. "
                            "Set its Item, or remove the row.").format(r.lab_test_template))
         rows.append({"row_dt": "Inpatient Lab Order", "row_name": r.name,
+                     "item_code": item, "qty": flt(r.qty) or 1, "rate": flt(r.rate),
+                     "desc": r.lab_test_name or r.lab_test_template})
+    for r in (so.get("imaging") or []):
+        if cint(r.get("billed")):
+            continue
+        item = _resolve_template_item("Lab Test Template", r.lab_test_template)
+        if not item:
+            frappe.throw(_("Imaging template <b>{0}</b> has no billing Item set. "
+                           "Set its Item, or remove the row.").format(r.lab_test_template))
+        rows.append({"row_dt": "Inpatient Imaging Order", "row_name": r.name,
                      "item_code": item, "qty": flt(r.qty) or 1, "rate": flt(r.rate),
                      "desc": r.lab_test_name or r.lab_test_template})
     for r in (so.get("procedures") or []):
@@ -328,8 +377,8 @@ def on_cancel_service_order(doc, method=None):
 
 def _refresh_service_order_status(name):
     so = frappe.get_doc("Inpatient Service Order", name)
-    allrows = (list(so.get("lab_tests") or []) + list(so.get("procedures") or [])
-               + list(so.get("items") or []))
+    allrows = (list(so.get("lab_tests") or []) + list(so.get("imaging") or [])
+               + list(so.get("procedures") or []) + list(so.get("items") or []))
     total = len(allrows)
     billed = len([r for r in allrows if cint(r.get("billed"))])
     if not total:

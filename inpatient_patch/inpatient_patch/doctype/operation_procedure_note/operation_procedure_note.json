@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_team",
@@ -87,19 +86,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -108,7 +99,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -117,20 +108,20 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_team",
    "label": "Team",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "operation_date",
    "label": "Date",
    "fieldtype": "Datetime",
    "reqd": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "surgeon",
@@ -138,13 +129,13 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "reqd": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "assistants",
    "label": "Assistants",
    "fieldtype": "Small Text",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "anesthesia_type",
@@ -152,79 +143,79 @@
    "fieldtype": "Select",
    "options": "\nGA (General)\nSA (Spinal)\nRegional Block\nLocal\nSedation\nOther",
    "reqd": 1,
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "cb_team",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "anesthetist",
    "label": "Anesthetist",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "scrub_nurse",
    "label": "Scrub Nurse",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
-   "idx": 17
+   "options": "Nurse",
+   "idx": 16
   },
   {
    "fieldname": "runner",
-   "label": "Runner",
+   "label": "Runner / Circulating Nurse",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
-   "idx": 18
+   "options": "Nurse",
+   "idx": 17
   },
   {
    "fieldname": "sb_dx",
    "label": "Diagnosis",
    "fieldtype": "Section Break",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "preop_diagnosis",
    "label": "Pre-op Diagnosis",
    "fieldtype": "Small Text",
    "reqd": 1,
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "postop_diagnosis",
    "label": "Post-op Diagnosis",
    "fieldtype": "Small Text",
    "reqd": 1,
-   "idx": 21
+   "idx": 20
   },
   {
    "fieldname": "procedure_done",
    "label": "Procedure Done",
    "fieldtype": "Small Text",
    "reqd": 1,
-   "idx": 22
+   "idx": 21
   },
   {
    "fieldname": "sb_note",
    "label": "Operative Detail",
    "fieldtype": "Section Break",
-   "idx": 23
+   "idx": 22
   },
   {
    "fieldname": "operation_note",
    "label": "Operation Note",
    "fieldtype": "Text",
-   "idx": 24
+   "idx": 23
   },
   {
    "fieldname": "drains",
    "label": "Drains",
    "fieldtype": "Small Text",
-   "idx": 25
+   "idx": 24
   },
   {
    "fieldname": "sponge_count",
@@ -233,13 +224,13 @@
    "options": "\nCorrect\nIncorrect",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 26
+   "idx": 25
   },
   {
    "fieldname": "complications",
    "label": "Complications",
    "fieldtype": "Small Text",
-   "idx": 27
+   "idx": 26
   },
   {
    "fieldname": "escalated",
@@ -247,7 +238,7 @@
    "fieldtype": "Check",
    "read_only": 1,
    "default": "0",
-   "idx": 28
+   "idx": 27
   }
  ],
  "index_web_pages_for_search": 1,

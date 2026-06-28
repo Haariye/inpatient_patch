@@ -16,7 +16,7 @@
  "fields": [
   {
    "fieldname": "item_code",
-   "label": "Item (drug / radiology / consumable)",
+   "label": "Item (pharmacy / consumable)",
    "fieldtype": "Link",
    "options": "Item",
    "in_list_view": 1,

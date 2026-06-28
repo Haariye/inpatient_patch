@@ -72,7 +72,7 @@
    "fieldname": "coordinating_nurse",
    "label": "Coordinating Nurse",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "idx": 7
   },
   {

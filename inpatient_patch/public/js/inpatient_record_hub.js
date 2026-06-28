@@ -11,6 +11,7 @@ frappe.ui.form.on('Inpatient Record', {
             callback(r) {
                 const s = r.message || {};
                 add_create_button(frm, s);
+                render_dashboard(frm, s);
                 show_next_step(frm, s);
                 render_snapshot(frm);
             },
@@ -80,7 +81,7 @@ function build_actions(frm, s) {
 }
 
 function add_create_button(frm, s) {
-    const btn = frm.add_custom_button(__('Create / Actions'), () => open_create_menu(frm, s));
+    const btn = frm.add_custom_button(__('Actions'), () => open_create_menu(frm, s));
     btn.addClass('btn-primary');
 }
 
@@ -116,6 +117,59 @@ function bill_bed(frm) {
         args: { inpatient_record: frm.doc.name }, freeze: true,
         callback(r) { if (r.message) { frappe.show_alert({ message: __('Draft bed invoice {0} created', [r.message]), indicator: 'green' }); frm.reload_doc(); } },
     });
+}
+
+function render_dashboard(frm, s) {
+    const d = frm.doc;
+    const surgical = s.is_surgical;
+    let steps = [
+        { key: 'adm', label: 'Admission', done: true },
+        { key: 'nurse', label: 'Nursing', done: s.has_nursing },
+        { key: 'exam', label: 'Examination', done: s.has_history },
+    ];
+    if (surgical) {
+        steps.push({ key: 'preop', label: 'Pre-Op', done: s.preop_ready });
+        steps.push({ key: 'ot', label: 'Theatre', done: s.operated });
+        steps.push({ key: 'rec', label: 'Recovery', done: s.has_recovery });
+    }
+    steps.push({ key: 'disc', label: 'Discharge', done: s.discharged });
+
+    let currentIdx = steps.findIndex((x) => !x.done);
+    if (currentIdx === -1) currentIdx = steps.length - 1;
+
+    let stepHtml = '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0;margin:6px 0 14px;">';
+    steps.forEach((st, i) => {
+        let bg = '#e5e7eb', col = '#6b7280', brd = '#e5e7eb';
+        if (st.done) { bg = '#10b981'; col = '#fff'; brd = '#10b981'; }
+        if (i === currentIdx && !st.done) { bg = '#f59e0b'; col = '#fff'; brd = '#f59e0b'; }
+        stepHtml += '<div style="display:flex;align-items:center;">';
+        stepHtml += '<div style="background:' + bg + ';color:' + col + ';border:2px solid ' + brd +
+            ';border-radius:18px;padding:5px 14px;font-size:12px;font-weight:600;white-space:nowrap;">' +
+            (st.done ? '\u2713 ' : '') + frappe.utils.escape_html(st.label) + '</div>';
+        if (i < steps.length - 1) {
+            stepHtml += '<div style="width:22px;height:3px;background:' + (st.done ? '#10b981' : '#e5e7eb') + ';"></div>';
+        }
+        stepHtml += '</div>';
+    });
+    stepHtml += '</div>';
+
+    const cards = [
+        { label: 'Billed', val: d.custom_total_billed, c1: '#6366f1', c2: '#8b5cf6' },
+        { label: 'Paid', val: d.custom_total_paid, c1: '#10b981', c2: '#059669' },
+        { label: 'Deposit', val: d.custom_total_deposit, c1: '#0ea5e9', c2: '#0284c7' },
+        { label: 'Outstanding', val: d.custom_outstanding, c1: '#f43f5e', c2: '#e11d48' },
+    ];
+    let cardHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px;">';
+    cards.forEach((c) => {
+        const v = format_currency(c.val || 0, d.currency || 'USD');
+        cardHtml += '<div style="flex:1;min-width:120px;background:linear-gradient(135deg,' + c.c1 + ',' + c.c2 +
+            ');color:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.12);">' +
+            '<div style="font-size:11px;opacity:.9;text-transform:uppercase;letter-spacing:.05em;">' + c.label + '</div>' +
+            '<div style="font-size:20px;font-weight:700;margin-top:2px;">' + v + '</div></div>';
+    });
+    cardHtml += '</div>';
+
+    frm.dashboard.add_section(stepHtml + cardHtml, __('Inpatient Overview'));
 }
 
 function show_next_step(frm, s) {

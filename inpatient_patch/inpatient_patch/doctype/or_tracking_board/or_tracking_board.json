@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_otb",
@@ -83,19 +82,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -104,7 +95,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -113,102 +104,102 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_otb",
    "label": "Operation",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "board_date",
    "label": "Date",
    "fieldtype": "Date",
    "reqd": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "diagnosis",
    "label": "Diagnosis",
    "fieldtype": "Data",
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "procedure",
    "label": "Procedure",
    "fieldtype": "Data",
    "reqd": 1,
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "sb_times",
    "label": "Times",
    "fieldtype": "Section Break",
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "time_in",
    "label": "Time In",
    "fieldtype": "Datetime",
    "reqd": 1,
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "start_time",
    "label": "Start Time",
    "fieldtype": "Datetime",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "finish_time",
    "label": "Finish Time",
    "fieldtype": "Datetime",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "cb_times",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "time_out",
    "label": "Time Out",
    "fieldtype": "Datetime",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "exit_time",
    "label": "Exit Time",
    "fieldtype": "Datetime",
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "sb_items",
    "label": "Items Used (deduct from stock)",
    "fieldtype": "Section Break",
-   "idx": 21
+   "idx": 20
   },
   {
    "fieldname": "items_used",
    "label": "Items Used",
    "fieldtype": "Table",
    "options": "OR Item Usage",
-   "idx": 22
+   "idx": 21
   },
   {
    "fieldname": "sb_meds",
    "label": "Medicines Used",
    "fieldtype": "Section Break",
-   "idx": 23
+   "idx": 22
   },
   {
    "fieldname": "medicines_used",
    "label": "Medicines Used",
    "fieldtype": "Table",
    "options": "OR Medicine Usage",
-   "idx": 24
+   "idx": 23
   }
  ],
  "index_web_pages_for_search": 1,

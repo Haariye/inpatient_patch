@@ -72,9 +72,9 @@
   },
   {
    "fieldname": "nurse",
-   "label": "Nurse / Doctor",
+   "label": "Nurse",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "in_list_view": 1,
    "idx": 8
   },

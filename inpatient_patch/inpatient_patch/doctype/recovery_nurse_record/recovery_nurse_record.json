@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_rec",
@@ -94,19 +93,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -115,7 +106,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -124,33 +115,33 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_rec",
    "label": "Recovery",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "procedure_performed",
    "label": "Procedure Performed",
    "fieldtype": "Data",
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "anesthesia_type",
    "label": "Anesthesia",
    "fieldtype": "Select",
    "options": "\nGA (General)\nSA (Spinal)\nRegional Block\nLocal\nSedation\nOther",
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "patient_source",
    "label": "Patient Source",
    "fieldtype": "Select",
    "options": "\nInpatient\nOutpatient",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "conscious_level",
@@ -158,117 +149,117 @@
    "fieldtype": "Select",
    "options": "\nAwake\nArousable/Drowsy\nRestless\nConfused\nUnresponsive",
    "in_list_view": 1,
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "cb_rec",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "ventilation",
    "label": "Ventilation",
    "fieldtype": "Select",
    "options": "\nAdequate Airway\nOral Airway\nNormal Airway\nIntubated",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "breath_sounds",
    "label": "Bilateral Breath Sounds",
    "fieldtype": "Select",
    "options": "\nPresent\nAbsent",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "skin",
    "label": "Skin",
    "fieldtype": "Select",
    "options": "\nPink\nPale\nDry\nMoist\nWarm\nCool",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "dressing",
    "label": "Dressing",
    "fieldtype": "Select",
    "options": "\nDry\nSoaked",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "sb_vitals_tbl",
    "label": "Repeated Vitals",
    "fieldtype": "Section Break",
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "vital_entries",
    "label": "Vital Entries",
    "fieldtype": "Table",
    "options": "Recovery Vital Entry",
-   "idx": 21
+   "idx": 20
   },
   {
    "fieldname": "sb_iv",
    "label": "IV / Pain / Nausea",
    "fieldtype": "Section Break",
-   "idx": 22
+   "idx": 21
   },
   {
    "fieldname": "iv_fluid_status",
    "label": "IV Fluid",
    "fieldtype": "Select",
    "options": "\nPatent\nNon-Patent",
-   "idx": 23
+   "idx": 22
   },
   {
    "fieldname": "iv_fluid_type_rate",
    "label": "Fluid Type & Rate",
    "fieldtype": "Data",
-   "idx": 24
+   "idx": 23
   },
   {
    "fieldname": "pain_score",
    "label": "Pain Score (0-10)",
    "fieldtype": "Int",
-   "idx": 25
+   "idx": 24
   },
   {
    "fieldname": "pain_medication",
    "label": "Pain Med (time/med/dose/route)",
    "fieldtype": "Small Text",
-   "idx": 26
+   "idx": 25
   },
   {
    "fieldname": "cb_iv",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 27
+   "idx": 26
   },
   {
    "fieldname": "nausea_vomiting",
    "label": "Nausea / Vomiting",
    "fieldtype": "Select",
    "options": "\nPresent\nAbsent",
-   "idx": 28
+   "idx": 27
   },
   {
    "fieldname": "antiemetic",
    "label": "Antiemetic given",
    "fieldtype": "Data",
    "depends_on": "eval:doc.nausea_vomiting=='Present'",
-   "idx": 29
+   "idx": 28
   },
   {
    "fieldname": "other_medication",
    "label": "Other Medication",
    "fieldtype": "Small Text",
-   "idx": 30
+   "idx": 29
   },
   {
    "fieldname": "sb_disc",
    "label": "Discharge from Recovery (mandatory)",
    "fieldtype": "Section Break",
-   "idx": 31
+   "idx": 30
   },
   {
    "fieldname": "aldrete_score",
@@ -276,14 +267,14 @@
    "fieldtype": "Int",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 32
+   "idx": 31
   },
   {
    "fieldname": "discharge_time",
    "label": "Discharge Time",
    "fieldtype": "Datetime",
    "reqd": 1,
-   "idx": 33
+   "idx": 32
   },
   {
    "fieldname": "transfer_location",
@@ -291,15 +282,15 @@
    "fieldtype": "Select",
    "options": "\nVIP\nGround Floor\nFirst Floor",
    "reqd": 1,
-   "idx": 34
+   "idx": 33
   },
   {
    "fieldname": "nurse",
    "label": "Recovery Nurse",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "reqd": 1,
-   "idx": 35
+   "idx": 34
   }
  ],
  "index_web_pages_for_search": 1,

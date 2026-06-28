@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "sb_consent",
   "consent_type",
@@ -79,19 +78,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -100,13 +91,13 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "sb_consent",
    "label": "Consent",
    "fieldtype": "Section Break",
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "consent_type",
@@ -115,71 +106,71 @@
    "options": "Operation\nVideo / Pictures\nBoth",
    "default": "Operation",
    "in_list_view": 1,
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "consent_text",
    "label": "Consent Text",
    "fieldtype": "Text Editor",
    "reqd": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "sb_signer",
    "label": "Consenter",
    "fieldtype": "Section Break",
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "consenter_name",
    "label": "Name of Consenter",
    "fieldtype": "Data",
    "reqd": 1,
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "consent_date",
    "label": "Date",
    "fieldtype": "Date",
    "reqd": 1,
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "address",
    "label": "Address",
    "fieldtype": "Small Text",
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "cb_signer",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "signature",
    "label": "Signature",
    "fieldtype": "Attach Image",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "video_consent_refused",
    "label": "Video/Picture consent refused",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "witness",
    "label": "Witness",
    "fieldtype": "Data",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "scanned_consent",
    "label": "Attach Signed Consent",
    "fieldtype": "Attach",
-   "idx": 20
+   "idx": 19
   }
  ],
  "index_web_pages_for_search": 1,

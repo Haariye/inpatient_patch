@@ -39,9 +39,9 @@
   },
   {
    "fieldname": "owner_nurse",
-   "label": "Owner",
+   "label": "Owner Nurse",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "idx": 4
   }
  ],

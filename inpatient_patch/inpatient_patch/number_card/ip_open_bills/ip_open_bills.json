@@ -1,0 +1,17 @@
+{
+ "creation": "2026-01-01 00:00:00",
+ "doctype": "Number Card",
+ "document_type": "Sales Invoice",
+ "function": "Count",
+ "filters_json": "[[\"Sales Invoice\",\"custom_inpatient_record\",\"is\",\"set\"],[\"Sales Invoice\",\"status\",\"in\",[\"Unpaid\",\"Overdue\",\"Draft\"]]]",
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Open Inpatient Bills",
+ "modified": "2026-01-01 00:00:00",
+ "module": "Inpatient Patch",
+ "name": "IP Open Bills",
+ "owner": "Administrator",
+ "color": "#f59e0b",
+ "show_percentage_stats": 0,
+ "type": "Document Type"
+}

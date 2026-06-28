@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "bed",
   "sb_basic",
@@ -55,7 +54,9 @@
   "c_bathing",
   "sb_sign",
   "nurse",
-  "completion_date"
+  "completion_date",
+  "nursing_completed",
+  "completed_at"
  ],
  "fields": [
   {
@@ -109,19 +110,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -130,7 +123,7 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "bed",
@@ -139,101 +132,101 @@
    "options": "Healthcare Service Unit",
    "fetch_from": "inpatient_record.custom_current_bed",
    "read_only": 1,
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "sb_basic",
    "label": "Assessment",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "data_collected_from",
    "label": "Data Collected From",
    "fieldtype": "Data",
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "assessment_datetime",
    "label": "Date / Time",
    "fieldtype": "Datetime",
    "reqd": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "height",
    "label": "Height (cm)",
    "fieldtype": "Float",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "sb_vitals",
    "label": "Vital Signs",
    "fieldtype": "Section Break",
    "collapsible": 1,
-   "idx": 14
+   "idx": 13
   },
   {
    "fieldname": "bp",
    "label": "BP",
    "fieldtype": "Data",
-   "idx": 15
+   "idx": 14
   },
   {
    "fieldname": "pulse",
    "label": "Pulse (PR)",
    "fieldtype": "Int",
-   "idx": 16
+   "idx": 15
   },
   {
    "fieldname": "rr",
    "label": "Respiration (RR)",
    "fieldtype": "Int",
-   "idx": 17
+   "idx": 16
   },
   {
    "fieldname": "cb_vitals",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 18
+   "idx": 17
   },
   {
    "fieldname": "temperature",
    "label": "Temperature (\u00b0C)",
    "fieldtype": "Float",
-   "idx": 19
+   "idx": 18
   },
   {
    "fieldname": "spo2",
    "label": "SpO2 (%)",
    "fieldtype": "Int",
-   "idx": 20
+   "idx": 19
   },
   {
    "fieldname": "weight",
    "label": "Weight (kg)",
    "fieldtype": "Float",
-   "idx": 21
+   "idx": 20
   },
   {
    "fieldname": "sb_allergy",
    "label": "Allergy (mandatory)",
    "fieldtype": "Section Break",
-   "idx": 22
+   "idx": 21
   },
   {
    "fieldname": "no_known_allergies",
    "label": "No Known Allergies",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 23
+   "idx": 22
   },
   {
    "fieldname": "has_allergies",
    "label": "Allergies Present",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 24
+   "idx": 23
   },
   {
    "fieldname": "allergy_detail",
@@ -241,97 +234,97 @@
    "fieldtype": "Small Text",
    "depends_on": "eval:doc.has_allergies",
    "mandatory_depends_on": "eval:doc.has_allergies",
-   "idx": 25
+   "idx": 24
   },
   {
    "fieldname": "sb_hist",
    "label": "History",
    "fieldtype": "Section Break",
-   "idx": 26
+   "idx": 25
   },
   {
    "fieldname": "reason_for_admission",
    "label": "Reason for Admission",
    "fieldtype": "Small Text",
-   "idx": 27
+   "idx": 26
   },
   {
    "fieldname": "current_past_history",
    "label": "Current & Past Medical History",
    "fieldtype": "Text",
-   "idx": 28
+   "idx": 27
   },
   {
    "fieldname": "current_medications",
    "label": "Current Medications (drug/dose/freq)",
    "fieldtype": "Text",
-   "idx": 29
+   "idx": 28
   },
   {
    "fieldname": "sb_psy",
    "label": "Psychosocial",
    "fieldtype": "Section Break",
    "collapsible": 1,
-   "idx": 30
+   "idx": 29
   },
   {
    "fieldname": "depression",
    "label": "Depression",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 31
+   "idx": 30
   },
   {
    "fieldname": "confusion",
    "label": "Confusion",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 32
+   "idx": 31
   },
   {
    "fieldname": "smoking",
    "label": "Smoking",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 33
+   "idx": 32
   },
   {
    "fieldname": "alcohol",
    "label": "Alcohol",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 34
+   "idx": 33
   },
   {
    "fieldname": "cb_psy",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 35
+   "idx": 34
   },
   {
    "fieldname": "usual_diet",
    "label": "Usual Diet",
    "fieldtype": "Data",
-   "idx": 36
+   "idx": 35
   },
   {
    "fieldname": "has_helper",
    "label": "Post-discharge Helper Available",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 37
+   "idx": 36
   },
   {
    "fieldname": "hospital_care_involvement",
    "label": "Hospital Care Involvement",
    "fieldtype": "Data",
-   "idx": 38
+   "idx": 37
   },
   {
    "fieldname": "sb_func",
    "label": "Functional Status",
    "fieldtype": "Section Break",
-   "idx": 39
+   "idx": 38
   },
   {
    "fieldname": "function_level",
@@ -339,7 +332,7 @@
    "fieldtype": "Select",
    "options": "\nIndependent\nAssisted\nDependent",
    "in_list_view": 1,
-   "idx": 40
+   "idx": 39
   },
   {
    "fieldname": "flag_nursing_support",
@@ -348,69 +341,84 @@
    "read_only": 1,
    "depends_on": "eval:doc.function_level=='Dependent'",
    "default": "0",
-   "idx": 41
+   "idx": 40
   },
   {
    "fieldname": "c_ambulation",
    "label": "Ambulation needs help",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 42
+   "idx": 41
   },
   {
    "fieldname": "c_dressing",
    "label": "Dressing needs help",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 43
+   "idx": 42
   },
   {
    "fieldname": "c_eating",
    "label": "Eating needs help",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 44
+   "idx": 43
   },
   {
    "fieldname": "cb_func",
    "label": "",
    "fieldtype": "Column Break",
-   "idx": 45
+   "idx": 44
   },
   {
    "fieldname": "c_toileting",
    "label": "Toileting needs help",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 46
+   "idx": 45
   },
   {
    "fieldname": "c_bathing",
    "label": "Bathing / Hygiene needs help",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 47
+   "idx": 46
   },
   {
    "fieldname": "sb_sign",
-   "label": "Completion",
+   "label": "Nursing Sign-off / Completion",
    "fieldtype": "Section Break",
-   "idx": 48
+   "idx": 47
   },
   {
    "fieldname": "nurse",
    "label": "Assessment Nurse",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "reqd": 1,
-   "idx": 49
+   "idx": 48
   },
   {
    "fieldname": "completion_date",
    "label": "Completion Date",
    "fieldtype": "Date",
    "reqd": 1,
+   "idx": 49
+  },
+  {
+   "fieldname": "nursing_completed",
+   "label": "Nursing Completed",
+   "fieldtype": "Check",
+   "default": "0",
    "idx": 50
+  },
+  {
+   "fieldname": "completed_at",
+   "label": "Completed At",
+   "fieldtype": "Datetime",
+   "depends_on": "eval:doc.nursing_completed",
+   "read_only": 1,
+   "idx": 51
   }
  ],
  "index_web_pages_for_search": 1,

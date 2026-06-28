@@ -11,10 +11,72 @@ Also enforces the safety gates from the specification.
 """
 import frappe
 from frappe import _
-from frappe.utils import flt, cint, nowdate
+from frappe.utils import flt, cint, nowdate, now_datetime
 
 from inpatient_patch.inpatient_patch.billing import get_customer, get_settings, \
     refresh_inpatient_billing_summary, _company
+
+
+def _preop_blockers(inpatient_record):
+    """Return a list of missing pre-op requirements (empty == ready for theatre)."""
+    missing = []
+    if not frappe.db.count("History Clinical Examination",
+                           {"inpatient_record": inpatient_record}):
+        missing.append("History & Clinical Examination")
+    if not frappe.db.count("Surgical Consent Form",
+                           {"inpatient_record": inpatient_record}):
+        missing.append("Surgical Consent Form")
+    if not frappe.db.count("Pre Operative Checklist",
+                           {"inpatient_record": inpatient_record, "ready_for_or": 1}):
+        missing.append("Pre-Operative Checklist marked READY FOR OR")
+    return missing
+
+
+@frappe.whitelist()
+def start_operation(ot_case):
+    doc = frappe.get_doc("Operation Theatre Case", ot_case)
+    missing = _preop_blockers(doc.inpatient_record)
+    if missing:
+        frappe.throw(_("Cannot start the operation \u2014 finish these first:<ul>{0}</ul>")
+                     .format("".join("<li>{0}</li>".format(m) for m in missing)))
+    doc.db_set("surgery_start_time", now_datetime())
+    doc.db_set("status", "In Theatre")
+    try:
+        from inpatient_patch.inpatient_patch.notifications import notify_patient
+        notify_patient(doc.inpatient_record, "Operation Started",
+                       _("Your operation has started."),
+                       ref_dt="Operation Theatre Case", ref_dn=doc.name)
+    except Exception:
+        pass
+
+
+@frappe.whitelist()
+def end_operation(ot_case):
+    doc = frappe.get_doc("Operation Theatre Case", ot_case)
+    if not doc.get("surgery_start_time"):
+        frappe.throw(_("Start the operation before ending it."))
+    doc.db_set("surgery_end_time", now_datetime())
+    try:
+        from inpatient_patch.inpatient_patch.notifications import notify_patient
+        notify_patient(doc.inpatient_record, "Operation Ended",
+                       _("Your operation has ended. You will be moved to recovery."),
+                       ref_dt="Operation Theatre Case", ref_dn=doc.name)
+    except Exception:
+        pass
+
+
+def validate_ot_case(doc, method=None):
+    """Hard gate: a patient cannot even be entered into a theatre case until the
+    pre-operative steps are complete."""
+    if doc.is_new():
+        return
+    missing = _preop_blockers(doc.inpatient_record)
+    if missing and doc.get("status") in (None, "", "Planned", "Pre-Op Ready",
+                                         "In Theatre"):
+        # only block forward movement, not cancellation
+        if doc.get("surgery_start_time") or doc.get("status") == "In Theatre":
+            frappe.throw(_("Pre-op incomplete \u2014 finish: {0}.")
+                         .format(", ".join(missing)))
 
 
 # ---- validation gates -----------------------------------------------------

@@ -12,7 +12,6 @@
   "patient_name",
   "cb_header",
   "hospital_id",
-  "age",
   "sex",
   "sb_ord",
   "order_datetime",
@@ -73,19 +72,11 @@
   },
   {
    "fieldname": "hospital_id",
-   "label": "Hospital ID",
+   "label": "Patient ID",
    "fieldtype": "Data",
-   "fetch_from": "patient.patient_id",
+   "fetch_from": "inpatient_record.patient",
    "read_only": 1,
    "idx": 6
-  },
-  {
-   "fieldname": "age",
-   "label": "Age",
-   "fieldtype": "Data",
-   "fetch_from": "patient.custom_patient_age",
-   "read_only": 1,
-   "idx": 7
   },
   {
    "fieldname": "sex",
@@ -94,13 +85,13 @@
    "options": "\nMale\nFemale\nOther",
    "fetch_from": "patient.sex",
    "read_only": 1,
-   "idx": 8
+   "idx": 7
   },
   {
    "fieldname": "sb_ord",
    "label": "Order",
    "fieldtype": "Section Break",
-   "idx": 9
+   "idx": 8
   },
   {
    "fieldname": "order_datetime",
@@ -108,7 +99,7 @@
    "fieldtype": "Datetime",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 10
+   "idx": 9
   },
   {
    "fieldname": "doctor",
@@ -117,29 +108,29 @@
    "options": "Healthcare Practitioner",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 11
+   "idx": 10
   },
   {
    "fieldname": "order_text",
    "label": "Order",
    "fieldtype": "Text",
    "reqd": 1,
-   "idx": 12
+   "idx": 11
   },
   {
    "fieldname": "carried_out",
    "label": "Carried Out by Nursing",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 13
+   "idx": 12
   },
   {
    "fieldname": "carried_out_by",
-   "label": "Carried Out By",
+   "label": "Carried Out By (Nurse)",
    "fieldtype": "Link",
-   "options": "Healthcare Practitioner",
+   "options": "Nurse",
    "depends_on": "eval:doc.carried_out",
-   "idx": 14
+   "idx": 13
   }
  ],
  "index_web_pages_for_search": 1,

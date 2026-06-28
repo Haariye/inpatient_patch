@@ -71,12 +71,6 @@ FIELD_CONFIGS = [
      "fieldtype": "Date", "label": "Last Bed Billed Date", "read_only": 1,
      "insert_after": "custom_outstanding"},
 
-    # ---------------- Healthcare Service Unit Type : bed rate --------------
-    {"dt": "Healthcare Service Unit Type", "fieldname": "custom_daily_bed_rate",
-     "fieldtype": "Currency", "label": "Daily Bed Rate (USD)"},
-    {"dt": "Healthcare Service Unit Type", "fieldname": "custom_bed_item",
-     "fieldtype": "Link", "label": "Bed Charge Item", "options": "Item"},
-
     # ---------------- Patient Encounter : inpatient link ------------------
     {"dt": "Patient Encounter", "fieldname": "custom_inpatient_record",
      "fieldtype": "Link", "label": "Inpatient Record", "options": "Inpatient Record"},

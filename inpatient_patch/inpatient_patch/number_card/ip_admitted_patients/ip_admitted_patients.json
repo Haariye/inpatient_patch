@@ -1,0 +1,17 @@
+{
+ "creation": "2026-01-01 00:00:00",
+ "doctype": "Number Card",
+ "document_type": "Inpatient Record",
+ "function": "Count",
+ "filters_json": "[[\"Inpatient Record\",\"status\",\"=\",\"Admitted\"]]",
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Admitted Patients",
+ "modified": "2026-01-01 00:00:00",
+ "module": "Inpatient Patch",
+ "name": "IP Admitted Patients",
+ "owner": "Administrator",
+ "color": "#6366f1",
+ "show_percentage_stats": 0,
+ "type": "Document Type"
+}
