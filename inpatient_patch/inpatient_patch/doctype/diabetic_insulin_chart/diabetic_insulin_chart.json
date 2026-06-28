@@ -116,6 +116,7 @@
    "label": "Reviewing Doctor",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
+   "fetch_from": "inpatient_record.primary_practitioner",
    "idx": 11
   },
   {

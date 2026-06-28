@@ -17,9 +17,15 @@ doctype_js = {
     "Operation Theatre Case": "public/js/ot_case.js",
     "Emergency Assessment Sheet": "public/js/emergency_assessment.js",
     "Nurse Handover": "public/js/nurse_handover.js",
+    "Medication Administration Record": "public/js/mar.js",
 }
 
 # ---- document events ------------------------------------------------------
+override_doctype_dashboards = {
+    "Inpatient Record": "inpatient_patch.inpatient_patch.dashboard_ip.get_dashboard_data",
+}
+
+
 def _stage(dt):
     return {dt: {"after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage",
                  "on_submit": "inpatient_patch.inpatient_patch.workflow.update_stage"}}
@@ -61,7 +67,10 @@ doc_events = {
     },
     "Discharge Summary": {
         "before_submit": "inpatient_patch.inpatient_patch.workflow.before_submit_discharge",
-        "on_submit": "inpatient_patch.inpatient_patch.workflow.update_stage",
+        "on_submit": [
+            "inpatient_patch.inpatient_patch.workflow.update_stage",
+            "inpatient_patch.inpatient_patch.workflow.create_discharge_followup",
+        ],
     },
     # stage tracking + patient notification for the remaining sheets
     "Emergency Assessment Sheet": {

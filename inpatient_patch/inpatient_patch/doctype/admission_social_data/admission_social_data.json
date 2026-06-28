@@ -121,6 +121,7 @@
    "label": "Admitting Doctor",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
+   "fetch_from": "inpatient_record.primary_practitioner",
    "reqd": 1,
    "idx": 11
   },
@@ -129,6 +130,7 @@
    "label": "Physician In Charge",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
+   "fetch_from": "inpatient_record.primary_practitioner",
    "idx": 12
   },
   {

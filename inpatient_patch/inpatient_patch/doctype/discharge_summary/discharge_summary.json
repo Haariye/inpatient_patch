@@ -29,7 +29,10 @@
   "physiotherapy",
   "cb_meds",
   "follow_up",
+  "follow_up_date",
+  "follow_up_with",
   "warning_signs",
+  "follow_up_appointment",
   "sb_sign",
   "doctor",
   "bill_cleared"
@@ -202,22 +205,44 @@
   },
   {
    "fieldname": "follow_up",
-   "label": "Follow-up Appointment",
+   "label": "Follow-up Notes",
    "fieldtype": "Data",
-   "reqd": 1,
    "idx": 23
+  },
+  {
+   "fieldname": "follow_up_date",
+   "label": "Follow-up Date",
+   "fieldtype": "Date",
+   "description": "If set, a follow-up Patient Appointment is created on submit (fee validity applies as in healthcare).",
+   "idx": 24
+  },
+  {
+   "fieldname": "follow_up_with",
+   "label": "Follow-up With",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "fetch_from": "inpatient_record.primary_practitioner",
+   "idx": 25
   },
   {
    "fieldname": "warning_signs",
    "label": "Warning Signs / When to Return",
    "fieldtype": "Small Text",
-   "idx": 24
+   "idx": 26
+  },
+  {
+   "fieldname": "follow_up_appointment",
+   "label": "Follow-up Appointment",
+   "fieldtype": "Link",
+   "options": "Patient Appointment",
+   "read_only": 1,
+   "idx": 27
   },
   {
    "fieldname": "sb_sign",
    "label": "Sign-off",
    "fieldtype": "Section Break",
-   "idx": 25
+   "idx": 28
   },
   {
    "fieldname": "doctor",
@@ -225,14 +250,15 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "reqd": 1,
-   "idx": 26
+   "fetch_from": "inpatient_record.primary_practitioner",
+   "idx": 29
   },
   {
    "fieldname": "bill_cleared",
    "label": "Bill / Clearance completed",
    "fieldtype": "Check",
    "default": "0",
-   "idx": 27
+   "idx": 30
   }
  ],
  "index_web_pages_for_search": 1,

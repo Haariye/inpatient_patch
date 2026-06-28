@@ -71,8 +71,10 @@ def get_stage(inpatient_record):
 
     dept = frappe.db.get_value("Inpatient Record", inpatient_record,
                                "custom_medical_department")
-    is_surgical = 0
-    if dept:
+    care_type = frappe.db.get_value("Inpatient Record", inpatient_record,
+                                    "custom_care_type")
+    is_surgical = 1 if care_type == "Surgery" else 0
+    if not care_type and dept:
         protocol = frappe.db.get_value("Department Admission Protocol",
                                        {"medical_department": dept, "enabled": 1}, "name")
         if protocol:
@@ -116,6 +118,34 @@ def before_submit_discharge(doc, method=None):
                            {"inpatient_record": doc.inpatient_record}):
         frappe.throw(_("Cannot discharge: a <b>History & Clinical Examination</b> "
                        "must be completed for this admission."))
+
+
+def create_discharge_followup(doc, method=None):
+    """Create a follow-up Patient Appointment (healthcare handles fee validity)."""
+    try:
+        if not doc.get("follow_up_date") or doc.get("follow_up_appointment"):
+            return
+        practitioner = doc.get("follow_up_with") or frappe.db.get_value(
+            "Inpatient Record", doc.inpatient_record, "primary_practitioner")
+        if not practitioner:
+            return
+        appt = frappe.new_doc("Patient Appointment")
+        appt.patient = doc.patient
+        appt.practitioner = practitioner
+        appt.appointment_date = doc.follow_up_date
+        dept = frappe.db.get_value("Inpatient Record", doc.inpatient_record,
+                                   "custom_medical_department")
+        if dept and appt.meta.has_field("department"):
+            appt.department = dept
+        appt.flags.ignore_mandatory = True
+        appt.insert(ignore_permissions=True)
+        doc.db_set("follow_up_appointment", appt.name)
+        notify_patient(doc.inpatient_record, "Follow-up Booked",
+                       _("A follow-up appointment was booked for {0}.")
+                       .format(doc.follow_up_date),
+                       ref_dt="Patient Appointment", ref_dn=appt.name)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "create_discharge_followup")
 
 
 def stamp_nursing_complete(doc, method=None):

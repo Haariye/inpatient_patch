@@ -277,6 +277,7 @@
    "label": "GP On Charge",
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
+   "fetch_from": "inpatient_record.primary_practitioner",
    "idx": 34
   }
  ],

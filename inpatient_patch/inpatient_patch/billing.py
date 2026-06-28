@@ -241,6 +241,7 @@ def _collect_order_rows(so):
     return rows
 
 
+@frappe.whitelist()
 def send_service_order_to_billing(service_order):
     so = frappe.get_doc("Inpatient Service Order", service_order)
 
@@ -292,6 +293,57 @@ def send_service_order_to_billing(service_order):
     except Exception:
         pass
     return inv.name
+
+
+def _encounters_for(inpatient_record):
+    """Patient Encounters linked to this admission (by our link, else by patient)."""
+    names = frappe.get_all("Patient Encounter",
+        filters={"custom_inpatient_record": inpatient_record}, pluck="name")
+    if names:
+        return names
+    patient = frappe.db.get_value("Inpatient Record", inpatient_record, "patient")
+    if not patient:
+        return []
+    return frappe.get_all("Patient Encounter", filters={"patient": patient},
+                          order_by="creation desc", pluck="name", limit=5)
+
+
+@frappe.whitelist()
+def pull_encounter_orders(inpatient_record):
+    """Mirror the doctor's Patient Encounter orders into the service order tables."""
+    out = {"lab_tests": [], "imaging": [], "procedures": [], "items": []}
+    for enc in _encounters_for(inpatient_record):
+        doc = frappe.get_doc("Patient Encounter", enc)
+        for r in (doc.get("lab_test_prescription") or []):
+            tmpl = r.get("lab_test_code")
+            if tmpl:
+                out["lab_tests"].append({"lab_test_template": tmpl,
+                                         "lab_test_name": r.get("lab_test_name"), "qty": 1})
+        for r in (doc.get("procedure_prescription") or []):
+            tmpl = r.get("procedure")
+            if tmpl:
+                out["procedures"].append({"procedure_template": tmpl,
+                                          "procedure_name": r.get("procedure_name"), "qty": 1})
+        for r in (doc.get("drug_prescription") or []):
+            code = r.get("drug_code") or r.get("medication")
+            if code and frappe.db.exists("Item", code):
+                out["items"].append({"item_code": code,
+                                     "item_name": r.get("drug_name"), "qty": 1})
+    return out
+
+
+@frappe.whitelist()
+def pull_prescribed_medicines(inpatient_record):
+    """Medicines the doctor already prescribed (encounter) for the MAR."""
+    out = []
+    for enc in _encounters_for(inpatient_record):
+        doc = frappe.get_doc("Patient Encounter", enc)
+        for r in (doc.get("drug_prescription") or []):
+            code = r.get("drug_code") or r.get("medication")
+            out.append({"drug_code": code if (code and frappe.db.exists("Item", code)) else None,
+                        "drug_name": r.get("drug_name"),
+                        "dose": r.get("dosage"), "status": "Pending"})
+    return out
 
 
 @frappe.whitelist()

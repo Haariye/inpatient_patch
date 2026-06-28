@@ -28,6 +28,15 @@ def _apply_admission_protocol(doc):
     if dept and not doc.get("custom_medical_department"):
         # mirror the native medical_department into our field for convenience
         doc.db_set("custom_medical_department", dept, update_modified=False)
+    # auto-fetch the admitted bed/service unit (no need to re-select it)
+    if not doc.get("custom_current_bed"):
+        bed = doc.get("admission_service_unit")
+        if not bed:
+            occ = doc.get("inpatient_occupancies") or []
+            if occ:
+                bed = occ[-1].service_unit
+        if bed:
+            doc.db_set("custom_current_bed", bed, update_modified=False)
     if not dept:
         prac = doc.get("primary_practitioner")
         if prac:

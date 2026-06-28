@@ -121,6 +121,7 @@
    "fieldtype": "Link",
    "options": "Healthcare Practitioner",
    "reqd": 1,
+   "fetch_from": "inpatient_record.primary_practitioner",
    "idx": 9
   },
   {
