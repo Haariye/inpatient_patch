@@ -242,6 +242,21 @@ def _collect_order_rows(so):
 
 
 @frappe.whitelist()
+def get_finance_access():
+    """True if the current user may see financial buttons/cards."""
+    defaults = {"System Manager", "Healthcare Administrator", "Accounts User",
+                "Accounts Manager"}
+    try:
+        s = get_settings()
+        configured = {r.role for r in (s.get("finance_roles") or []) if r.get("role")}
+    except Exception:
+        configured = set()
+    allowed = configured or defaults
+    user_roles = set(frappe.get_roles())
+    return bool(user_roles & allowed)
+
+
+@frappe.whitelist()
 def send_service_order_to_billing(service_order):
     so = frappe.get_doc("Inpatient Service Order", service_order)
 
@@ -451,6 +466,7 @@ def on_submit_deposit(doc, method=None):
 
     settings = get_settings()
     company = settings.default_company or frappe.defaults.get_user_default("Company")
+    company_currency = frappe.get_cached_value("Company", company, "default_currency")
 
     pe = frappe.new_doc("Payment Entry")
     pe.payment_type = "Receive"
@@ -464,14 +480,46 @@ def on_submit_deposit(doc, method=None):
     pe.reference_no = doc.name
     pe.reference_date = pe.posting_date
     pe.remarks = doc.remarks or _("Inpatient deposit {0}").format(doc.name)
-    # treat as advance
-    if hasattr(pe, "is_advance"):
-        pe.is_advance = "Yes"
+
     try:
         pe.setup_party_account_field()
         pe.set_missing_values()
     except Exception:
         pass
+
+    # ---- exchange rates: fix "Target Exchange Rate is mandatory" ----
+    # both accounts are in company currency here, so rates are 1.
+    if not flt(pe.get("source_exchange_rate")):
+        pe.source_exchange_rate = 1
+    if not flt(pe.get("target_exchange_rate")):
+        pe.target_exchange_rate = 1
+    try:
+        pe.set_amounts()
+    except Exception:
+        pass
+
+    # ---- auto-reconcile: allocate against this admission's unpaid invoices ----
+    try:
+        unpaid = frappe.get_all("Sales Invoice",
+            filters={"custom_inpatient_record": doc.inpatient_record, "docstatus": 1,
+                     "outstanding_amount": [">", 0]},
+            fields=["name", "outstanding_amount"], order_by="posting_date asc")
+        remaining = flt(doc.amount)
+        for inv in unpaid:
+            if remaining <= 0:
+                break
+            alloc = min(remaining, flt(inv.outstanding_amount))
+            pe.append("references", {
+                "reference_doctype": "Sales Invoice",
+                "reference_name": inv.name,
+                "allocated_amount": alloc,
+            })
+            remaining -= alloc
+        if pe.get("references"):
+            pe.set_amounts()
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "deposit auto-reconcile")
+
     pe.insert(ignore_permissions=True)
     pe.submit()
 

@@ -7,7 +7,51 @@ def after_install():
     app is usable immediately. Safe & idempotent."""
     _seed_settings()
     _seed_protocols()
+    _seed_ot_facilities()
     frappe.db.commit()
+
+
+def _seed_ot_facilities():
+    """Create an unbillable 'Operating Theatre' service-unit type + two theatres."""
+    try:
+        ut = "Operating Theatre"
+        if not frappe.db.exists("Healthcare Service Unit Type", ut):
+            d = frappe.get_doc({
+                "doctype": "Healthcare Service Unit Type",
+                "service_unit_type": ut, "is_billable": 0,
+                "inpatient_occupancy": 0, "allow_appointments": 0,
+            })
+            d.flags.ignore_mandatory = True
+            d.insert(ignore_permissions=True)
+        try:
+            frappe.db.set_value("Healthcare Service Unit Type", ut,
+                                "custom_is_ot_facility", 1)
+        except Exception:
+            pass
+
+        company = (frappe.db.get_single_value("Inpatient Billing Settings",
+                                              "default_company")
+                   or frappe.defaults.get_global_default("company")
+                   or frappe.db.get_value("Company", {}, "name"))
+        if not company:
+            return
+        for name in ("Operating Theatre 1", "Operating Theatre 2"):
+            if frappe.db.exists("Healthcare Service Unit",
+                                {"healthcare_service_unit_name": name}):
+                continue
+            try:
+                su = frappe.get_doc({
+                    "doctype": "Healthcare Service Unit",
+                    "healthcare_service_unit_name": name,
+                    "service_unit_type": ut, "company": company, "is_group": 0,
+                    "inpatient_occupancy": 0,
+                })
+                su.flags.ignore_mandatory = True
+                su.insert(ignore_permissions=True)
+            except Exception:
+                frappe.log_error(frappe.get_traceback(), "seed OT unit")
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "seed OT facilities")
 
 
 def _seed_settings():

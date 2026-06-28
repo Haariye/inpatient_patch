@@ -1,4 +1,9 @@
 frappe.ui.form.on('Operation Theatre Case', {
+    onload(frm) {
+        frm.set_query('theatre', () => ({
+            query: 'inpatient_patch.inpatient_patch.ot.ot_facility_query',
+        }));
+    },
     refresh(frm) {
         if (!frm.is_new() && frm.doc.docstatus === 0) {
             if (!frm.doc.surgery_start_time) {

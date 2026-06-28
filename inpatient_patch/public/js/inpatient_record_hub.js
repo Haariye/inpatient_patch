@@ -5,15 +5,31 @@
 frappe.ui.form.on('Inpatient Record', {
     refresh(frm) {
         if (frm.is_new()) return;
+        // Nothing happens until the patient is actually admitted.
+        if (frm.doc.status && frm.doc.status !== 'Admitted') {
+            frm.dashboard.clear_headline();
+            frm.dashboard.set_headline(
+                '<span style="font-weight:600;color:#b45309;">Patient not yet admitted.</span> '
+                + 'Use the native <b>Admit</b> button (or admit from the Emergency Assessment). '
+                + 'Care steps appear once status is Admitted.');
+            return;
+        }
         frappe.call({
-            method: 'inpatient_patch.inpatient_patch.workflow.get_stage',
-            args: { inpatient_record: frm.doc.name },
-            callback(r) {
-                const s = r.message || {};
-                add_create_button(frm, s);
-                render_dashboard(frm, s);
-                show_next_step(frm, s);
-                render_snapshot(frm);
+            method: 'inpatient_patch.inpatient_patch.billing.get_finance_access',
+            callback(fr) {
+                const canFinance = !!(fr.message);
+                frappe.call({
+                    method: 'inpatient_patch.inpatient_patch.workflow.get_stage',
+                    args: { inpatient_record: frm.doc.name },
+                    callback(r) {
+                        const s = r.message || {};
+                        s._finance = canFinance;
+                        add_create_button(frm, s);
+                        render_dashboard(frm, s);
+                        show_next_step(frm, s);
+                        render_snapshot(frm);
+                    },
+                });
             },
         });
     },
@@ -68,10 +84,12 @@ function build_actions(frm, s) {
     const can_discharge = s.is_surgical ? s.has_recovery : s.has_history;
     if (can_discharge && !s.discharged) add('Discharge', 'Discharge Summary', () => go(frm, 'Discharge Summary'));
 
-    // ----- Billing -----
-    add('Billing', 'Send Service to Billing (lab / drugs / radiology)', () => go(frm, 'Inpatient Service Order'));
-    add('Billing', 'Add Deposit', () => open_deposit_dialog(frm));
-    add('Billing', 'Bill Bed Now', () => bill_bed(frm));
+    // ----- Billing (only for finance/reception/audit roles) -----
+    if (s._finance) {
+        add('Billing', 'Send Service to Billing (lab / drugs / radiology)', () => go(frm, 'Inpatient Service Order'));
+        add('Billing', 'Add Deposit', () => open_deposit_dialog(frm));
+        add('Billing', 'Bill Bed Now', () => bill_bed(frm));
+    }
 
     // ----- View -----
     add('View', 'Care Timeline (notifications)', () => frappe.set_route('List', 'Patient Notification', { inpatient_record: frm.doc.name }));
@@ -159,15 +177,18 @@ function render_dashboard(frm, s) {
         { label: 'Deposit', val: d.custom_total_deposit, c1: '#0ea5e9', c2: '#0284c7' },
         { label: 'Outstanding', val: d.custom_outstanding, c1: '#f43f5e', c2: '#e11d48' },
     ];
-    let cardHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px;">';
-    cards.forEach((c) => {
-        const v = format_currency(c.val || 0, d.currency || 'USD');
-        cardHtml += '<div style="flex:1;min-width:120px;background:linear-gradient(135deg,' + c.c1 + ',' + c.c2 +
-            ');color:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.12);">' +
-            '<div style="font-size:11px;opacity:.9;text-transform:uppercase;letter-spacing:.05em;">' + c.label + '</div>' +
-            '<div style="font-size:20px;font-weight:700;margin-top:2px;">' + v + '</div></div>';
-    });
-    cardHtml += '</div>';
+    let cardHtml = '';
+    if (s._finance) {
+        cardHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px;">';
+        cards.forEach((c) => {
+            const v = format_currency(c.val || 0, d.currency || 'USD');
+            cardHtml += '<div style="flex:1;min-width:120px;background:linear-gradient(135deg,' + c.c1 + ',' + c.c2 +
+                ');color:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.12);">' +
+                '<div style="font-size:11px;opacity:.9;text-transform:uppercase;letter-spacing:.05em;">' + c.label + '</div>' +
+                '<div style="font-size:20px;font-weight:700;margin-top:2px;">' + v + '</div></div>';
+        });
+        cardHtml += '</div>';
+    }
 
     frm.dashboard.add_section(stepHtml + cardHtml, __('Inpatient Overview'));
 }

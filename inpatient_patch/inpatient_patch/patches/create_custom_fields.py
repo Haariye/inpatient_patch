@@ -132,6 +132,9 @@ COMPAT_FIELDS = [
     {"dt": "Healthcare Service Unit", "fieldname": "custom_disabled",
      "fieldtype": "Check", "label": "Disabled", "default": "0",
      "insert_after": "service_unit_type"},
+    {"dt": "Healthcare Service Unit Type", "fieldname": "custom_is_ot_facility",
+     "fieldtype": "Check", "label": "OT Facility (unbillable theatre)",
+     "insert_after": "is_billable"},
 ]
 
 

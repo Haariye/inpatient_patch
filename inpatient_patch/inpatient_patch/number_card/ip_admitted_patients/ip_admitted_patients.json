@@ -1,5 +1,5 @@
 {
- "creation": "2026-01-01 00:00:00",
+ "creation": "2026-06-28 20:32:15",
  "doctype": "Number Card",
  "document_type": "Inpatient Record",
  "function": "Count",
@@ -7,7 +7,7 @@
  "is_public": 1,
  "is_standard": 1,
  "label": "Admitted Patients",
- "modified": "2026-01-01 00:00:00",
+ "modified": "2026-06-28 20:32:15",
  "module": "Inpatient Patch",
  "name": "IP Admitted Patients",
  "owner": "Administrator",

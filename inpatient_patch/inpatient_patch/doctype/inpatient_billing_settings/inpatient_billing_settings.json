@@ -20,6 +20,9 @@
   "send_patient_inapp",
   "send_patient_sms",
   "notify_help",
+  "sb_access",
+  "access_help",
+  "finance_roles",
   "sb_warn",
   "note"
  ],
@@ -128,23 +131,43 @@
    "idx": 15
   },
   {
+   "fieldname": "sb_access",
+   "label": "Financial Access Control",
+   "fieldtype": "Section Break",
+   "idx": 16
+  },
+  {
+   "fieldname": "access_help",
+   "label": "Access",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Only users with one of these roles see the financial buttons, deposit, and the Billed/Paid/Deposit/Outstanding cards. Leave empty to allow the default (Healthcare Administrator, Accounts User/Manager, System Manager). Nurses/doctors without a finance role see only clinical items.</p>",
+   "idx": 17
+  },
+  {
+   "fieldname": "finance_roles",
+   "label": "Finance / Reception / Audit Roles",
+   "fieldtype": "Table MultiSelect",
+   "options": "Inpatient Finance Role",
+   "idx": 18
+  },
+  {
    "fieldname": "sb_warn",
    "label": "Behaviour",
    "fieldtype": "Section Break",
    "collapsible": 1,
-   "idx": 16
+   "idx": 19
   },
   {
    "fieldname": "note",
    "label": "Note",
    "fieldtype": "Small Text",
    "default": "Service invoices (pharmacy/lab/radiology/OT) are created as DRAFT but billable the moment a nurse/doctor sends them. Only bed charges run on the daily schedule.",
-   "idx": 17
+   "idx": 20
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-01 00:00:00.000000",
+ "modified": "2026-06-28 20:32:15.103945",
  "modified_by": "Administrator",
  "module": "Inpatient Patch",
  "name": "Inpatient Billing Settings",

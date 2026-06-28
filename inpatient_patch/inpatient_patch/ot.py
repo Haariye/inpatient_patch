@@ -33,6 +33,20 @@ def _preop_blockers(inpatient_record):
 
 
 @frappe.whitelist()
+def ot_facility_query(doctype, txt, searchfield, start, page_len, filters):
+    """Service units whose type is flagged as an OT facility."""
+    return frappe.db.sql("""
+        select su.name
+        from `tabHealthcare Service Unit` su
+        join `tabHealthcare Service Unit Type` ut on ut.name = su.service_unit_type
+        where ifnull(ut.custom_is_ot_facility,0) = 1
+          and ifnull(su.is_group,0) = 0
+          and su.name like %(txt)s
+        order by su.name limit %(start)s, %(page_len)s
+    """, {"txt": "%%%s%%" % (txt or ""), "start": start, "page_len": page_len})
+
+
+@frappe.whitelist()
 def start_operation(ot_case):
     doc = frappe.get_doc("Operation Theatre Case", ot_case)
     missing = _preop_blockers(doc.inpatient_record)
