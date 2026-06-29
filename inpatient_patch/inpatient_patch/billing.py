@@ -481,22 +481,33 @@ def on_submit_deposit(doc, method=None):
     pe.reference_date = pe.posting_date
     pe.remarks = doc.remarks or _("Inpatient deposit {0}").format(doc.name)
 
+    # ---- accounts (fixes 'paid_to / paid_to_account_currency mandatory') ----
+    # paid_from = the customer's receivable account
     try:
-        pe.setup_party_account_field()
-        pe.set_missing_values()
+        from erpnext.accounts.party import get_party_account
+        paid_from = get_party_account("Customer", customer, company)
     except Exception:
-        pass
+        paid_from = frappe.get_cached_value("Company", company, "default_receivable_account")
+    # paid_to = chosen deposit account > settings > mode-of-payment default > cash
+    paid_to = doc.get("deposit_to_account") or settings.get("deposit_account")
+    if not paid_to and pe.mode_of_payment:
+        paid_to = frappe.db.get_value("Mode of Payment Account",
+            {"parent": pe.mode_of_payment, "company": company}, "default_account")
+    if not paid_to:
+        paid_to = (frappe.get_cached_value("Company", company, "default_cash_account")
+                   or frappe.get_cached_value("Company", company, "default_bank_account"))
+    if not paid_from or not paid_to:
+        frappe.throw(_("Set a Deposit / Advance Account in Inpatient Billing Settings "
+                       "(or a default cash account on the company)."))
 
-    # ---- exchange rates: fix "Target Exchange Rate is mandatory" ----
-    # both accounts are in company currency here, so rates are 1.
-    if not flt(pe.get("source_exchange_rate")):
-        pe.source_exchange_rate = 1
-    if not flt(pe.get("target_exchange_rate")):
-        pe.target_exchange_rate = 1
-    try:
-        pe.set_amounts()
-    except Exception:
-        pass
+    pe.paid_from = paid_from
+    pe.paid_to = paid_to
+    pe.paid_from_account_currency = (frappe.db.get_value("Account", paid_from,
+                                     "account_currency") or company_currency)
+    pe.paid_to_account_currency = (frappe.db.get_value("Account", paid_to,
+                                   "account_currency") or company_currency)
+    pe.source_exchange_rate = 1
+    pe.target_exchange_rate = 1
 
     # ---- auto-reconcile: allocate against this admission's unpaid invoices ----
     try:

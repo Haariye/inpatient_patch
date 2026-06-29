@@ -152,6 +152,24 @@ def _upsert(cfg):
         frappe.get_doc({"doctype": "Custom Field", **cfg}).insert(ignore_permissions=True)
 
 
+def force_sync_doctypes():
+    """Re-import every DocType this app ships, ignoring the timestamp skip, so
+    `bench migrate` ALWAYS (re)creates them. Prevents 'DocType X not found'."""
+    import os
+    from frappe.modules.import_file import import_file_by_path
+    base = frappe.get_app_path("inpatient_patch", "inpatient_patch", "doctype")
+    if not os.path.isdir(base):
+        return
+    for d in sorted(os.listdir(base)):
+        p = os.path.join(base, d, d + ".json")
+        if os.path.exists(p):
+            try:
+                import_file_by_path(p, force=True)
+            except Exception:
+                frappe.log_error(frappe.get_traceback(), "force_sync %s" % d)
+    frappe.db.commit()
+
+
 def execute():
     for cfg in FIELD_CONFIGS:
         try:

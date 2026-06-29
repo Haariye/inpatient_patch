@@ -5,15 +5,16 @@
 frappe.ui.form.on('Inpatient Record', {
     refresh(frm) {
         if (frm.is_new()) return;
-        // Nothing happens until the patient is actually admitted.
-        if (frm.doc.status && frm.doc.status !== 'Admitted') {
+        // Only before admission do we hide everything and ask to admit.
+        if (frm.doc.status === 'Admission Scheduled') {
             frm.dashboard.clear_headline();
             frm.dashboard.set_headline(
                 '<span style="font-weight:600;color:#b45309;">Patient not yet admitted.</span> '
                 + 'Use the native <b>Admit</b> button (or admit from the Emergency Assessment). '
-                + 'Care steps appear once status is Admitted.');
+                + 'Care steps appear once the patient is admitted.');
             return;
         }
+        const discharged = (frm.doc.status === 'Discharged');
         frappe.call({
             method: 'inpatient_patch.inpatient_patch.billing.get_finance_access',
             callback(fr) {
@@ -24,6 +25,7 @@ frappe.ui.form.on('Inpatient Record', {
                     callback(r) {
                         const s = r.message || {};
                         s._finance = canFinance;
+                        s._discharged = discharged;
                         add_create_button(frm, s);
                         render_dashboard(frm, s);
                         show_next_step(frm, s);
@@ -44,6 +46,13 @@ function go(frm, sheet) {
 function build_actions(frm, s) {
     const A = [];
     const add = (group, label, fn) => A.push({ group, label, fn });
+
+    if (s._discharged) {
+        add('View', 'Care Timeline (notifications)', () => frappe.set_route('List', 'Patient Notification', { inpatient_record: frm.doc.name }));
+        add('View', 'Nurse Handovers', () => frappe.set_route('List', 'Nurse Handover', { inpatient_record: frm.doc.name }));
+        add('View', 'Invoices', () => frappe.set_route('List', 'Sales Invoice', { custom_inpatient_record: frm.doc.name }));
+        return A;
+    }
 
     // ----- Admission -----
     if (!s.has_admission_data) add('Admission', 'Admission Social Data', () => go(frm, 'Admission Social Data'));
@@ -210,8 +219,10 @@ function open_deposit_dialog(frm) {
     const d = new frappe.ui.Dialog({
         title: __('Add Deposit'),
         fields: [
-            { fieldname: 'amount', label: __('Amount (USD)'), fieldtype: 'Currency', reqd: 1 },
-            { fieldname: 'mode_of_payment', label: __('Mode of Payment'), fieldtype: 'Link', options: 'Mode of Payment' },
+            { fieldname: 'amount', label: __('Amount'), fieldtype: 'Currency', reqd: 1 },
+            { fieldname: 'mode_of_payment', label: __('Mode of Payment'), fieldtype: 'Link', options: 'Mode of Payment', reqd: 1 },
+            { fieldname: 'deposit_to_account', label: __('Deposit To Account (cash/bank)'), fieldtype: 'Link', options: 'Account',
+              get_query: () => ({ filters: { is_group: 0, account_type: ['in', ['Bank', 'Cash', 'Receivable']] } }) },
             { fieldname: 'remarks', label: __('Remarks'), fieldtype: 'Small Text' },
         ],
         primary_action_label: __('Save Deposit'),
@@ -219,7 +230,8 @@ function open_deposit_dialog(frm) {
             frappe.db.insert({
                 doctype: 'Patient Deposit', inpatient_record: frm.doc.name, patient: frm.doc.patient,
                 deposit_date: frappe.datetime.now_datetime(), amount: values.amount,
-                mode_of_payment: values.mode_of_payment, remarks: values.remarks,
+                mode_of_payment: values.mode_of_payment, deposit_to_account: values.deposit_to_account,
+                remarks: values.remarks,
             }).then((doc) => {
                 frappe.call({ method: 'frappe.client.submit', args: { doc } }).then(() => {
                     d.hide(); frappe.show_alert({ message: __('Deposit recorded'), indicator: 'green' }); frm.reload_doc();

@@ -15,6 +15,7 @@
   "deposit_date",
   "amount",
   "mode_of_payment",
+  "deposit_to_account",
   "sb_pe",
   "payment_entry",
   "remarks"
@@ -102,10 +103,18 @@
    "idx": 9
   },
   {
+   "fieldname": "deposit_to_account",
+   "label": "Deposit To Account",
+   "fieldtype": "Link",
+   "options": "Account",
+   "description": "Cash/Bank account that receives the money. Leave empty to use the default from Inpatient Billing Settings.",
+   "idx": 10
+  },
+  {
    "fieldname": "sb_pe",
    "label": "Posting",
    "fieldtype": "Section Break",
-   "idx": 10
+   "idx": 11
   },
   {
    "fieldname": "payment_entry",
@@ -113,18 +122,18 @@
    "fieldtype": "Link",
    "options": "Payment Entry",
    "read_only": 1,
-   "idx": 11
+   "idx": 12
   },
   {
    "fieldname": "remarks",
    "label": "Remarks",
    "fieldtype": "Small Text",
-   "idx": 12
+   "idx": 13
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-28 20:32:15.103945",
+ "modified": "2026-06-29 00:07:56.879656",
  "modified_by": "Administrator",
  "module": "Inpatient Patch",
  "name": "Patient Deposit",

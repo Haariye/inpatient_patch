@@ -101,9 +101,13 @@ scheduler_events = {
 # ---- install / migrate / uninstall ---------------------------------------
 after_install = [
     "inpatient_patch.inpatient_patch.patches.create_custom_fields.execute",
+    "inpatient_patch.inpatient_patch.patches.create_custom_fields.force_sync_doctypes",
     "inpatient_patch.inpatient_patch.install.after_install",
 ]
-after_migrate = ["inpatient_patch.inpatient_patch.patches.create_custom_fields.execute"]
+after_migrate = [
+    "inpatient_patch.inpatient_patch.patches.create_custom_fields.force_sync_doctypes",
+    "inpatient_patch.inpatient_patch.patches.create_custom_fields.execute",
+]
 before_uninstall = "inpatient_patch.inpatient_patch.uninstall.before_uninstall"
 
 # ---- fixtures (ship the workspace & reports) ------------------------------
