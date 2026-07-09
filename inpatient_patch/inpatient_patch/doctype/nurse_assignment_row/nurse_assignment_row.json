@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "inpatient_record",
+  "patient_name",
+  "bed_no",
+  "responsible_nurse",
+  "shift"
+ ],
+ "fields": [
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "read_only": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "bed_no",
+   "label": "Bed / Room",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "read_only": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "responsible_nurse",
+   "label": "Responsible Nurse",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "shift",
+   "label": "Shift",
+   "fieldtype": "Link",
+   "options": "Nurse Shift",
+   "in_list_view": 1,
+   "idx": 5
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Nurse Assignment Row",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

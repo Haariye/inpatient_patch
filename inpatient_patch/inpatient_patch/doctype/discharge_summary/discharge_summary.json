@@ -1,0 +1,348 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "sex",
+  "bed",
+  "sb_dates",
+  "admission_date",
+  "discharge_date",
+  "condition_at_discharge",
+  "sb_clin",
+  "final_diagnosis",
+  "procedure_performed",
+  "investigations",
+  "treatment_given",
+  "sb_meds",
+  "discharge_medicines",
+  "wound_care",
+  "physiotherapy",
+  "cb_meds",
+  "follow_up",
+  "follow_up_date",
+  "follow_up_with",
+  "warning_signs",
+  "follow_up_appointment",
+  "sb_sign",
+  "doctor",
+  "bill_cleared"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "DISCHARGE-.YYYY.-.#####",
+   "default": "DISCHARGE-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Patient ID",
+   "fieldtype": "Data",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_dates",
+   "label": "Dates",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "admission_date",
+   "label": "Admission Date",
+   "fieldtype": "Date",
+   "fetch_from": "inpatient_record.admitted_datetime",
+   "idx": 10
+  },
+  {
+   "fieldname": "discharge_date",
+   "label": "Discharge Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "condition_at_discharge",
+   "label": "Condition at Discharge",
+   "fieldtype": "Select",
+   "options": "\nImproved\nStable\nReferred\nDeceased\nLAMA",
+   "in_list_view": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "sb_clin",
+   "label": "Clinical",
+   "fieldtype": "Section Break",
+   "idx": 13
+  },
+  {
+   "fieldname": "final_diagnosis",
+   "label": "Final Diagnosis",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "idx": 14
+  },
+  {
+   "fieldname": "procedure_performed",
+   "label": "Procedure Performed (if any)",
+   "fieldtype": "Small Text",
+   "idx": 15
+  },
+  {
+   "fieldname": "investigations",
+   "label": "Important Investigations & Results",
+   "fieldtype": "Text",
+   "idx": 16
+  },
+  {
+   "fieldname": "treatment_given",
+   "label": "Treatment Given",
+   "fieldtype": "Text",
+   "idx": 17
+  },
+  {
+   "fieldname": "sb_meds",
+   "label": "Discharge Plan",
+   "fieldtype": "Section Break",
+   "idx": 18
+  },
+  {
+   "fieldname": "discharge_medicines",
+   "label": "Discharge Medicines (dose & duration)",
+   "fieldtype": "Text",
+   "reqd": 1,
+   "idx": 19
+  },
+  {
+   "fieldname": "wound_care",
+   "label": "Wound Care Instructions",
+   "fieldtype": "Small Text",
+   "idx": 20
+  },
+  {
+   "fieldname": "physiotherapy",
+   "label": "Physiotherapy Instructions",
+   "fieldtype": "Small Text",
+   "idx": 21
+  },
+  {
+   "fieldname": "cb_meds",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 22
+  },
+  {
+   "fieldname": "follow_up",
+   "label": "Follow-up Notes",
+   "fieldtype": "Data",
+   "idx": 23
+  },
+  {
+   "fieldname": "follow_up_date",
+   "label": "Follow-up Date",
+   "fieldtype": "Date",
+   "description": "If set, a follow-up Patient Appointment is created on submit (fee validity applies as in healthcare).",
+   "idx": 24
+  },
+  {
+   "fieldname": "follow_up_with",
+   "label": "Follow-up With",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "fetch_from": "inpatient_record.primary_practitioner",
+   "idx": 25
+  },
+  {
+   "fieldname": "warning_signs",
+   "label": "Warning Signs / When to Return",
+   "fieldtype": "Small Text",
+   "idx": 26
+  },
+  {
+   "fieldname": "follow_up_appointment",
+   "label": "Follow-up Appointment",
+   "fieldtype": "Link",
+   "options": "Patient Appointment",
+   "read_only": 1,
+   "idx": 27
+  },
+  {
+   "fieldname": "sb_sign",
+   "label": "Sign-off",
+   "fieldtype": "Section Break",
+   "idx": 28
+  },
+  {
+   "fieldname": "doctor",
+   "label": "Treating Doctor",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "fetch_from": "inpatient_record.primary_practitioner",
+   "idx": 29
+  },
+  {
+   "fieldname": "bill_cleared",
+   "label": "Bill / Clearance completed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 30
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Discharge Summary",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 0,
+ "is_submittable": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

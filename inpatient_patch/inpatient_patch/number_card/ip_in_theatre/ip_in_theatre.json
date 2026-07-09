@@ -1,0 +1,17 @@
+{
+ "creation": "2026-07-09 17:03:29",
+ "doctype": "Number Card",
+ "document_type": "Clinical Procedure",
+ "function": "Count",
+ "filters_json": "[[\"Clinical Procedure\",\"custom_surgery_start\",\"is\",\"set\"],[\"Clinical Procedure\",\"custom_surgery_finish\",\"is\",\"not set\"]]",
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "In Theatre",
+ "modified": "2026-07-09 17:03:29",
+ "module": "Inpatient Patch",
+ "name": "IP In Theatre",
+ "owner": "Administrator",
+ "color": "#ef4444",
+ "show_percentage_stats": 0,
+ "type": "Document Type"
+}

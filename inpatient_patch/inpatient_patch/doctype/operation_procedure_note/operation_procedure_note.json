@@ -1,0 +1,327 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "sex",
+  "bed",
+  "sb_team",
+  "operation_date",
+  "surgeon",
+  "assistants",
+  "anesthesia_type",
+  "cb_team",
+  "anesthetist",
+  "scrub_nurse",
+  "runner",
+  "sb_dx",
+  "preop_diagnosis",
+  "postop_diagnosis",
+  "procedure_done",
+  "sb_note",
+  "operation_note",
+  "drains",
+  "sponge_count",
+  "complications",
+  "escalated"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "OPNOTE-.YYYY.-.#####",
+   "default": "OPNOTE-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Patient ID",
+   "fieldtype": "Data",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_team",
+   "label": "Team",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "operation_date",
+   "label": "Date",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "surgeon",
+   "label": "Surgeon",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "assistants",
+   "label": "Assistants",
+   "fieldtype": "Small Text",
+   "idx": 12
+  },
+  {
+   "fieldname": "anesthesia_type",
+   "label": "Type of Anesthesia",
+   "fieldtype": "Select",
+   "options": "\nGA (General)\nSA (Spinal)\nRegional Block\nLocal\nSedation\nOther",
+   "reqd": 1,
+   "idx": 13
+  },
+  {
+   "fieldname": "cb_team",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 14
+  },
+  {
+   "fieldname": "anesthetist",
+   "label": "Anesthetist",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "idx": 15
+  },
+  {
+   "fieldname": "scrub_nurse",
+   "label": "Scrub Nurse",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "idx": 16
+  },
+  {
+   "fieldname": "runner",
+   "label": "Runner / Circulating Nurse",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "idx": 17
+  },
+  {
+   "fieldname": "sb_dx",
+   "label": "Diagnosis",
+   "fieldtype": "Section Break",
+   "idx": 18
+  },
+  {
+   "fieldname": "preop_diagnosis",
+   "label": "Pre-op Diagnosis",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "idx": 19
+  },
+  {
+   "fieldname": "postop_diagnosis",
+   "label": "Post-op Diagnosis",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "idx": 20
+  },
+  {
+   "fieldname": "procedure_done",
+   "label": "Procedure Done",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "idx": 21
+  },
+  {
+   "fieldname": "sb_note",
+   "label": "Operative Detail",
+   "fieldtype": "Section Break",
+   "idx": 22
+  },
+  {
+   "fieldname": "operation_note",
+   "label": "Operation Note",
+   "fieldtype": "Text",
+   "idx": 23
+  },
+  {
+   "fieldname": "drains",
+   "label": "Drains",
+   "fieldtype": "Small Text",
+   "idx": 24
+  },
+  {
+   "fieldname": "sponge_count",
+   "label": "Sponge Count",
+   "fieldtype": "Select",
+   "options": "\nCorrect\nIncorrect",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 25
+  },
+  {
+   "fieldname": "complications",
+   "label": "Complications",
+   "fieldtype": "Small Text",
+   "idx": 26
+  },
+  {
+   "fieldname": "escalated",
+   "label": "Escalated (incorrect count / complication)",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "default": "0",
+   "idx": 27
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Operation Procedure Note",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 0,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

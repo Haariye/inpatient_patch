@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "drug_code",
+  "drug_name",
+  "dose",
+  "route",
+  "scheduled_time",
+  "cb_mae",
+  "given",
+  "administration_time",
+  "administered_by",
+  "status",
+  "hold_reason",
+  "discontinued",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "drug_code",
+   "label": "Drug",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "drug_name",
+   "label": "Drug Name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "dose",
+   "label": "Dose",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "route",
+   "label": "Route",
+   "fieldtype": "Select",
+   "options": "\nOral\nIV\nIM\nSC\nTopical\nInhalation\nPR\nSublingual\nOther",
+   "idx": 4
+  },
+  {
+   "fieldname": "scheduled_time",
+   "label": "Scheduled Time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "description": "Exact time the medicine is due (not only frequency).",
+   "idx": 5
+  },
+  {
+   "fieldname": "cb_mae",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 6
+  },
+  {
+   "fieldname": "given",
+   "label": "Given",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "default": "0",
+   "idx": 7
+  },
+  {
+   "fieldname": "administration_time",
+   "label": "Time Given",
+   "fieldtype": "Datetime",
+   "depends_on": "eval:doc.given",
+   "mandatory_depends_on": "eval:doc.given",
+   "in_list_view": 1,
+   "description": "Actual time the dose was administered.",
+   "idx": 8
+  },
+  {
+   "fieldname": "administered_by",
+   "label": "Nurse (Given By)",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "depends_on": "eval:doc.given",
+   "mandatory_depends_on": "eval:doc.given",
+   "in_list_view": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Pending\nGiven\nHeld\nMissed\nRefused\nDiscontinued",
+   "default": "Pending",
+   "idx": 10
+  },
+  {
+   "fieldname": "hold_reason",
+   "label": "Reason (if held/missed/refused)",
+   "fieldtype": "Small Text",
+   "depends_on": "eval:['Held','Missed','Refused'].includes(doc.status)",
+   "idx": 11
+  },
+  {
+   "fieldname": "discontinued",
+   "label": "Discontinued",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 12
+  },
+  {
+   "fieldname": "remarks",
+   "label": "Remarks",
+   "fieldtype": "Small Text",
+   "idx": 13
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Medication Administration Entry",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

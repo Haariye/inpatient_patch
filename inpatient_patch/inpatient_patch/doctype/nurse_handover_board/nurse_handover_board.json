@@ -1,0 +1,254 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_brd",
+  "responsible_nurse",
+  "ward",
+  "shift",
+  "handover_date",
+  "cb_brd",
+  "from_nurse",
+  "to_nurse",
+  "status",
+  "last_updated",
+  "sb_brd_sum",
+  "total_patients",
+  "completed_count",
+  "cb_brd_sum",
+  "pending_meds_count",
+  "pending_tasks_count",
+  "sb_brd_pts",
+  "patients"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "NHB-.YYYY.-.#####",
+   "default": "NHB-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_brd",
+   "label": "Shift Handover Board",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "responsible_nurse",
+   "label": "Responsible Nurse (whose patients)",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "ward",
+   "label": "Service Unit / Ward (optional)",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "in_standard_filter": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "shift",
+   "label": "Shift",
+   "fieldtype": "Select",
+   "options": "\nMorning\nAfternoon\nNight",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "handover_date",
+   "label": "Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "idx": 5
+  },
+  {
+   "fieldname": "cb_brd",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 6
+  },
+  {
+   "fieldname": "from_nurse",
+   "label": "From Nurse (going off)",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "idx": 7
+  },
+  {
+   "fieldname": "to_nurse",
+   "label": "To Nurse (coming on)",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "idx": 8
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Open\nWrapped\nAccepted",
+   "default": "Open",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "last_updated",
+   "label": "Last Updated",
+   "fieldtype": "Datetime",
+   "read_only": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "sb_brd_sum",
+   "label": "Summary",
+   "fieldtype": "Section Break",
+   "idx": 11
+  },
+  {
+   "fieldname": "total_patients",
+   "label": "Total Patients",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "completed_count",
+   "label": "Accepted",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "idx": 13
+  },
+  {
+   "fieldname": "cb_brd_sum",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 14
+  },
+  {
+   "fieldname": "pending_meds_count",
+   "label": "Pending Meds",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "idx": 15
+  },
+  {
+   "fieldname": "pending_tasks_count",
+   "label": "Pending Orders/Tasks",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "idx": 16
+  },
+  {
+   "fieldname": "sb_brd_pts",
+   "label": "Patients",
+   "fieldtype": "Section Break",
+   "idx": 17
+  },
+  {
+   "fieldname": "patients",
+   "label": "Patients",
+   "fieldtype": "Table",
+   "options": "Nurse Handover Board Patient",
+   "idx": 18
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Nurse Handover Board",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 0,
+ "autoname": "naming_series:",
+ "title_field": "ward",
+ "show_title_field_in_link": 1
+}

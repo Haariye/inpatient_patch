@@ -1,0 +1,1 @@
+frappe.query_reports["Inpatient Outstanding Bills"] = { filters: [] };

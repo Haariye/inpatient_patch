@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "lab_test",
+  "test_name",
+  "status",
+  "result_date",
+  "finding"
+ ],
+ "fields": [
+  {
+   "fieldname": "lab_test",
+   "label": "Lab Test",
+   "fieldtype": "Link",
+   "options": "Lab Test",
+   "in_list_view": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "test_name",
+   "label": "Test",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "result_date",
+   "label": "Result Date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "finding",
+   "label": "Finding / Result",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "idx": 5
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Inpatient Lab Finding",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

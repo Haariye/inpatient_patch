@@ -1,0 +1,499 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_top",
+  "patient",
+  "patient_name",
+  "inpatient_record",
+  "cb_top",
+  "er_datetime",
+  "discharge_datetime",
+  "arrival_mode",
+  "gp_in_charge",
+  "sb_complaint",
+  "chief_complaint",
+  "sb_vitals",
+  "bp",
+  "pulse",
+  "rr",
+  "cb_vitals",
+  "temperature",
+  "spo2",
+  "weight",
+  "physical_exam",
+  "sb_history",
+  "h_dm",
+  "h_htn",
+  "h_tb",
+  "h_asthma",
+  "cb_hist",
+  "h_hepatitis",
+  "h_heart",
+  "past_medications",
+  "sb_orders",
+  "orders_help",
+  "drug_prescription",
+  "lab_test_prescription",
+  "procedure_prescription",
+  "sb_orders_legacy",
+  "lab_tests",
+  "imaging",
+  "procedures",
+  "items",
+  "sales_invoice",
+  "sb_dx",
+  "lab_findings_help",
+  "lab_findings",
+  "diagnosis",
+  "emergency_plan",
+  "consultant",
+  "sb_decision",
+  "final_decision",
+  "admitted_to",
+  "decision_reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "EAS-.YYYY.-.#####",
+   "default": "EAS-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_top",
+   "label": "Emergency Assessment",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "description": "Linked once admission is created.",
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_top",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "er_datetime",
+   "label": "ER Admission Date/Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "discharge_datetime",
+   "label": "Discharge Date/Time (if applicable)",
+   "fieldtype": "Datetime",
+   "idx": 7
+  },
+  {
+   "fieldname": "arrival_mode",
+   "label": "Arrival",
+   "fieldtype": "Select",
+   "options": "\nEmergency\nElective",
+   "in_list_view": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "gp_in_charge",
+   "label": "GP On Charge",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "fetch_from": "inpatient_record.primary_practitioner",
+   "idx": 9
+  },
+  {
+   "fieldname": "sb_complaint",
+   "label": "Complaint & Exam",
+   "fieldtype": "Section Break",
+   "idx": 10
+  },
+  {
+   "fieldname": "chief_complaint",
+   "label": "Chief Complaint",
+   "fieldtype": "Table MultiSelect",
+   "options": "Patient Encounter Symptom",
+   "reqd": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "sb_vitals",
+   "label": "Vital Signs",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "bp",
+   "label": "BP",
+   "fieldtype": "Data",
+   "idx": 13
+  },
+  {
+   "fieldname": "pulse",
+   "label": "Pulse (PR)",
+   "fieldtype": "Int",
+   "idx": 14
+  },
+  {
+   "fieldname": "rr",
+   "label": "Respiration (RR)",
+   "fieldtype": "Int",
+   "idx": 15
+  },
+  {
+   "fieldname": "cb_vitals",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 16
+  },
+  {
+   "fieldname": "temperature",
+   "label": "Temperature (\u00b0C)",
+   "fieldtype": "Float",
+   "idx": 17
+  },
+  {
+   "fieldname": "spo2",
+   "label": "SpO2 (%)",
+   "fieldtype": "Int",
+   "idx": 18
+  },
+  {
+   "fieldname": "weight",
+   "label": "Weight (kg)",
+   "fieldtype": "Float",
+   "idx": 19
+  },
+  {
+   "fieldname": "physical_exam",
+   "label": "Physical Examination Findings",
+   "fieldtype": "Text",
+   "idx": 20
+  },
+  {
+   "fieldname": "sb_history",
+   "label": "Past History",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 21
+  },
+  {
+   "fieldname": "h_dm",
+   "label": "Diabetes (DM)",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 22
+  },
+  {
+   "fieldname": "h_htn",
+   "label": "Hypertension (HTN)",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 23
+  },
+  {
+   "fieldname": "h_tb",
+   "label": "TB",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 24
+  },
+  {
+   "fieldname": "h_asthma",
+   "label": "Asthma",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 25
+  },
+  {
+   "fieldname": "cb_hist",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 26
+  },
+  {
+   "fieldname": "h_hepatitis",
+   "label": "Hepatitis",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 27
+  },
+  {
+   "fieldname": "h_heart",
+   "label": "Heart Disease",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 28
+  },
+  {
+   "fieldname": "past_medications",
+   "label": "Past Medications",
+   "fieldtype": "Small Text",
+   "idx": 29
+  },
+  {
+   "fieldname": "sb_orders",
+   "label": "Orders (like Patient Encounter)",
+   "fieldtype": "Section Break",
+   "idx": 30
+  },
+  {
+   "fieldname": "orders_help",
+   "label": "Orders",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Order like a Patient Encounter. These tables are copied into the Inpatient Record on admit and are billed from here.</p>",
+   "idx": 31
+  },
+  {
+   "fieldname": "drug_prescription",
+   "label": "Drug Prescription",
+   "fieldtype": "Table",
+   "options": "Drug Prescription",
+   "idx": 32
+  },
+  {
+   "fieldname": "lab_test_prescription",
+   "label": "Lab Prescription",
+   "fieldtype": "Table",
+   "options": "Lab Prescription",
+   "idx": 33
+  },
+  {
+   "fieldname": "procedure_prescription",
+   "label": "Procedure Prescription",
+   "fieldtype": "Table",
+   "options": "Procedure Prescription",
+   "idx": 34
+  },
+  {
+   "fieldname": "sb_orders_legacy",
+   "label": "Other Orders",
+   "fieldtype": "Section Break",
+   "collapsible": 1,
+   "idx": 35
+  },
+  {
+   "fieldname": "lab_tests",
+   "label": "Lab Tests",
+   "fieldtype": "Table",
+   "options": "Inpatient Lab Order",
+   "idx": 36
+  },
+  {
+   "fieldname": "imaging",
+   "label": "Imaging",
+   "fieldtype": "Table",
+   "options": "Inpatient Imaging Order",
+   "idx": 37
+  },
+  {
+   "fieldname": "procedures",
+   "label": "Procedures",
+   "fieldtype": "Table",
+   "options": "Inpatient Procedure Order",
+   "idx": 38
+  },
+  {
+   "fieldname": "items",
+   "label": "Pharmacy / Consumables",
+   "fieldtype": "Table",
+   "options": "Inpatient Item Order",
+   "idx": 39
+  },
+  {
+   "fieldname": "sales_invoice",
+   "label": "Draft Sales Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "idx": 40
+  },
+  {
+   "fieldname": "sb_dx",
+   "label": "Diagnosis & Plan",
+   "fieldtype": "Section Break",
+   "idx": 41
+  },
+  {
+   "fieldname": "lab_findings_help",
+   "label": "Lab Findings",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Use the <b>Fetch Findings</b> button (top right) to pull this patient's lab results into the table.</p>",
+   "idx": 42
+  },
+  {
+   "fieldname": "lab_findings",
+   "label": "Laboratory Findings",
+   "fieldtype": "Table",
+   "options": "Inpatient Lab Finding",
+   "idx": 43
+  },
+  {
+   "fieldname": "diagnosis",
+   "label": "Diagnosis / Assessment",
+   "fieldtype": "Table MultiSelect",
+   "options": "Patient Encounter Diagnosis",
+   "idx": 44
+  },
+  {
+   "fieldname": "emergency_plan",
+   "label": "Emergency Plan & Medications",
+   "fieldtype": "Text",
+   "idx": 45
+  },
+  {
+   "fieldname": "consultant",
+   "label": "Consultant Consulted",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "idx": 46
+  },
+  {
+   "fieldname": "sb_decision",
+   "label": "Final Decision",
+   "fieldtype": "Section Break",
+   "idx": 47
+  },
+  {
+   "fieldname": "final_decision",
+   "label": "Final Decision",
+   "fieldtype": "Select",
+   "options": "\nAdmitted\nDischarged\nSelf-Discharge\nReferred",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 48
+  },
+  {
+   "fieldname": "admitted_to",
+   "label": "Admitted To (ward)",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.final_decision=='Admitted'",
+   "idx": 49
+  },
+  {
+   "fieldname": "decision_reason",
+   "label": "Reason / Referral Detail",
+   "fieldtype": "Small Text",
+   "depends_on": "eval:['Self-Discharge','Referred'].includes(doc.final_decision)",
+   "idx": 50
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Emergency Assessment Sheet",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 0,
+ "is_submittable": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

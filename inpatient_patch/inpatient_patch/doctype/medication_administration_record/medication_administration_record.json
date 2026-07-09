@@ -1,0 +1,356 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "sex",
+  "bed",
+  "sb_mar",
+  "mar_date",
+  "recording_nurse",
+  "shift",
+  "ordered_by",
+  "instructions",
+  "sb_entries",
+  "entries",
+  "sb_vitals",
+  "vs_help",
+  "vs_bp_systolic",
+  "vs_bp_diastolic",
+  "vs_pulse",
+  "cb_vitals",
+  "vs_temperature",
+  "vs_respiratory_rate",
+  "vs_spo2",
+  "vital_signs",
+  "vs_created",
+  "sb_signoff",
+  "nursing_completed",
+  "completed_by",
+  "completed_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "MAR-.YYYY.-.#####",
+   "default": "MAR-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Patient ID",
+   "fieldtype": "Data",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_mar",
+   "label": "Medication Administration",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "mar_date",
+   "label": "Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "recording_nurse",
+   "label": "Recording Nurse",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "in_standard_filter": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "shift",
+   "label": "Shift",
+   "fieldtype": "Link",
+   "options": "Nurse Shift",
+   "idx": 12
+  },
+  {
+   "fieldname": "ordered_by",
+   "label": "Ordered By (Doctor)",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "idx": 13
+  },
+  {
+   "fieldname": "instructions",
+   "label": "Exact-timing Instructions",
+   "fieldtype": "Small Text",
+   "idx": 14
+  },
+  {
+   "fieldname": "sb_entries",
+   "label": "Administrations  (time given + nurse)",
+   "fieldtype": "Section Break",
+   "idx": 15
+  },
+  {
+   "fieldname": "entries",
+   "label": "Medication Entries",
+   "fieldtype": "Table",
+   "options": "Medication Administration Entry",
+   "idx": 16
+  },
+  {
+   "fieldname": "sb_vitals",
+   "label": "Vital Signs (optional \u2014 creates a Vital Signs record)",
+   "fieldtype": "Section Break",
+   "idx": 17
+  },
+  {
+   "fieldname": "vs_help",
+   "label": "Vitals",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Fill any of these and on save a <b>Vital Signs</b> record is created automatically \u2014 no need to open a separate form.</p>",
+   "idx": 18
+  },
+  {
+   "fieldname": "vs_bp_systolic",
+   "label": "BP Systolic",
+   "fieldtype": "Float",
+   "idx": 19
+  },
+  {
+   "fieldname": "vs_bp_diastolic",
+   "label": "BP Diastolic",
+   "fieldtype": "Float",
+   "idx": 20
+  },
+  {
+   "fieldname": "vs_pulse",
+   "label": "Pulse (/min)",
+   "fieldtype": "Float",
+   "idx": 21
+  },
+  {
+   "fieldname": "cb_vitals",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 22
+  },
+  {
+   "fieldname": "vs_temperature",
+   "label": "Temperature",
+   "fieldtype": "Float",
+   "idx": 23
+  },
+  {
+   "fieldname": "vs_respiratory_rate",
+   "label": "Respiratory Rate",
+   "fieldtype": "Float",
+   "idx": 24
+  },
+  {
+   "fieldname": "vs_spo2",
+   "label": "SpO2 (%)",
+   "fieldtype": "Float",
+   "idx": 25
+  },
+  {
+   "fieldname": "vital_signs",
+   "label": "Created Vital Signs",
+   "fieldtype": "Link",
+   "options": "Vital Signs",
+   "read_only": 1,
+   "idx": 26
+  },
+  {
+   "fieldname": "vs_created",
+   "label": "Vitals Recorded",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 27
+  },
+  {
+   "fieldname": "sb_signoff",
+   "label": "Nursing Sign-off",
+   "fieldtype": "Section Break",
+   "idx": 28
+  },
+  {
+   "fieldname": "nursing_completed",
+   "label": "Nursing Completed",
+   "fieldtype": "Check",
+   "default": "0",
+   "idx": 29
+  },
+  {
+   "fieldname": "completed_by",
+   "label": "Completed By (Nurse)",
+   "fieldtype": "Link",
+   "options": "Nurse",
+   "depends_on": "eval:doc.nursing_completed",
+   "mandatory_depends_on": "eval:doc.nursing_completed",
+   "idx": 30
+  },
+  {
+   "fieldname": "completed_at",
+   "label": "Completed At",
+   "fieldtype": "Datetime",
+   "depends_on": "eval:doc.nursing_completed",
+   "read_only": 1,
+   "idx": 31
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Medication Administration Record",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 0,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

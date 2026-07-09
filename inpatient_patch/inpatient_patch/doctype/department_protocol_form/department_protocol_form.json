@@ -1,0 +1,63 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "stage",
+  "form",
+  "mandatory",
+  "sequence"
+ ],
+ "fields": [
+  {
+   "fieldname": "stage",
+   "label": "Stage",
+   "fieldtype": "Select",
+   "options": "Emergency\nAdmission\nWard\nPre-Operation\nOperation\nRecovery\nDischarge",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "form",
+   "label": "Form / Sheet",
+   "fieldtype": "Select",
+   "options": "\nEmergency Assessment Sheet\nNursing Admission Assessment\nHistory Clinical Examination\nProgress Note\nPre Operation Cardiac Review\nPre Anesthetic Assessment\nPre Operative Checklist\nSurgical Consent Form\nOperation Schedule\nSurgical Safety Checklist\nOR Tracking Board\nOperation Procedure Note\nPost Operative Checklist\nRecovery Nurse Record\nMedication Administration Record\nDoctor Order\nDiabetic Insulin Chart\nDaily Round Plan\nDischarge Summary\nOperation Theatre Case",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "mandatory",
+   "label": "Mandatory",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "sequence",
+   "label": "Sequence",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "idx": 4
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Department Protocol Form",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

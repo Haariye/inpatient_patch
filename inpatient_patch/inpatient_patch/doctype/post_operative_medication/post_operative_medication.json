@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "drug_code",
+  "drug_name",
+  "category",
+  "dose",
+  "route",
+  "cb_pom",
+  "frequency",
+  "duration",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "drug_code",
+   "label": "Medicine",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "drug_name",
+   "label": "Name",
+   "fieldtype": "Data",
+   "fetch_from": "drug_code.item_name",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "category",
+   "label": "Category",
+   "fieldtype": "Select",
+   "options": "Antibiotic\nAnalgesic\nAnticoagulant\nGastric / PPI\nOther",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "dose",
+   "label": "Dose",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "route",
+   "label": "Route",
+   "fieldtype": "Select",
+   "options": "\nOral\nIV\nIM\nSC\nTopical\nInhalation\nPR\nSublingual\nOther",
+   "idx": 5
+  },
+  {
+   "fieldname": "cb_pom",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 6
+  },
+  {
+   "fieldname": "frequency",
+   "label": "Frequency",
+   "fieldtype": "Data",
+   "idx": 7
+  },
+  {
+   "fieldname": "duration",
+   "label": "Duration",
+   "fieldtype": "Data",
+   "idx": 8
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text",
+   "idx": 9
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Post Operative Medication",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

@@ -1,0 +1,330 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "sex",
+  "bed",
+  "sb_so",
+  "ordered_by",
+  "order_datetime",
+  "cb_so",
+  "status",
+  "sales_invoice",
+  "sb_lab",
+  "lab_help",
+  "lab_tests",
+  "sb_imaging",
+  "imaging_help",
+  "imaging",
+  "sb_proc",
+  "procedures",
+  "sb_items",
+  "item_help",
+  "items",
+  "sb_send",
+  "send_help"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "SVCORD-.YYYY.-.#####",
+   "default": "SVCORD-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Patient ID",
+   "fieldtype": "Data",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "bed",
+   "label": "Bed / Service Unit",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit",
+   "fetch_from": "inpatient_record.custom_current_bed",
+   "read_only": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "sb_so",
+   "label": "Order",
+   "fieldtype": "Section Break",
+   "idx": 9
+  },
+  {
+   "fieldname": "ordered_by",
+   "label": "Ordered By",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "in_list_view": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "order_datetime",
+   "label": "Order Date/Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "idx": 11
+  },
+  {
+   "fieldname": "cb_so",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 12
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nSent (Billable)\nPartially Billed\nBilled\nCancelled",
+   "default": "Draft",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "idx": 13
+  },
+  {
+   "fieldname": "sales_invoice",
+   "label": "Draft Sales Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "idx": 14
+  },
+  {
+   "fieldname": "sb_lab",
+   "label": "Lab Tests",
+   "fieldtype": "Section Break",
+   "idx": 15
+  },
+  {
+   "fieldname": "lab_help",
+   "label": "Lab",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Add lab tests \u2014 each pulls its billing Item from the Lab Test Template.</p>",
+   "idx": 16
+  },
+  {
+   "fieldname": "lab_tests",
+   "label": "Lab Tests",
+   "fieldtype": "Table",
+   "options": "Inpatient Lab Order",
+   "idx": 17
+  },
+  {
+   "fieldname": "sb_imaging",
+   "label": "Radiology / Imaging",
+   "fieldtype": "Section Break",
+   "idx": 18
+  },
+  {
+   "fieldname": "imaging_help",
+   "label": "Imaging",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Imaging is chosen from Lab Test Templates in the IMAGING group.</p>",
+   "idx": 19
+  },
+  {
+   "fieldname": "imaging",
+   "label": "Imaging",
+   "fieldtype": "Table",
+   "options": "Inpatient Imaging Order",
+   "idx": 20
+  },
+  {
+   "fieldname": "sb_proc",
+   "label": "Procedures",
+   "fieldtype": "Section Break",
+   "idx": 21
+  },
+  {
+   "fieldname": "procedures",
+   "label": "Procedures",
+   "fieldtype": "Table",
+   "options": "Inpatient Procedure Order",
+   "idx": 22
+  },
+  {
+   "fieldname": "sb_items",
+   "label": "Pharmacy / Consumables",
+   "fieldtype": "Section Break",
+   "idx": 23
+  },
+  {
+   "fieldname": "item_help",
+   "label": "Items",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Pharmacy medicines and consumable items.</p>",
+   "idx": 24
+  },
+  {
+   "fieldname": "items",
+   "label": "Pharmacy / Consumables",
+   "fieldtype": "Table",
+   "options": "Inpatient Item Order",
+   "idx": 25
+  },
+  {
+   "fieldname": "sb_send",
+   "label": "Send",
+   "fieldtype": "Section Break",
+   "idx": 26
+  },
+  {
+   "fieldname": "send_help",
+   "label": "Send",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Click <b>Send to Billing</b> to create the draft-but-billable Sales Invoice from all the lines above \u2014 exactly like consultation drug-prescription invoicing.</p>",
+   "idx": 27
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Inpatient Service Order",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 0,
+ "is_submittable": 1,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

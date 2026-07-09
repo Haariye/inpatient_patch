@@ -1,0 +1,1 @@
+frappe.query_reports["Medication Due List"] = { filters: [] };

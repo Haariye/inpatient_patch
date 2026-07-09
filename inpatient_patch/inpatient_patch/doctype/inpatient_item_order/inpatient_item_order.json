@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "item_code",
+  "item_name",
+  "qty",
+  "rate",
+  "cb_io",
+  "billed",
+  "billed_invoice"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "label": "Item (pharmacy / consumable)",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "item_name",
+   "label": "Name",
+   "fieldtype": "Data",
+   "fetch_from": "item_code.item_name",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "qty",
+   "label": "Qty",
+   "fieldtype": "Float",
+   "default": "1",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "rate",
+   "label": "Rate (USD)",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_io",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "billed",
+   "label": "Billed",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "in_list_view": 1,
+   "default": "0",
+   "idx": 6
+  },
+  {
+   "fieldname": "billed_invoice",
+   "label": "Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "idx": 7
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Inpatient Item Order",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

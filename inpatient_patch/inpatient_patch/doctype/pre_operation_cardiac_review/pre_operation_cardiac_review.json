@@ -1,0 +1,282 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sb_header",
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "cb_header",
+  "hospital_id",
+  "sex",
+  "sb_card",
+  "review_date",
+  "bp",
+  "pulse",
+  "mets",
+  "rcri",
+  "cb_card",
+  "cardio_pulmonary_exam",
+  "ecg_findings",
+  "echo_findings",
+  "ejection_fraction",
+  "chamber_wall_motion",
+  "sb_plan",
+  "plan",
+  "doctor"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "PCR-.YYYY.-.#####",
+   "default": "PCR-.YYYY.-.#####",
+   "reqd": 1,
+   "idx": 0
+  },
+  {
+   "fieldname": "sb_header",
+   "label": "Patient",
+   "fieldtype": "Section Break",
+   "idx": 1
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "cb_header",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 5
+  },
+  {
+   "fieldname": "hospital_id",
+   "label": "Patient ID",
+   "fieldtype": "Data",
+   "fetch_from": "inpatient_record.patient",
+   "read_only": 1,
+   "idx": 6
+  },
+  {
+   "fieldname": "sex",
+   "label": "Sex",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "fetch_from": "patient.sex",
+   "read_only": 1,
+   "idx": 7
+  },
+  {
+   "fieldname": "sb_card",
+   "label": "Cardiac Review",
+   "fieldtype": "Section Break",
+   "idx": 8
+  },
+  {
+   "fieldname": "review_date",
+   "label": "Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "bp",
+   "label": "BP",
+   "fieldtype": "Data",
+   "idx": 10
+  },
+  {
+   "fieldname": "pulse",
+   "label": "Pulse",
+   "fieldtype": "Int",
+   "idx": 11
+  },
+  {
+   "fieldname": "mets",
+   "label": "METS",
+   "fieldtype": "Select",
+   "options": "\n< 4\n> 4\n> 10",
+   "in_list_view": 1,
+   "idx": 12
+  },
+  {
+   "fieldname": "rcri",
+   "label": "RCRI",
+   "fieldtype": "Select",
+   "options": "\n< 1\n> 1",
+   "idx": 13
+  },
+  {
+   "fieldname": "cb_card",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 14
+  },
+  {
+   "fieldname": "cardio_pulmonary_exam",
+   "label": "Cardio-Pulmonary Examination",
+   "fieldtype": "Text",
+   "idx": 15
+  },
+  {
+   "fieldname": "ecg_findings",
+   "label": "ECG Findings",
+   "fieldtype": "Small Text",
+   "idx": 16
+  },
+  {
+   "fieldname": "echo_findings",
+   "label": "ECHO Findings (if done)",
+   "fieldtype": "Small Text",
+   "idx": 17
+  },
+  {
+   "fieldname": "ejection_fraction",
+   "label": "Ejection Fraction (%)",
+   "fieldtype": "Float",
+   "idx": 18
+  },
+  {
+   "fieldname": "chamber_wall_motion",
+   "label": "Chamber Size / Wall Motion",
+   "fieldtype": "Small Text",
+   "idx": 19
+  },
+  {
+   "fieldname": "sb_plan",
+   "label": "Plan (mandatory)",
+   "fieldtype": "Section Break",
+   "idx": 20
+  },
+  {
+   "fieldname": "plan",
+   "label": "Plan",
+   "fieldtype": "Select",
+   "options": "\nFit for Surgery\nNeeds Optimization\nNot Fit",
+   "reqd": 1,
+   "in_list_view": 1,
+   "idx": 21
+  },
+  {
+   "fieldname": "doctor",
+   "label": "Assessing / Cardiology Doctor",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "idx": 22
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Pre Operation Cardiac Review",
+ "owner": "Administrator",
+ "naming_rule": "By \"Naming Series\" field",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "permissions": [
+  {
+   "role": "Healthcare Administrator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Physician",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Nursing User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "quick_entry": 0,
+ "autoname": "naming_series:",
+ "title_field": "patient_name",
+ "show_title_field_in_link": 1
+}

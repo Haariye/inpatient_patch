@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "role",
+  "member_type",
+  "member_dt",
+  "member_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "role",
+   "label": "Role",
+   "fieldtype": "Select",
+   "options": "Surgeon\nAssistant Surgeon\nAnesthetist\nScrub Nurse\nCirculator\nTechnician\nOther",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "member_type",
+   "label": "Member Type",
+   "fieldtype": "Select",
+   "options": "Doctor\nNurse",
+   "in_list_view": 1,
+   "reqd": 1,
+   "default": "Doctor",
+   "idx": 2
+  },
+  {
+   "fieldname": "member_dt",
+   "label": "Member DocType",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "default": "Healthcare Practitioner",
+   "idx": 3
+  },
+  {
+   "fieldname": "member_name",
+   "label": "Name",
+   "fieldtype": "Dynamic Link",
+   "options": "member_dt",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 4
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "OT Team Member",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}

@@ -1,0 +1,177 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "inpatient_record",
+  "patient",
+  "patient_name",
+  "bed_no",
+  "condition",
+  "alerts_summary",
+  "cb_nhbp1",
+  "meds_given_count",
+  "pending_meds_count",
+  "pending_tasks_count",
+  "latest_vitals",
+  "latest_glucose",
+  "handover_status",
+  "sb_nhbp_detail",
+  "latest_progress",
+  "pending_orders",
+  "round_plan",
+  "meds_summary",
+  "nurse_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record",
+   "in_list_view": 1,
+   "reqd": 1,
+   "idx": 1
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "in_list_view": 1,
+   "idx": 2
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 3
+  },
+  {
+   "fieldname": "bed_no",
+   "label": "Bed",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "idx": 4
+  },
+  {
+   "fieldname": "condition",
+   "label": "Condition",
+   "fieldtype": "Select",
+   "options": "\nStable\nImproving\nGuarded\nCritical",
+   "in_list_view": 1,
+   "idx": 5
+  },
+  {
+   "fieldname": "alerts_summary",
+   "label": "Alerts",
+   "fieldtype": "Small Text",
+   "idx": 6
+  },
+  {
+   "fieldname": "cb_nhbp1",
+   "label": "",
+   "fieldtype": "Column Break",
+   "idx": 7
+  },
+  {
+   "fieldname": "meds_given_count",
+   "label": "Meds Given",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "idx": 8
+  },
+  {
+   "fieldname": "pending_meds_count",
+   "label": "Meds Pending",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "idx": 9
+  },
+  {
+   "fieldname": "pending_tasks_count",
+   "label": "Orders/Tasks",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "idx": 10
+  },
+  {
+   "fieldname": "latest_vitals",
+   "label": "Last Vitals",
+   "fieldtype": "Data",
+   "idx": 11
+  },
+  {
+   "fieldname": "latest_glucose",
+   "label": "Last Glucose / Insulin",
+   "fieldtype": "Data",
+   "idx": 12
+  },
+  {
+   "fieldname": "handover_status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "\nPending\nIn Progress\nHanded Over\nAccepted",
+   "in_list_view": 1,
+   "idx": 13
+  },
+  {
+   "fieldname": "sb_nhbp_detail",
+   "label": "Shift Detail (absorbed)",
+   "fieldtype": "Section Break",
+   "idx": 14
+  },
+  {
+   "fieldname": "latest_progress",
+   "label": "Latest Progress Note",
+   "fieldtype": "Small Text",
+   "read_only": 1,
+   "idx": 15
+  },
+  {
+   "fieldname": "pending_orders",
+   "label": "Pending Doctor Orders",
+   "fieldtype": "Small Text",
+   "read_only": 1,
+   "idx": 16
+  },
+  {
+   "fieldname": "round_plan",
+   "label": "Daily Round Plan",
+   "fieldtype": "Small Text",
+   "read_only": 1,
+   "idx": 17
+  },
+  {
+   "fieldname": "meds_summary",
+   "label": "Medications This Shift",
+   "fieldtype": "Small Text",
+   "read_only": 1,
+   "idx": 18
+  },
+  {
+   "fieldname": "nurse_notes",
+   "label": "Nurse Notes (handover)",
+   "fieldtype": "Text",
+   "idx": 19
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-09 17:03:29.868912",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Nurse Handover Board Patient",
+ "owner": "Administrator",
+ "naming_rule": "",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "description": "",
+ "istable": 1,
+ "permissions": []
+}
