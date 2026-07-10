@@ -106,8 +106,10 @@ function render_board(frm) {
     h += '</div>';
 
     frm.dashboard.clear();
-    frm.dashboard.add_section(h, __('Shift Handover'));
-    const wrap = frm.dashboard.wrapper;
+    const target = (frm.fields_dict.board_view && frm.fields_dict.board_view.$wrapper);
+    if (target && target.length) { target.html(h); }
+    else { frm.dashboard.add_section(h, __('Shift Handover')); }
+    const wrap = (target && target.length) ? target : frm.dashboard.wrapper;
     wrap.find('.nhb2-pth').on('click', function () {
         const card = $(this).closest('.nhb2-pt');
         card.toggleClass('open');
