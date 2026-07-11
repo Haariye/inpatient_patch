@@ -337,4 +337,40 @@ def execute():
         except Exception:
             frappe.log_error(frappe.get_traceback(),
                              f"Inpatient Patch compat field: {cfg.get('fieldname')}")
+    cleanup_removed()
+    frappe.db.commit()
+
+
+# Fields and doctypes that older versions of this app created and that must be
+# deleted from sites upgrading from those versions.
+_REMOVED_CUSTOM_FIELDS = [
+    ("Inpatient Record", "custom_medical_department"),
+    ("Inpatient Record", "custom_chief_complaint"),
+    ("Inpatient Record", "custom_allow_outstanding_discharge"),
+]
+_REMOVED_DOCTYPES = [
+    "Nurse Handover Board Patient",   # child first
+    "Nurse Handover Board",
+    "Handover Task", "Handover Vital", "Handover Medication",
+    "Operation Theatre Case", "OR Tracking Board",
+]
+
+
+def cleanup_removed():
+    for dt, fn in _REMOVED_CUSTOM_FIELDS:
+        try:
+            cf = "{0}-{1}".format(dt, fn)
+            if frappe.db.exists("Custom Field", cf):
+                frappe.delete_doc("Custom Field", cf, ignore_permissions=True, force=True)
+            # drop the leftover column too, if any
+            if frappe.db.has_column(dt, fn):
+                frappe.db.sql_ddl("alter table `tab{0}` drop column `{1}`".format(dt, fn))
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "cleanup field " + fn)
+    for dt in _REMOVED_DOCTYPES:
+        try:
+            if frappe.db.exists("DocType", dt):
+                frappe.delete_doc("DocType", dt, ignore_permissions=True, force=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "cleanup doctype " + dt)
     frappe.db.commit()

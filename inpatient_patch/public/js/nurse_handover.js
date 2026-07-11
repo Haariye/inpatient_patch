@@ -81,11 +81,12 @@ function build(frm, data) {
     const initials = (d.patient_name || '?').split(' ').map((x) => x[0]).slice(0, 2).join('').toUpperCase();
     const meds = data.meds || [], vs = data.vitals || [], g = data.glucose || [];
     const given = meds.filter((m) => m.given), pending = meds.filter((m) => !m.given);
-    const disc = meds.filter((m) => (m.status || '').toLowerCase().indexOf('disc') >= 0 || (m.status || '').toLowerCase().indexOf('stop') >= 0);
+    const disc = meds.filter((m) => m.discontinued || (m.status || '').toLowerCase().indexOf('disc') >= 0 || (m.status || '').toLowerCase().indexOf('stop') >= 0);
 
     let h = CSS + '<div class="nh">';
     h += '<div class="nh-hero"><div class="av">' + esc(initials) + '</div>' +
         '<div><h3>' + esc(d.patient_name || '') + '</h3><div class="sub">' + esc(d.inpatient_record || '') +
+        (data.bed ? ' · 🛏 ' + esc(data.bed) : '') +
         (d.admission_date ? ' · admitted ' + esc(d.admission_date) : '') + (d.responsible_nurse ? ' · nurse ' + esc(d.responsible_nurse) : '') + '</div></div>' +
         '<div class="st"><span class="nh-badge">' + esc(d.status || 'Open') + '</span></div></div>';
 
@@ -116,9 +117,34 @@ function build(frm, data) {
     h += sec('❤️ Vital Signs & Progress', vsec);
 
     let gsec = '';
-    if (g.length) { gsec += spark(g.map((x) => x.glucose), '#16a34a', 'Blood Glucose', ''); gsec += table(['Time', 'Glucose', 'Insulin'], g.slice(-8).map((x) => [esc(x.time), esc(x.glucose), esc(x.insulin)])); }
+    if (g.length) { gsec += spark(g.map((x) => x.glucose), '#16a34a', 'Blood Glucose (mg/dL)', ''); gsec += table(['Time', 'Timing', 'Glucose', 'Insulin'], g.slice(-10).map((x) => [esc(x.time), esc(x.meal), esc(x.glucose), esc(x.insulin)])); }
     else gsec = empty('No glucose readings.');
     h += sec('🩸 Diabetic Chart', gsec);
+
+    // Daily Round Plan (latest clinical daily info)
+    const rp = data.round_plan || {};
+    if (rp.name) {
+        const kv = (l, v) => v ? '<div style="margin:3px 0;font-size:12.5px"><b style="color:var(--text-muted,#7b8794)">' + l + ':</b> ' + esc(v) + '</div>' : '';
+        h += sec('📋 Daily Round Plan (' + esc(rp.date || rp.name) + ')',
+            kv('Condition', rp.condition) + kv('Diagnosis update', rp.diagnosis_update) +
+            kv('Treatment plan', rp.treatment_plan) + kv('Medicine changes', rp.medicine_changes) +
+            kv('Lab / radiology', rp.lab_radiology_requests) + kv('Round plan', rp.round_plan) +
+            kv('Discharge plan', rp.discharge_plan) + kv('Follow-up', rp.follow_up_instructions));
+    } else {
+        h += sec('📋 Daily Round Plan', empty('No round plan recorded yet.'));
+    }
+
+    // Progress notes
+    const pr = data.progress || [];
+    h += sec('📝 Progress Notes', pr.length
+        ? pr.map((p) => '<div style="margin:6px 0;font-size:12.5px;border-left:3px solid #6366f1;padding-left:8px"><b>' + esc(p.when) + '</b><br>' + esc(p.text || p.name) + '</div>').join('')
+        : empty('No progress notes.'));
+
+    // Doctor orders
+    const ords = data.orders || [];
+    h += sec('🧾 Doctor Orders', ords.length
+        ? table(['Order', 'When'], ords.map((o) => ['<a href="/app/doctor-order/' + encodeURIComponent(o.name) + '">' + esc(o.name) + '</a>', esc(o.when)]))
+        : empty('No doctor orders.'));
 
     h += '</div>';
     return h;

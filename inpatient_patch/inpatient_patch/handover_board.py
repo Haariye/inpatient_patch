@@ -127,6 +127,12 @@ def create_vitals_from_mar(doc, method=None):
                 vs.set(fld, val)
         vs.flags.ignore_mandatory = True
         vs.insert(ignore_permissions=True)
+        # Vital Signs is submittable in healthcare - submit so it is not left draft
+        try:
+            if vs.meta.is_submittable:
+                vs.submit()
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "submit vital signs")
         doc.db_set("vital_signs", vs.name, update_modified=False)
         doc.db_set("vs_created", 1, update_modified=False)
     except Exception:
@@ -135,24 +141,31 @@ def create_vitals_from_mar(doc, method=None):
 
 @frappe.whitelist()
 def patient_shift_detail(inpatient_record):
-    """Rich data for one patient on the handover board: medicines given this shift,
-    a vitals series, and a glucose series. Defensive on field names."""
-    out = {"meds": [], "vitals": [], "glucose": []}
+    """Rich data for the Nurse Handover dashboard: medicines (given / pending /
+    discontinued), vitals series, glucose series, current bed, latest Daily Round
+    Plan, progress notes and pending doctor orders."""
+    out = {"meds": [], "vitals": [], "glucose": [], "bed": "",
+           "round_plan": {}, "progress": [], "orders": []}
 
-    # --- medicines given (from MAR entries) ---
-    mars = frappe.get_all("Medication Administration Record",
-        filters={"inpatient_record": inpatient_record, "docstatus": ["!=", 2]},
-        fields=["name"], order_by="modified desc", limit=5)
-    for m in mars:
+    ip = frappe.db.get_value("Inpatient Record", inpatient_record,
+        ["patient", "custom_current_bed", "admission_service_unit"], as_dict=True) or {}
+    out["bed"] = ip.get("custom_current_bed") or ip.get("admission_service_unit") or ""
+
+    # --- medicines (MAR entries) ---
+    for m in frappe.get_all("Medication Administration Record",
+            filters={"inpatient_record": inpatient_record, "docstatus": ["!=", 2]},
+            pluck="name", order_by="modified desc", limit=8):
         try:
-            doc = frappe.get_doc("Medication Administration Record", m.name)
-            for e in (doc.get("entries") or []):
+            for e in (frappe.get_doc("Medication Administration Record", m).get("entries") or []):
                 out["meds"].append({
-                    "drug": e.get("drug") or e.get("drug_code") or e.get("medication") or "",
-                    "dose": e.get("dose") or e.get("dosage") or "",
-                    "time": str(e.get("time_given") or e.get("given_at") or ""),
-                    "nurse": e.get("nurse") or e.get("given_by") or "",
+                    "drug": e.get("drug_name") or e.get("drug_code") or "",
+                    "dose": e.get("dose") or "",
+                    "route": e.get("route") or "",
+                    "time": str(e.get("administration_time") or e.get("scheduled_time") or ""),
+                    "nurse": e.get("administered_by") or "",
                     "given": 1 if e.get("given") else 0,
+                    "status": e.get("status") or ("Given" if e.get("given") else "Pending"),
+                    "discontinued": 1 if (e.get("discontinued") or e.get("status") == "Discontinued") else 0,
                 })
         except Exception:
             pass
@@ -160,37 +173,79 @@ def patient_shift_detail(inpatient_record):
     # --- vitals series (Vital Signs) ---
     if frappe.db.exists("DocType", "Vital Signs"):
         vmeta = frappe.get_meta("Vital Signs")
-        fields = ["name"]
-        for f in ("signs_date", "signs_time", "pulse", "temperature",
-                  "respiratory_rate", "bp_systolic", "bp_diastolic",
-                  "oxygen_saturation"):
-            if vmeta.has_field(f):
-                fields.append(f)
+        fields = ["name"] + [f for f in ("signs_date", "signs_time", "pulse",
+            "temperature", "respiratory_rate", "bp_systolic", "bp_diastolic",
+            "oxygen_saturation") if vmeta.has_field(f)]
         try:
-            vs = frappe.get_all("Vital Signs",
-                filters={"inpatient_record": inpatient_record} if vmeta.has_field("inpatient_record")
-                else {"patient": frappe.db.get_value("Inpatient Record", inpatient_record, "patient")},
-                fields=fields, order_by="creation asc", limit=20)
-            out["vitals"] = vs
+            flt = {"inpatient_record": inpatient_record} if vmeta.has_field("inpatient_record") \
+                else {"patient": ip.get("patient")}
+            out["vitals"] = frappe.get_all("Vital Signs", filters=flt,
+                fields=fields, order_by="creation asc", limit=30)
         except Exception:
             pass
 
-    # --- glucose series (Diabetic Insulin Chart entries) ---
-    if frappe.db.exists("DocType", "Diabetic Insulin Chart"):
-        charts = frappe.get_all("Diabetic Insulin Chart",
+    # --- glucose series (Diabetic Insulin Chart -> Insulin Monitoring Entry) ---
+    for c in frappe.get_all("Diabetic Insulin Chart",
             filters={"inpatient_record": inpatient_record, "docstatus": ["!=", 2]},
-            fields=["name"], order_by="modified desc", limit=5)
-        for c in charts:
-            try:
-                doc = frappe.get_doc("Diabetic Insulin Chart", c.name)
-                for e in (doc.get("entries") or []):
-                    g = e.get("blood_glucose") or e.get("glucose") or e.get("rbs")
-                    if g:
-                        out["glucose"].append({
-                            "time": str(e.get("reading_time") or e.get("time") or ""),
-                            "glucose": g,
-                            "insulin": e.get("insulin_dose") or e.get("insulin") or e.get("dose") or "",
-                        })
-            except Exception:
-                pass
+            pluck="name", order_by="modified desc", limit=8):
+        try:
+            for e in (frappe.get_doc("Diabetic Insulin Chart", c).get("entries") or []):
+                g = e.get("rbs_mgdl") or e.get("blood_glucose") or e.get("glucose") or e.get("rbs")
+                if g in (None, "", 0):
+                    continue
+                units = e.get("units") or e.get("insulin_dose") or ""
+                kind = e.get("insulin_kind") or ""
+                item = e.get("insulin_item") or ""
+                insulin = ("{0} u {1}".format(units, ("- " + item) if item else "")).strip() if units else (item or "")
+                out["glucose"].append({
+                    "time": str(e.get("entry_datetime") or e.get("reading_time") or ""),
+                    "glucose": g,
+                    "meal": e.get("meal_relation") or e.get("shift") or "",
+                    "insulin": (insulin + ((" (" + kind + ")") if kind else "")).strip(),
+                })
+        except Exception:
+            pass
+    # oldest-first for charting
+    out["glucose"].sort(key=lambda x: x["time"])
+
+    # --- latest Daily Round Plan (clinical daily info) ---
+    rp = frappe.get_all("Daily Round Plan",
+        filters={"inpatient_record": inpatient_record, "docstatus": ["!=", 2]},
+        fields=["name"], order_by="modified desc", limit=1)
+    if rp:
+        try:
+            d = frappe.get_doc("Daily Round Plan", rp[0].name)
+            out["round_plan"] = {
+                "name": d.name, "date": str(d.get("round_date") or ""),
+                "condition": d.get("current_condition") or "",
+                "diagnosis_update": d.get("diagnosis_update") or "",
+                "treatment_plan": d.get("treatment_plan") or "",
+                "medicine_changes": d.get("medicine_changes") or "",
+                "lab_radiology_requests": d.get("lab_radiology_requests") or "",
+                "discharge_plan": d.get("discharge_plan") or "",
+                "follow_up_instructions": d.get("follow_up_instructions") or "",
+                "round_plan": d.get("round_plan") or d.get("current_problems") or "",
+            }
+        except Exception:
+            pass
+
+    # --- progress notes (latest few) ---
+    if frappe.db.exists("DocType", "Progress Note"):
+        pmeta = frappe.get_meta("Progress Note")
+        tf = next((f for f in ("note", "progress_note", "clinical_note", "summary", "notes")
+                   if pmeta.has_field(f)), None)
+        for p in frappe.get_all("Progress Note",
+                filters={"inpatient_record": inpatient_record, "docstatus": ["!=", 2]},
+                fields=["name", "modified"] + ([tf] if tf else []),
+                order_by="modified desc", limit=4):
+            out["progress"].append({"name": p.name, "when": str(p.get("modified"))[:16],
+                                    "text": (p.get(tf) or "")[:300] if tf else ""})
+
+    # --- pending doctor orders ---
+    if frappe.db.exists("DocType", "Doctor Order"):
+        for o in frappe.get_all("Doctor Order",
+                filters={"inpatient_record": inpatient_record, "docstatus": ["!=", 2]},
+                fields=["name", "modified"], order_by="modified desc", limit=6):
+            out["orders"].append({"name": o.name, "when": str(o.get("modified"))[:16]})
     return out
+

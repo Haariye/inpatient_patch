@@ -8,9 +8,12 @@
   "entry_datetime",
   "shift",
   "rbs_mgdl",
+  "meal_relation",
+  "ketones",
   "cb_ins",
   "insulin_item",
   "insulin_kind",
+  "route",
   "units",
   "nurse",
   "remarks"
@@ -41,6 +44,19 @@
    "idx": 3
   },
   {
+   "fieldname": "meal_relation",
+   "fieldtype": "Select",
+   "label": "Timing / Meal",
+   "options": "\nFasting\nPre-breakfast\nPost-breakfast\nPre-lunch\nPost-lunch\nPre-dinner\nPost-dinner\nBedtime\n3 AM\nRandom",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "ketones",
+   "fieldtype": "Select",
+   "label": "Ketones",
+   "options": "\nNegative\nTrace\nSmall\nModerate\nLarge"
+  },
+  {
    "fieldname": "cb_ins",
    "label": "",
    "fieldtype": "Column Break",
@@ -62,6 +78,13 @@
    "options": "\nBasal\nBolus / Pre-meal\nSliding Scale",
    "in_list_view": 1,
    "idx": 6
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Select",
+   "label": "Route",
+   "options": "\nSC\nIV\nIM",
+   "default": "SC"
   },
   {
    "fieldname": "units",
