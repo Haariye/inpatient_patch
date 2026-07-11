@@ -263,8 +263,21 @@ def discharge_block_reason(ip):
     Patient/Patients groups pay cash and must be fully paid."""
     if isinstance(ip, str):
         ip = frappe.get_doc("Inpatient Record", ip)
-    if cint(ip.get("custom_allow_outstanding_discharge")):
-        return None
+    # surgery must be fully completed before discharge
+    if (ip.get("custom_care_type") == "Surgery"):
+        need = []
+        if not frappe.db.count("Operation Procedure Note", {"inpatient_record": ip.name}) \
+                and not frappe.db.sql("select 1 from `tabClinical Procedure` where "
+                "inpatient_record=%s and (custom_surgery_finish is not null or status='Completed') "
+                "limit 1", ip.name):
+            need.append("the operation (Clinical Procedure finished / Procedure Note)")
+        if not frappe.db.count("Recovery Nurse Record", {"inpatient_record": ip.name}):
+            need.append("Recovery Nurse Record")
+        if not frappe.db.count("Post Operative Checklist", {"inpatient_record": ip.name}):
+            need.append("Post-Operative Checklist")
+        if need:
+            return ("Cannot discharge a Surgery case \u2014 finish the operation steps "
+                    "first: {0}.").format(", ".join(need))
     customer = get_customer(ip.patient)
     group = frappe.db.get_value("Customer", customer, "customer_group") if customer else None
     invoiced, paid, drafts = _account_totals(ip.name)
@@ -402,8 +415,6 @@ def admit_from_emergency(emergency):
         if dept:
             if ip.meta.has_field("medical_department"):
                 ip.medical_department = dept
-            if ip.meta.has_field("custom_medical_department"):
-                ip.custom_medical_department = dept
     # copy the encounter-style child tables 1:1 into the Inpatient Record
     _copy_child(ea, ip, "chief_complaint")
     _copy_child(ea, ip, "diagnosis")
@@ -411,9 +422,6 @@ def admit_from_emergency(emergency):
     _copy_child(ea, ip, "lab_test_prescription")
     _copy_child(ea, ip, "procedure_prescription")
     # plain-text summaries for our own text fields (NEVER assign a list here)
-    if ip.meta.has_field("custom_chief_complaint"):
-        ip.custom_chief_complaint = _rows_to_text(ea.get("chief_complaint"),
-                                                  ("complaint", "chief_complaint"))
     if ip.meta.has_field("custom_primary_diagnosis"):
         ip.custom_primary_diagnosis = _rows_to_text(ea.get("diagnosis"),
                                                     ("diagnosis",))[:140]

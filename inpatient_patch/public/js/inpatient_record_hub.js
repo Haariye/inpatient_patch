@@ -42,6 +42,15 @@ function go(frm, sheet) {
     frappe.new_doc(sheet);
 }
 
+function open_handover(frm) {
+    frappe.call({
+        method: 'inpatient_patch.inpatient_patch.nurse_handover.get_or_create_handover',
+        args: { inpatient_record: frm.doc.name }, freeze: true,
+        freeze_message: __('Opening handover…'),
+        callback(r) { if (r.message) frappe.set_route('Form', 'Nurse Handover', r.message); },
+    });
+}
+
 // Build the list of actions valid for the current stage.
 function build_actions(frm, s) {
     const A = [];
@@ -49,8 +58,7 @@ function build_actions(frm, s) {
 
     if (s._discharged) {
         add('View', 'Care Timeline (notifications)', () => frappe.set_route('List', 'Patient Notification', { inpatient_record: frm.doc.name }));
-        add('View', 'Handover Boards', () => frappe.set_route('List', 'Nurse Handover Board'));
-        add('Ward / Nursing', 'Ward Handover Board', () => frappe.set_route('List', 'Nurse Handover Board'));
+        add('View', 'Nurse Handover', () => open_handover(frm));
         add('View', 'Invoices', () => frappe.set_route('List', 'Sales Invoice', { custom_inpatient_record: frm.doc.name }));
         return A;
     }
@@ -72,6 +80,7 @@ function build_actions(frm, s) {
         add('Ward / Nursing', 'Medication Administration (MAR)', () => go(frm, 'Medication Administration Record'));
         add('Ward / Nursing', 'Diabetic Insulin Chart', () => go(frm, 'Diabetic Insulin Chart'));
         add('Ward / Nursing', 'Daily Round Plan', () => go(frm, 'Daily Round Plan'));
+        add('Ward / Nursing', 'Nurse Handover (dashboard)', () => open_handover(frm));
     }
 
     // ----- Operation (surgical only) -----

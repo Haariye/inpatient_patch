@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="inpatient_patch",
-    version="2.9.2",
+    version="2.9.4",
     description="Comprehensive Inpatient, OT and Somali-billing extension for Frappe Healthcare v15",
     author="Dagaar",
     author_email="info.dagaar@gmail.com",

@@ -70,7 +70,7 @@ def get_stage(inpatient_record):
             return False
 
     dept = frappe.db.get_value("Inpatient Record", inpatient_record,
-                               "custom_medical_department")
+                               "medical_department")
     care_type = frappe.db.get_value("Inpatient Record", inpatient_record,
                                     "custom_care_type")
     is_surgical = 1 if care_type == "Surgery" else 0
@@ -153,7 +153,7 @@ def create_discharge_followup(doc, method=None):
         appt.practitioner = practitioner
         appt.appointment_date = doc.follow_up_date
         dept = frappe.db.get_value("Inpatient Record", doc.inpatient_record,
-                                   "custom_medical_department")
+                                   "medical_department")
         if dept and appt.meta.has_field("department"):
             appt.department = dept
         appt.flags.ignore_mandatory = True

@@ -140,15 +140,18 @@
   },
   {
    "fieldname": "diagnosis",
-   "label": "Diagnosis",
-   "fieldtype": "Data",
-   "idx": 11
+   "label": "Diagnosis (from Inpatient Record)",
+   "fieldtype": "Table MultiSelect",
+   "idx": 11,
+   "options": "Patient Encounter Diagnosis"
   },
   {
    "fieldname": "procedure",
-   "label": "Procedure",
-   "fieldtype": "Data",
-   "idx": 12
+   "label": "Procedure (from Inpatient Record order)",
+   "fieldtype": "Small Text",
+   "idx": 12,
+   "options": null,
+   "read_only": 1
   },
   {
    "fieldname": "sb_forms",

@@ -10,6 +10,7 @@ department and:
     department-specific checklist of forms.
 """
 import frappe
+from frappe.utils import cint
 from frappe import _
 
 
@@ -24,25 +25,24 @@ def apply_admission_protocol(doc, method=None):
 
 
 def _apply_admission_protocol(doc):
-    dept = doc.get("custom_medical_department") or doc.get("medical_department")
-    if dept and not doc.get("custom_medical_department"):
-        # mirror the native medical_department into our field for convenience
-        doc.db_set("custom_medical_department", dept, update_modified=False)
-    # auto-fetch the admitted bed/service unit (no need to re-select it)
-    if not doc.get("custom_current_bed"):
-        bed = doc.get("admission_service_unit")
-        if not bed:
-            occ = doc.get("inpatient_occupancies") or []
-            if occ:
-                bed = occ[-1].service_unit
-        if bed:
-            doc.db_set("custom_current_bed", bed, update_modified=False)
+    dept = doc.get("medical_department")
+    # keep custom_current_bed pointing at the room the patient is CURRENTLY in:
+    # the latest inpatient_occupancy row that has not been left / checked out.
+    current = None
+    occ = doc.get("inpatient_occupancy") or doc.get("inpatient_occupancies") or []
+    for row in occ:
+        if not cint(row.get("left")) and not row.get("check_out"):
+            current = row.get("service_unit")
+    if not current:
+        current = doc.get("admission_service_unit")
+    if current and doc.get("custom_current_bed") != current:
+        doc.db_set("custom_current_bed", current, update_modified=False)
     if not dept:
         prac = doc.get("primary_practitioner")
         if prac:
             dept = frappe.db.get_value("Healthcare Practitioner", prac, "department")
             if dept:
-                doc.db_set("custom_medical_department", dept, update_modified=False)
+                doc.db_set("medical_department", dept, update_modified=False)
     if not dept:
         return
 
@@ -78,7 +78,7 @@ def get_protocol(inpatient_record):
     """Return the ordered required forms + default order set for the record's
     department (used by the Inpatient Record hub UI)."""
     dept = frappe.db.get_value("Inpatient Record", inpatient_record,
-                               "custom_medical_department")
+                               "medical_department")
     if not dept:
         return {"department": None, "forms": [], "order_set": []}
     protocol = frappe.db.get_value("Department Admission Protocol",

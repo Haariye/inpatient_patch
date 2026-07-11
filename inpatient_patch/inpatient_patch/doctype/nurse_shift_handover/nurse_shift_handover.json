@@ -1,0 +1,31 @@
+{
+ "actions": [],
+ "creation": "2026-07-11 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["shift","nurse","handover_datetime","condition","summary","medicines_given","medicines_discontinued","pending_tasks","acknowledged","acknowledged_by","acknowledged_at"],
+ "fields": [
+  {"fieldname":"shift","fieldtype":"Link","in_list_view":1,"label":"Shift","options":"Nurse Shift"},
+  {"fieldname":"nurse","fieldtype":"Link","in_list_view":1,"label":"Nurse","options":"Nurse"},
+  {"fieldname":"handover_datetime","fieldtype":"Datetime","in_list_view":1,"label":"Date / Time"},
+  {"fieldname":"condition","fieldtype":"Select","in_list_view":1,"label":"Condition","options":"\nStable\nImproving\nGuarded\nCritical"},
+  {"fieldname":"summary","fieldtype":"Small Text","label":"Shift Summary / Events"},
+  {"fieldname":"medicines_given","fieldtype":"Small Text","label":"Medicines Given"},
+  {"fieldname":"medicines_discontinued","fieldtype":"Small Text","label":"Medicines Discontinued"},
+  {"fieldname":"pending_tasks","fieldtype":"Small Text","label":"Pending for Next Shift"},
+  {"fieldname":"acknowledged","fieldtype":"Check","in_list_view":1,"label":"Acknowledged"},
+  {"fieldname":"acknowledged_by","fieldtype":"Link","label":"Acknowledged By","options":"Nurse","depends_on":"eval:doc.acknowledged"},
+  {"fieldname":"acknowledged_at","fieldtype":"Datetime","label":"Acknowledged At","read_only":1,"depends_on":"eval:doc.acknowledged"}
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Inpatient Patch",
+ "name": "Nurse Shift Handover",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

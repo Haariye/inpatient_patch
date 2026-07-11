@@ -16,10 +16,11 @@ doctype_js = {
     "Inpatient Service Order": "public/js/service_order.js",
     "Clinical Procedure": "public/js/clinical_procedure.js",
     "Emergency Assessment Sheet": "public/js/emergency_assessment.js",
-    "Nurse Handover Board": "public/js/handover_board.js",
+    "Nurse Handover": "public/js/nurse_handover.js",
     "Nurse Admission Assignment": "public/js/nurse_assignment.js",
     "Diabetic Insulin Chart": "public/js/nurse_defaults.js",
     "Medication Administration Record": "public/js/mar.js",
+    "Pre Operative Checklist": "public/js/preop_checklist.js",
 }
 
 # ---- document events ------------------------------------------------------
@@ -85,6 +86,7 @@ doc_events = {
         "on_submit": [
             "inpatient_patch.inpatient_patch.workflow.update_stage",
             "inpatient_patch.inpatient_patch.workflow.create_discharge_followup",
+            "inpatient_patch.inpatient_patch.nurse_handover.close_on_discharge",
         ],
     },
     # stage tracking + patient notification for the remaining sheets
@@ -102,8 +104,8 @@ doc_events = {
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
     "Recovery Nurse Record": {
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
-    "Nurse Handover Board": {
-        "validate": "inpatient_patch.inpatient_patch.handover_board.guard_duplicate_board"},
+    "Nurse Handover": {
+        "before_save": "inpatient_patch.inpatient_patch.nurse_handover.stamp_updated"},
     "Nurse Admission Assignment": {
         "on_update": "inpatient_patch.inpatient_patch.handover_board.push_assignments_to_records"},
     "Daily Round Plan": {
