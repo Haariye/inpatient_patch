@@ -426,7 +426,33 @@ def admit_from_emergency(emergency):
     ip.insert(ignore_permissions=True)
 
     ea.db_set("inpatient_record", ip.name)
+    # link any invoices already raised from this emergency sheet to the new record
+    _backfill_emergency_invoices(ea, ip.name)
+    refresh_inpatient_billing_summary(ip.name)
     return ip.name
+
+
+def _backfill_emergency_invoices(ea, inpatient_record):
+    """Point invoices raised from the Emergency sheet at the new Inpatient Record,
+    so their charges join the patient's inpatient balance."""
+    row_ids = []
+    for tf, dt in (("drug_prescription", "Drug Prescription"),
+                   ("lab_test_prescription", "Lab Prescription"),
+                   ("procedure_prescription", "Procedure Prescription")):
+        for r in (ea.get(tf) or []):
+            row_ids.append("{0}:{1}".format(dt, r.name))
+    if not row_ids:
+        return
+    try:
+        sis = frappe.get_all("Sales Invoice Item",
+            filters={"custom_service_charge_row_id": ["in", row_ids]},
+            fields=["parent"], distinct=True, pluck="parent")
+        for si in set(sis):
+            if not frappe.db.get_value("Sales Invoice", si, "custom_inpatient_record"):
+                frappe.db.set_value("Sales Invoice", si, "custom_inpatient_record",
+                                    inpatient_record, update_modified=False)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "backfill_emergency_invoices")
 
 
 def _rows_to_text(rows, fieldnames):
@@ -575,35 +601,45 @@ def _sheet_prescription_rows(doc):
     return rows
 
 
-def _mark_ir_row_invoiced(inpatient_record, dt, match_value, si_name, unset=False):
-    """Mark (or, with unset=True, unmark) the matching Inpatient Record native
-    prescription row. Matches on ANY identifying field so rows copied from the
-    Emergency sheet (which may carry medication/name instead of the bare code)
-    are still found."""
-    if not inpatient_record or not match_value:
+def _ir_row_item(dt, row):
+    if dt == "Drug Prescription":
+        return _item_for_drug(row)
+    if dt == "Lab Prescription":
+        return _item_for_lab(row)
+    if dt == "Procedure Prescription":
+        return _item_for_procedure(row)
+    return None
+
+
+def _mark_ir_row_invoiced(inpatient_record, dt, item_code, si_name, unset=False):
+    """Mark (or unset) the matching Inpatient Record native prescription row.
+    Matches by the RESOLVED item code (not raw code/name fields), so a row copied
+    from the Emergency sheet is always found regardless of which field it used."""
+    if not inpatient_record or not item_code:
         return
     tablefield = {"Drug Prescription": "drug_prescription",
                   "Lab Prescription": "lab_test_prescription",
                   "Procedure Prescription": "procedure_prescription"}.get(dt)
-    match_fields = {"Drug Prescription": ("drug_code", "medication", "drug_name"),
-                    "Lab Prescription": ("lab_test_code", "lab_test_name"),
-                    "Procedure Prescription": ("procedure", "procedure_name")}.get(dt)
     if not tablefield:
         return
     want = cint(not unset)
     try:
         ip = frappe.get_doc("Inpatient Record", inpatient_record)
         for r in (ip.get(tablefield) or []):
-            if any(r.get(f) and r.get(f) == match_value for f in match_fields):
-                if unset or cint(r.get("invoiced")) != want:
-                    if dt == "Drug Prescription":
-                        frappe.db.set_value(dt, r.name, {"custom_is_billed": want,
-                            "custom_billed_sales_invoice": (None if unset else si_name)},
-                            update_modified=False)
-                    if frappe.get_meta(dt).has_field("invoiced"):
-                        frappe.db.set_value(dt, r.name, "invoiced", want, update_modified=False)
-                    if not unset:
-                        break
+            if _ir_row_item(dt, r) != item_code:
+                continue
+            already = cint(r.get("invoiced")) == want and (
+                dt != "Drug Prescription" or cint(r.get("custom_is_billed")) == want)
+            if not unset and already:
+                continue  # find the next matching (e.g. duplicate) row
+            if dt == "Drug Prescription":
+                frappe.db.set_value(dt, r.name, {"custom_is_billed": want,
+                    "custom_billed_sales_invoice": (None if unset else si_name)},
+                    update_modified=False)
+            if frappe.get_meta(dt).has_field("invoiced"):
+                frappe.db.set_value(dt, r.name, "invoiced", want, update_modified=False)
+            if not unset:
+                break
     except Exception:
         frappe.log_error(frappe.get_traceback(), "mark_ir_row_invoiced")
 
@@ -672,35 +708,28 @@ def bill_sheet_prescriptions(doc, method=None):
 
 def _mark_prescription_rows_invoiced(si, unset=False):
     """On SI submit (or cancel): mark the source sheet row, the matching Inpatient
-    Record row, and (for procedures) the Clinical Procedure invoiced=1 (or 0)."""
+    Record row, and (for procedures) the Clinical Procedure invoiced=1 (or 0).
+    The IR row is matched by the invoice line's item_code (deterministic)."""
     ir = si.get("custom_inpatient_record")
     want = cint(not unset)
-    cand = {"Drug Prescription": ("drug_code", "medication", "drug_name"),
-            "Lab Prescription": ("lab_test_code", "lab_test_name"),
-            "Procedure Prescription": ("procedure", "procedure_name")}
     for item in (si.get("items") or []):
         rid = item.get("custom_service_charge_row_id") or ""
         if ":" not in rid:
             continue
         dt, name = rid.split(":", 1)
-        if not frappe.db.exists(dt, name):
-            continue
         # 1) the sheet's own child row
-        if dt == "Drug Prescription":
-            frappe.db.set_value(dt, name, {"custom_is_billed": want,
-                "custom_billed_sales_invoice": (None if unset else si.name)},
-                update_modified=False)
-        if frappe.get_meta(dt).has_field("invoiced"):
-            frappe.db.set_value(dt, name, "invoiced", want, update_modified=False)
-        # 2) matching Inpatient Record row (match on any identifying field)
-        match = None
-        for f in cand.get(dt, ()):
-            match = frappe.db.get_value(dt, name, f)
-            if match:
-                break
-        _mark_ir_row_invoiced(ir, dt, match, si.name, unset=unset)
+        if frappe.db.exists(dt, name):
+            if dt == "Drug Prescription":
+                frappe.db.set_value(dt, name, {"custom_is_billed": want,
+                    "custom_billed_sales_invoice": (None if unset else si.name)},
+                    update_modified=False)
+            if frappe.get_meta(dt).has_field("invoiced"):
+                frappe.db.set_value(dt, name, "invoiced", want, update_modified=False)
+        # 2) matching Inpatient Record row + Clinical Procedure, by item_code
+        item_code = item.get("item_code")
+        _mark_ir_row_invoiced(ir, dt, item_code, si.name, unset=unset)
         if dt == "Procedure Prescription":
-            _mark_clinical_procedure_invoiced(ir, match, si.name, unset=unset)
+            _mark_clinical_procedure_invoiced_by_item(ir, item_code, si.name, unset=unset)
 
 
 def _mark_clinical_procedure_invoiced(inpatient_record, template, si_name, unset=False):
@@ -717,6 +746,16 @@ def _mark_clinical_procedure_invoiced(inpatient_record, template, si_name, unset
                                     update_modified=False)
     except Exception:
         frappe.log_error(frappe.get_traceback(), "mark_clinical_procedure_invoiced")
+
+
+def _mark_clinical_procedure_invoiced_by_item(inpatient_record, item_code, si_name, unset=False):
+    """Mark Clinical Procedure(s) invoiced by matching the template's item_code."""
+    if not inpatient_record or not item_code:
+        return
+    templates = frappe.get_all("Clinical Procedure Template",
+        filters={"item": item_code}, pluck="name")
+    for t in templates:
+        _mark_clinical_procedure_invoiced(inpatient_record, t, si_name, unset=unset)
 
 
 @frappe.whitelist()
@@ -1220,6 +1259,82 @@ def on_cancel_deposit(doc, method=None):
 # ===========================================================================
 # 4. SUMMARY ROLLUP on Inpatient Record
 # ===========================================================================
+def _refresh_ir_from_payment(pe):
+    """Refresh the billing summary of every Inpatient Record touched by this
+    Payment Entry's referenced Sales Invoices."""
+    seen = set()
+    for ref in (pe.get("references") or []):
+        if ref.get("reference_doctype") == "Sales Invoice" and ref.get("reference_name"):
+            ir = frappe.db.get_value("Sales Invoice", ref.reference_name,
+                                     "custom_inpatient_record")
+            if ir and ir not in seen:
+                seen.add(ir)
+                refresh_inpatient_billing_summary(ir)
+
+
+def on_submit_payment_entry(doc, method=None):
+    _refresh_ir_from_payment(doc)
+
+
+def on_cancel_payment_entry(doc, method=None):
+    _refresh_ir_from_payment(doc)
+
+
+def _sheet_of_invoice(si):
+    """Return (doctype, name) of the prescribing sheet behind a prescription
+    invoice, by reading the first tagged item row."""
+    for item in (si.get("items") or []):
+        rid = item.get("custom_service_charge_row_id") or ""
+        if ":" in rid:
+            dt, name = rid.split(":", 1)
+            if frappe.db.exists(dt, name):
+                parent = frappe.db.get_value(dt, name, ["parenttype", "parent"], as_dict=True)
+                if parent and parent.parenttype in ("Emergency Assessment Sheet", "Daily Round Plan"):
+                    return parent.parenttype, parent.parent
+    return None, None
+
+
+def before_cancel_sales_invoice(doc, method=None):
+    """Do not allow a prescription invoice to be cancelled on its own while its
+    source sheet is still submitted. The reversal must happen by cancelling the
+    Emergency Assessment Sheet / Daily Round Plan, which rolls back every flag."""
+    if not cint(getattr(doc, "custom_is_prescription_invoice", 0)):
+        return
+    dt, name = _sheet_of_invoice(doc)
+    if dt and name and cint(frappe.db.get_value(dt, name, "docstatus")) == 1:
+        frappe.throw(_("This invoice is linked to a submitted <b>{0}</b> ({1}). "
+                       "To reverse the billing, cancel that {0} \u2014 it will roll back "
+                       "all invoiced/billed flags automatically.").format(dt, name))
+
+
+def cancel_sheet_invoices(doc, method=None):
+    """on_cancel of a prescribing sheet: cancel/delete its invoices, which reverses
+    all invoiced/billed flags on the sheet, the Inpatient Record and Clinical
+    Procedures via on_cancel_sales_invoice."""
+    row_ids = []
+    for tf, dt in (("drug_prescription", "Drug Prescription"),
+                   ("lab_test_prescription", "Lab Prescription"),
+                   ("procedure_prescription", "Procedure Prescription")):
+        for r in (doc.get(tf) or []):
+            row_ids.append("{0}:{1}".format(dt, r.name))
+    if not row_ids:
+        return
+    try:
+        sis = set(frappe.get_all("Sales Invoice Item",
+            filters={"custom_service_charge_row_id": ["in", row_ids]},
+            distinct=True, pluck="parent"))
+        for si in sis:
+            si_doc = frappe.get_doc("Sales Invoice", si)
+            if si_doc.docstatus == 1:
+                si_doc.flags.ignore_permissions = True
+                si_doc.cancel()   # triggers on_cancel_sales_invoice -> flags to 0
+            elif si_doc.docstatus == 0:
+                _mark_prescription_rows_invoiced(si_doc, unset=True)
+                si_doc.delete(ignore_permissions=True)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "cancel_sheet_invoices")
+
+
 def refresh_inpatient_billing_summary(record, method=None):
     """Roll up billed/paid/deposit/outstanding onto the Inpatient Record.
 

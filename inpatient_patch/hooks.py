@@ -62,6 +62,11 @@ doc_events = {
     "Sales Invoice": {
         "on_submit": "inpatient_patch.inpatient_patch.billing.on_submit_sales_invoice",
         "on_cancel": "inpatient_patch.inpatient_patch.billing.on_cancel_sales_invoice",
+        "before_cancel": "inpatient_patch.inpatient_patch.billing.before_cancel_sales_invoice",
+    },
+    "Payment Entry": {
+        "on_submit": "inpatient_patch.inpatient_patch.billing.on_submit_payment_entry",
+        "on_cancel": "inpatient_patch.inpatient_patch.billing.on_cancel_payment_entry",
     },
     "Operation Procedure Note": {
         "validate": "inpatient_patch.inpatient_patch.ot.validate_procedure_note",
@@ -85,12 +90,14 @@ doc_events = {
     # stage tracking + patient notification for the remaining sheets
     "Emergency Assessment Sheet": {
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage",
-        "on_submit": "inpatient_patch.inpatient_patch.billing.auto_bill_emergency"},
+        "on_submit": "inpatient_patch.inpatient_patch.billing.auto_bill_emergency",
+        "on_cancel": "inpatient_patch.inpatient_patch.billing.cancel_sheet_invoices"},
     "Nursing Admission Assessment": {
         "validate": "inpatient_patch.inpatient_patch.workflow.stamp_nursing_complete",
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
     "Medication Administration Record": {
-        "validate": "inpatient_patch.inpatient_patch.workflow.stamp_nursing_complete"},
+        "validate": "inpatient_patch.inpatient_patch.workflow.stamp_nursing_complete",
+        "on_update": "inpatient_patch.inpatient_patch.handover_board.create_vitals_from_mar"},
     "History Clinical Examination": {
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage"},
     "Recovery Nurse Record": {
@@ -99,10 +106,9 @@ doc_events = {
         "validate": "inpatient_patch.inpatient_patch.handover_board.guard_duplicate_board"},
     "Nurse Admission Assignment": {
         "on_update": "inpatient_patch.inpatient_patch.handover_board.push_assignments_to_records"},
-    "Medication Administration Record": {
-        "on_update": "inpatient_patch.inpatient_patch.handover_board.create_vitals_from_mar"},
     "Daily Round Plan": {
-        "on_submit": "inpatient_patch.inpatient_patch.billing.bill_sheet_prescriptions"},
+        "on_submit": "inpatient_patch.inpatient_patch.billing.bill_sheet_prescriptions",
+        "on_cancel": "inpatient_patch.inpatient_patch.billing.cancel_sheet_invoices"},
 }
 
 # ---- scheduled jobs -------------------------------------------------------
