@@ -93,6 +93,7 @@ doc_events = {
     "Emergency Assessment Sheet": {
         "after_insert": "inpatient_patch.inpatient_patch.workflow.update_stage",
         "on_submit": "inpatient_patch.inpatient_patch.billing.auto_bill_emergency",
+        "on_update_after_submit": "inpatient_patch.inpatient_patch.billing.auto_bill_emergency",
         "on_cancel": "inpatient_patch.inpatient_patch.billing.cancel_sheet_invoices"},
     "Nursing Admission Assessment": {
         "validate": "inpatient_patch.inpatient_patch.workflow.stamp_nursing_complete",

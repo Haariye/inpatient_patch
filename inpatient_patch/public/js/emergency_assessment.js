@@ -66,9 +66,12 @@ function warn_if_admitted(frm) {
         if (rows && rows.length) {
             const r = rows[0];
             frm.dashboard.set_headline(
-                __('\u26A0 This patient is already {0} (Inpatient Record {1}). Do not admit again.', [r.status, r.name]),
-                'orange');
-            frappe.show_alert({ message: __('Patient already {0}: {1}', [r.status, r.name]), indicator: 'orange' }, 7);
+                __('\u26D4 This patient is already {0} (Inpatient Record {1}). Do not admit again.', [r.status, r.name]),
+                'red');
+            frappe.msgprint({
+                title: __('Already Admitted'), indicator: 'red',
+                message: __('This patient is already {0} (Inpatient Record {1}). Do not admit again.', [r.status, r.name]),
+            });
         }
     });
 }

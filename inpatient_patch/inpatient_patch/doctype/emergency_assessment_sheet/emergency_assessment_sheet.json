@@ -283,21 +283,24 @@
    "label": "Drug Prescription",
    "fieldtype": "Table",
    "options": "Drug Prescription",
-   "idx": 32
+   "idx": 32,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "lab_test_prescription",
    "label": "Lab Prescription",
    "fieldtype": "Table",
    "options": "Lab Prescription",
-   "idx": 33
+   "idx": 33,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "procedure_prescription",
    "label": "Procedure Prescription",
    "fieldtype": "Table",
    "options": "Procedure Prescription",
-   "idx": 34
+   "idx": 34,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "sb_orders_legacy",
@@ -392,10 +395,11 @@
    "fieldname": "final_decision",
    "label": "Final Decision",
    "fieldtype": "Select",
-   "options": "\nAdmitted\nDischarged\nSelf-Discharge\nReferred",
+   "options": "\nAdmitted\nDischarged\nSelf-Discharge\nReferred\nUncertainty",
    "reqd": 1,
    "in_list_view": 1,
-   "idx": 48
+   "idx": 48,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "admitted_to",

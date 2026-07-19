@@ -257,27 +257,42 @@ def _account_totals(ip_name):
     return invoiced, paid, drafts
 
 
-def discharge_block_reason(ip):
-    """Block discharge unless invoices == payments (fully settled), OR the patient
-    is Sponsored (Sponsors ticked AND customer group not Patient/Patients).
-    Patient/Patients groups pay cash and must be fully paid."""
+def _surgery_incomplete_reason(ip):
+    """Surgery steps that must be finished. Empty string = complete."""
+    if ip.get("custom_care_type") != "Surgery":
+        return ""
+    need = []
+    if not frappe.db.count("Operation Procedure Note", {"inpatient_record": ip.name}) \
+            and not frappe.db.sql("select 1 from `tabClinical Procedure` where "
+            "inpatient_record=%s and (custom_surgery_finish is not null or status='Completed') "
+            "limit 1", ip.name):
+        need.append("the operation (Clinical Procedure finished / Procedure Note)")
+    if not frappe.db.count("Recovery Nurse Record", {"inpatient_record": ip.name}):
+        need.append("Recovery Nurse Record")
+    if not frappe.db.count("Post Operative Checklist", {"inpatient_record": ip.name}):
+        need.append("Post-Operative Checklist")
+    if need:
+        return ("Cannot proceed with a Surgery case \u2014 finish the operation steps "
+                "first: {0}.").format(", ".join(need))
+    return ""
+
+
+def schedule_block_reason(ip):
+    """Blocks ONLY scheduling a discharge. A pending bill does NOT block scheduling
+    (the doctor schedules; reception discharges) - only incomplete surgery does."""
     if isinstance(ip, str):
         ip = frappe.get_doc("Inpatient Record", ip)
-    # surgery must be fully completed before discharge
-    if (ip.get("custom_care_type") == "Surgery"):
-        need = []
-        if not frappe.db.count("Operation Procedure Note", {"inpatient_record": ip.name}) \
-                and not frappe.db.sql("select 1 from `tabClinical Procedure` where "
-                "inpatient_record=%s and (custom_surgery_finish is not null or status='Completed') "
-                "limit 1", ip.name):
-            need.append("the operation (Clinical Procedure finished / Procedure Note)")
-        if not frappe.db.count("Recovery Nurse Record", {"inpatient_record": ip.name}):
-            need.append("Recovery Nurse Record")
-        if not frappe.db.count("Post Operative Checklist", {"inpatient_record": ip.name}):
-            need.append("Post-Operative Checklist")
-        if need:
-            return ("Cannot discharge a Surgery case \u2014 finish the operation steps "
-                    "first: {0}.").format(", ".join(need))
+    return _surgery_incomplete_reason(ip) or None
+
+
+def discharge_block_reason(ip):
+    """Blocks the ACTUAL discharge: surgery must be complete AND the bill settled,
+    unless the patient is Sponsored (non-cash customer group)."""
+    if isinstance(ip, str):
+        ip = frappe.get_doc("Inpatient Record", ip)
+    surg = _surgery_incomplete_reason(ip)
+    if surg:
+        return surg
     customer = get_customer(ip.patient)
     group = frappe.db.get_value("Customer", customer, "customer_group") if customer else None
     invoiced, paid, drafts = _account_totals(ip.name)
@@ -345,9 +360,15 @@ def create_refund_journal_entry(inpatient_record, amount=None):
 
 
 def guard_inpatient_discharge(doc, method=None):
-    """Block the NATIVE schedule-discharge / discharge when the bill is unpaid."""
+    """Scheduling a discharge is allowed with a pending bill (only incomplete
+    surgery blocks it). The actual discharge additionally requires a settled bill
+    (or a sponsor)."""
     try:
-        if doc.get("status") in ("Discharge Scheduled", "Discharged"):
+        if doc.get("status") == "Discharge Scheduled":
+            reason = schedule_block_reason(doc)
+            if reason:
+                frappe.throw(_(reason))
+        elif doc.get("status") == "Discharged":
             reason = discharge_block_reason(doc)
             if reason:
                 frappe.throw(_(reason))
@@ -394,6 +415,14 @@ def admit_from_emergency(emergency):
     ea = frappe.get_doc("Emergency Assessment Sheet", emergency)
     if ea.get("inpatient_record"):
         return ea.inpatient_record
+
+    # hard stop: do not admit a patient who is already admitted / scheduled
+    active = frappe.db.get_value("Inpatient Record",
+        {"patient": ea.patient, "status": ["in", ["Admitted", "Admission Scheduled"]]},
+        "name")
+    if active:
+        frappe.throw(_("This patient is already Admitted (Inpatient Record {0}). "
+                       "Do not admit again.").format(active))
 
     ip = frappe.new_doc("Inpatient Record")
     ip.patient = ea.patient
@@ -496,10 +525,21 @@ def _copy_child(src, dst, fieldname):
 
 @frappe.whitelist()
 def auto_bill_emergency(doc, method=None):
-    """on_submit of Emergency Assessment Sheet: bill the prescribed drug/lab/
-    procedure rows into a draft invoice, exactly like patient_patch bills the
-    Patient Encounter."""
+    """on_submit / on_update_after_submit of Emergency Assessment Sheet: bill the
+    prescribed drug/lab/procedure rows into draft invoices (idempotent), and if a
+    procedure is ordered mark the linked Inpatient Record as a Surgery case."""
     bill_sheet_prescriptions(doc, method)
+    _sync_emergency_care_type(doc)
+
+
+def _sync_emergency_care_type(doc):
+    """If a procedure is prescribed on the emergency sheet, the linked Inpatient
+    Record becomes a Surgery admission."""
+    ir = doc.get("inpatient_record")
+    if ir and doc.get("procedure_prescription"):
+        if frappe.db.get_value("Inpatient Record", ir, "custom_care_type") != "Surgery":
+            frappe.db.set_value("Inpatient Record", ir, "custom_care_type", "Surgery",
+                                update_modified=False)
 
 
 @frappe.whitelist()
@@ -822,6 +862,34 @@ def _reconcile_procedures_invoiced(inpatient_record):
             _mark_clinical_procedure_invoiced(inpatient_record, r.get("procedure"), None)
 
 
+def _load_procedure_template(cp, template):
+    """Copy consume_stock, default warehouse and the consumable items from the
+    Clinical Procedure Template onto the Clinical Procedure (mirrors what the
+    native form does when you pick a template)."""
+    try:
+        tmpl = frappe.get_doc("Clinical Procedure Template", template)
+        if cp.meta.has_field("consume_stock"):
+            cp.consume_stock = tmpl.get("consume_stock") or 0
+        if cp.meta.has_field("warehouse") and not cp.get("warehouse"):
+            wh = (frappe.db.get_single_value("Stock Settings", "default_warehouse")
+                  or frappe.db.get_value("Warehouse", {"is_group": 0}, "name"))
+            if wh:
+                cp.warehouse = wh
+        if cp.meta.has_field("items"):
+            cp.set("items", [])
+            for it in (tmpl.get("items") or []):
+                cp.append("items", {
+                    "item_code": it.get("item_code"),
+                    "item_name": it.get("item_name"),
+                    "qty": it.get("qty") or 1,
+                    "uom": it.get("uom"),
+                    "invoice_separately_as_consumables": it.get("invoice_separately_as_consumables") or 0,
+                    "batch_no": it.get("batch_no"),
+                })
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "load_procedure_template")
+
+
 @frappe.whitelist()
 def create_procedures_from_record(inpatient_record):
     """Create a Clinical Procedure from each INVOICED procedure_prescription row's
@@ -859,14 +927,9 @@ def create_procedures_from_record(inpatient_record):
             cp.inpatient_record = ip.name
         if cp.meta.has_field("medical_department") and r.get("department"):
             cp.medical_department = r.get("department")
+        _load_procedure_template(cp, tmpl)
         cp.flags.ignore_mandatory = True
         cp.insert(ignore_permissions=True)
-        # auto-load the stock consumption defined on the template
-        try:
-            if hasattr(cp, "set_actual_qty"):
-                cp.reload()
-        except Exception:
-            pass
         frappe.db.set_value("Procedure Prescription", r.name, "procedure_created", 1,
                             update_modified=False)
         made.append(cp.name)

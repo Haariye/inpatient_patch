@@ -5,6 +5,25 @@ frappe.ui.form.on('Clinical Procedure', {
             query: 'inpatient_patch.inpatient_patch.ot.ot_facility_query',
         }));
     },
+    procedure_template(frm) {
+        // pull consumables + consume_stock from the template (mirrors native form)
+        if (!frm.doc.procedure_template) return;
+        frappe.db.get_doc('Clinical Procedure Template', frm.doc.procedure_template).then((t) => {
+            if (t.consume_stock) frm.set_value('consume_stock', 1);
+            if ((t.items || []).length && !(frm.doc.items || []).length) {
+                frm.clear_table('items');
+                t.items.forEach((it) => {
+                    const row = frm.add_child('items');
+                    row.item_code = it.item_code;
+                    row.item_name = it.item_name;
+                    row.qty = it.qty || 1;
+                    row.uom = it.uom;
+                    row.invoice_separately_as_consumables = it.invoice_separately_as_consumables || 0;
+                });
+                frm.refresh_field('items');
+            }
+        });
+    },
     refresh(frm) {
         if (frm.is_new()) return;
         const M = 'inpatient_patch.inpatient_patch.ot.';
@@ -23,8 +42,7 @@ frappe.ui.form.on('Clinical Procedure', {
                 frappe.utils.escape_html(frm.doc.custom_surgery_report) + '</pre>', __('Operation Report'));
         }
     },
-    inpatient_record(frm) {
-        if (!frm.doc.inpatient_record) return;
+    inpatient_record(frm) {        if (!frm.doc.inpatient_record) return;
         frappe.db.get_value('Inpatient Record', frm.doc.inpatient_record,
             ['medical_department', 'primary_practitioner']).then((r) => {
                 const v = r.message || {};
